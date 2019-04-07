@@ -7,12 +7,12 @@ import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.e.dudusgram.HomeActivity;
-import com.e.dudusgram.LikesActivity;
-import com.e.dudusgram.ProfileActivity;
+import com.e.dudusgram.Home.HomeActivity;
+import com.e.dudusgram.Likes.LikesActivity;
+import com.e.dudusgram.Profile.ProfileActivity;
 import com.e.dudusgram.R;
-import com.e.dudusgram.SearchActivity;
-import com.e.dudusgram.ShareActivity;
+import com.e.dudusgram.Search.SearchActivity;
+import com.e.dudusgram.Share.ShareActivity;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class BottomNavigationViewHelper {

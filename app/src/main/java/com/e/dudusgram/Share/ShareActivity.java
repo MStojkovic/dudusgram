@@ -1,4 +1,4 @@
-package com.e.dudusgram;
+package com.e.dudusgram.Share;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,14 +8,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.BottomNavigationViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-public class ProfileActivity extends AppCompatActivity {
-    private static final String TAG = "ProfileActivity";
-    private static final int ACTIVITY_NUM = 4;
+public class ShareActivity extends AppCompatActivity {
+    private static final String TAG = "ShareActivity";
+    private static final int ACTIVITY_NUM = 2;
 
-    private Context mContext = ProfileActivity.this;
+    private Context mContext = ShareActivity.this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

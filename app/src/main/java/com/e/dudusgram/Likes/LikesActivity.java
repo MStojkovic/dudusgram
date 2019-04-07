@@ -1,4 +1,4 @@
-package com.e.dudusgram;
+package com.e.dudusgram.Likes;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.BottomNavigationViewHelper;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
