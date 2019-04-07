@@ -6,4 +6,6 @@
 
     <color name="grey">#BFBFBF</color>
     <color name="white">#EFFF</color>
+    <color name="black">#000000</color>
+    <color name="link_blue">#005ce6</color>
 </resources>
