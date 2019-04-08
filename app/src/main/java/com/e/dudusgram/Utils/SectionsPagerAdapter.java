@@ -1,4 +1,4 @@
-package com.e.dudusgram.Home;
+package com.e.dudusgram.Utils;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

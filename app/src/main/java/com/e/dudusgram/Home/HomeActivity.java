@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.BottomNavigationViewHelper;
+import com.e.dudusgram.Utils.SectionsPagerAdapter;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class HomeActivity extends AppCompatActivity {
