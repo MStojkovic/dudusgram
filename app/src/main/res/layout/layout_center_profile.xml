@@ -78,7 +78,7 @@
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:text="Roki"
-                    android:textSize="16dp"/>
+                    android:textSize="16sp"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -86,7 +86,7 @@
                     android:id="@+id/description"
                     android:textColor="@color/black"
                     android:text="Ja sam teski rokan"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:layout_marginTop="5dp"/>
 
                 <TextView
@@ -95,7 +95,7 @@
                     android:id="@+id/website"
                     android:textColor="@color/link_blue"
                     android:text="Ma kakva web stranica? Sto je to?!?"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:layout_marginTop="5dp"/>
 
             </LinearLayout>
