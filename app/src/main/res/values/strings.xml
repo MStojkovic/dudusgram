@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Dudusgram</string>
-    <string name="edit_profile_fragment">Edit Profile</string>
-    <string name="sign_out_fragment">Sign Out</string>
+    <string name="edit_profile_text">Edit Profile</string>
+    <string name="sign_out_text">Sign Out</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -10,4 +10,8 @@
     <string name="register_new_account">REGISTER A NEW ACCOUNT</string>
     <string name="full_name">Full name</string>
     <string name="register">REGISTER</string>
+
+    <!-- Firebase msgs -->
+    <string name="auth_failed">Authentication failed.</string>
+    <string name="auth_success">Authentication successful</string>
 </resources>

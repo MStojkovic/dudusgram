@@ -60,8 +60,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
 
     private void setupFragments(){
         pagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(new EditProfileFragment(), getString(R.string.edit_profile_fragment));
-        pagerAdapter.addFragment(new SignOutFragment(), getString(R.string.sign_out_fragment));
+        pagerAdapter.addFragment(new EditProfileFragment(), getString(R.string.edit_profile_text));
+        pagerAdapter.addFragment(new SignOutFragment(), getString(R.string.sign_out_text));
     }
     
     private void setViewPager(int fragmentNumber){
@@ -76,8 +76,8 @@ public class AccountSettingsActivity extends AppCompatActivity {
         ListView listView = findViewById(R.id.lvAccountSettings);
 
         ArrayList<String> options = new ArrayList<>();
-        options.add(getString(R.string.edit_profile_fragment)); //fragment 0
-        options.add(getString(R.string.edit_profile_fragment)); //fragment 1
+        options.add(getString(R.string.edit_profile_text)); //fragment 0
+        options.add(getString(R.string.sign_out_text)); //fragment 1
 
         ArrayAdapter adapter = new ArrayAdapter(mContext, android.R.layout.simple_list_item_1, options);
         listView.setAdapter(adapter);
