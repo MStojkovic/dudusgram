@@ -93,8 +93,6 @@ public class LoginActivity extends AppCompatActivity {
                                         mProgressBar.setVisibility(View.GONE);
                                         mPleaseWait.setVisibility(View.GONE);
 
-                                        //Intent intent = new Intent(mContext, HomeActivity.class);
-                                        //startActivity(intent);
                                         //FirebaseUser user = mAuth.getCurrentUser();
                                         //updateUI(user);
                                     } else {
@@ -113,6 +111,16 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        /*
+        If the user is logged in navigate to homeActivity and call 'finish()'
+         */
+
+        if (mAuth.getCurrentUser() != null){
+            Intent intent = new Intent(mContext, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     //<----------------------------------------Firebase------------------------------------------->
