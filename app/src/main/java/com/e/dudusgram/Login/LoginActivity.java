@@ -112,6 +112,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        TextView linkSignup = findViewById(R.id.link_signup);
+        linkSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: navigating to register screen");
+                Intent intent = new Intent(mContext, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
         /*
         If the user is logged in navigate to homeActivity and call 'finish()'
          */

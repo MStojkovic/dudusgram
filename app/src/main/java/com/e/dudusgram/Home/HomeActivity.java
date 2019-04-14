@@ -90,7 +90,9 @@ public class HomeActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
+        mAuth.signOut();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+
         checkCurrentUser(currentUser);
 
         if (currentUser != null){
