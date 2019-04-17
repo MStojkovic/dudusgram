@@ -5,19 +5,26 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.e.dudusgram.R;
 import com.e.dudusgram.models.User;
+import com.e.dudusgram.models.UserAccountSettings;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class FirebaseMethods {
 
     private static final String TAG = "FirebaseMethods";
 
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference myRef;
     private String userID;
 
     private Context mContext;
@@ -25,26 +32,29 @@ public class FirebaseMethods {
     public FirebaseMethods(Context context){
         mContext = context;
         mAuth = FirebaseAuth.getInstance();
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
 
         if(mAuth.getCurrentUser() != null){
             userID = mAuth.getCurrentUser().getUid();
         }
     }
 
-    public boolean checkIfUsernameExsists(String username, DataSnapshot dataSnapshot){
+    public boolean checkIfUsernameExists(String username, DataSnapshot datasnapshot){
 
-        Log.d(TAG, "checkIfUsernameExsists: checking if username already exsists.");
+        Log.d(TAG, "checkIfUsernameExists: checking if username already exsists.");
+        Log.d(TAG, "checkIfUsernameExists: userID value: " + userID);
 
         User user = new User();
 
-        for (DataSnapshot ds: dataSnapshot.getChildren()){
-            Log.d(TAG, "checkIfUsernameExsists: dataSnapshot" + ds);
+        for (DataSnapshot ds: datasnapshot.child(userID).getChildren()){
+            Log.d(TAG, "checkIfUsernameExists: datasnapshot" + ds);
 
             user.setUsername(ds.getValue(User.class).getUsername());
-            Log.d(TAG, "checkIfUsernameExsists: username: " + user.getUsername());
+            Log.d(TAG, "checkIfUsernameExists: username: " + user.getUsername());
 
             if(StringManipulation.expandUsername(user.getUsername()).equals(username)){
-                Log.d(TAG, "checkIfUsernameExsists: FOUND A MATCH!" + user.getUsername());
+                Log.d(TAG, "checkIfUsernameExists: FOUND A MATCH!" + user.getUsername());
                 return true;
             }
         }
@@ -67,6 +77,8 @@ public class FirebaseMethods {
                             // Sign in success, update UI with the signed-in user's information
                             userID = mAuth.getCurrentUser().getUid();
                             Log.d(TAG, "createUserWithEmail:success" + userID);
+                            //send verification email
+                            sendVerificationEmail();
                             //updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -79,5 +91,57 @@ public class FirebaseMethods {
                         // ...
                     }
                 });
+    }
+
+    public void sendVerificationEmail(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null){
+            user.sendEmailVerification()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+
+                            }else {
+                                Toast.makeText(mContext, "couldnt send verification email.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+    }
+
+    /**
+     * Add information to the users and users_account_settings node
+     * @param email
+     * @param username
+     * @param description
+     * @param webiste
+     * @param profile_photo
+     */
+
+    public void addNewUser(String email, String username, String description, String webiste, String profile_photo){
+
+        User user = new User(userID, 1, email, StringManipulation.condenseUsername(username));
+
+        myRef.child(mContext.getString(R.string.dbname_users))
+                .child(userID)
+                .setValue(user);
+
+        UserAccountSettings settings = new UserAccountSettings(
+                description,
+                username,
+                0,
+                0,
+                0,
+                profile_photo,
+                username,
+                webiste
+        );
+
+
+        myRef.child(mContext.getString(R.string.dbname_user_account_settings))
+                .child(userID)
+                .setValue(settings);
     }
 }

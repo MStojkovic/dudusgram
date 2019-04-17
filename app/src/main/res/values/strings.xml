@@ -14,4 +14,8 @@
     <!-- Firebase msgs -->
     <string name="auth_failed">Authentication failed.</string>
     <string name="auth_success">Authentication successful</string>
+
+    <!-- Firebase databse fields -->
+    <string name="dbname_users">users</string>
+    <string name="dbname_user_account_settings">user_account_settings</string>
 </resources>

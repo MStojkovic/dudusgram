@@ -84,14 +84,27 @@ public class LoginActivity extends AppCompatActivity {
                             .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                    Log.d(TAG, "onComplete: " + task.isSuccessful());
+                                    FirebaseUser user = mAuth.getCurrentUser();
+
                                     if (task.isSuccessful()) {
                                         // Sign in success, update UI with the signed-in user's information
-                                        Log.d(TAG, "signInWithEmail:success");
-                                        Toast.makeText(mContext, getString(R.string.auth_success),
-                                                Toast.LENGTH_SHORT).show();
+                                        try{
+                                            if (user.isEmailVerified()){
+                                                Log.d(TAG, "onComplete: success. Email is verified");
+                                                Intent intent = new Intent(mContext, HomeActivity.class);
+                                                startActivity(intent);
+                                            } else {
+                                                Toast.makeText(mContext, "Email is not verified \n Check your email inbox", Toast.LENGTH_SHORT).show();
+                                                mProgressBar.setVisibility(View.GONE);
+                                                mPleaseWait.setVisibility(View.GONE);
+                                                mAuth.signOut();
+                                            }
 
-                                        mProgressBar.setVisibility(View.GONE);
-                                        mPleaseWait.setVisibility(View.GONE);
+                                        } catch (NullPointerException e){
+                                            Log.e(TAG, "onComplete: NullPointerException" + e.getMessage() );
+                                        }
 
                                         //FirebaseUser user = mAuth.getCurrentUser();
                                         //updateUI(user);

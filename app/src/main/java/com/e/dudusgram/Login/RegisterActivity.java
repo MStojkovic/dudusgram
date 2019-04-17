@@ -117,13 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-
-        if (currentUser != null){
-            Log.d(TAG, "onStart: signed in." + currentUser.getUid());
-        } else{
-            Log.d(TAG, "onStart: signed out.");
-        }
+        mAuth.addAuthStateListener(mAuthListener);
     }
 
 
@@ -148,13 +142,18 @@ public class RegisterActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             //1st check cheking if username is in use
-                            if(firebaseMethods.checkIfUsernameExsists(username, dataSnapshot)){
+                            if(firebaseMethods.checkIfUsernameExists(username, dataSnapshot)){
                                 append = myRef.push().getKey().substring(3,10);
                                 Log.d(TAG, "onDataChange: username already exists. Appending random string to name!" + append);
                             }
                             username = username + append;
 
+                            //add new user to database
+                            firebaseMethods.addNewUser(email, username, "", "", "");
 
+                            Toast.makeText(mContext, "Signup successful. Sending verification email.", Toast.LENGTH_SHORT).show();
+
+                            mAuth.signOut();
                         }
 
                         @Override
@@ -162,6 +161,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                         }
                     });
+
+                    finish();
+
                 } else{
                     Log.d(TAG, "setupFirebaseAuth: signed out.");
                 }
