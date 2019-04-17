@@ -2,6 +2,7 @@ package com.e.dudusgram.Home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ public class HomeActivity extends AppCompatActivity {
 
     //Firebase
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,14 +92,15 @@ public class HomeActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        mAuth.addAuthStateListener(mAuthListener);
+        checkCurrentUser(mAuth.getCurrentUser());
+    }
 
-        checkCurrentUser(currentUser);
-
-        if (currentUser != null){
-            Log.d(TAG, "onStart: signed in." + currentUser.getUid());
-        } else{
-            Log.d(TAG, "onStart: signed out.");
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
         }
     }
 
@@ -117,7 +120,27 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setupFirebaseAuth(){
-        Log.d(TAG, "instance initializer: setting up firebase auth.");
+        Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
+
         mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                //check if the user is logged in
+                checkCurrentUser(user);
+
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
     }
 }

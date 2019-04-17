@@ -18,4 +18,7 @@
     <!-- Firebase databse fields -->
     <string name="dbname_users">users</string>
     <string name="dbname_user_account_settings">user_account_settings</string>
+    <string name="are_you_sure_you_want_to_sign_out">Are you sure you want to sign out?</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="signing_out">Signing Out...</string>
 </resources>

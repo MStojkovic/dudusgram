@@ -26,6 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     private Context mContext;
     private ProgressBar mProgressBar;
@@ -146,25 +147,43 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    //<----------------------------------------Firebase------------------------------------------->
-
+    //<-----------------------------------Firebase---------------------------------------------->
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
 
-        if (currentUser != null){
-            Log.d(TAG, "onStart: signed in." + currentUser.getUid());
-        } else{
-            Log.d(TAG, "onStart: signed out.");
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
         }
     }
 
-
-
     private void setupFirebaseAuth(){
-        Log.d(TAG, "instance initializer: setting up firebase auth.");
+        Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
+
         mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                //check if the user is logged in
+
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
     }
 }

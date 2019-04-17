@@ -119,6 +119,13 @@ public class RegisterActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         mAuth.addAuthStateListener(mAuthListener);
     }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
 
 
 
