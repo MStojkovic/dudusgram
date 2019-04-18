@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Dudusgram</string>
-    <string name="edit_profile_text">Edit Profile</string>
-    <string name="sign_out_text">Sign Out</string>
+    <string name="edit_profile_fragment">Edit Profile</string>
+    <string name="sign_out_fragment">Sign Out</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
@@ -22,5 +22,7 @@
     <string name="are_you_sure_you_want_to_sign_out">Are you sure you want to sign out?</string>
     <string name="sign_out">Sign Out</string>
     <string name="signing_out">Signing Out...</string>
+    <string name="calling_activity">calling_activity</string>
+    <string name="profile_activity">Profile Activity</string>
 
 </resources>

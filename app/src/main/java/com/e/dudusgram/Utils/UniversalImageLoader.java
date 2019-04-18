@@ -21,8 +21,8 @@ public class UniversalImageLoader {
     private static final int defaultImage = R.drawable.ic_conrad;
     private Context mContext;
 
-    public UniversalImageLoader(Context mContext) {
-        this.mContext = mContext;
+    public UniversalImageLoader(Context context) {
+        mContext = context;
     }
 
     public ImageLoaderConfiguration getConfig(){
