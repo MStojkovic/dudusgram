@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -45,8 +47,13 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         Log.d(TAG, "onCreate: started.");
+
+        init();
+
+        /*
         mProgressBar = findViewById(R.id.profileProgressBar);
         mProgressBar.setVisibility(View.GONE);
+
 
         setupFirebaseAuth();
 
@@ -56,8 +63,19 @@ public class ProfileActivity extends AppCompatActivity {
         setProfileImage();
 
         tempGridSetup();
+        */
     }
 
+    private void init(){
+        Log.d(TAG, "init: inflating." + getString(R.string.profile_fragment));
+
+        ProfileFragment fragment = new ProfileFragment();
+        FragmentTransaction transaction = ProfileActivity.this.getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(getString(R.string.profile_fragment));
+        transaction.commit();
+    }
+    /*
     private void tempGridSetup(){
         ArrayList<String> imgURLs = new ArrayList<>();
         imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=6COT3TOpW0YSEM:");
@@ -118,7 +136,7 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * Responsible for setting up the profile toolbar
      */
-
+    /*
     private void setupToolBar(){
         Toolbar toolbar = findViewById(R.id.profileToolBar);
         setSupportActionBar(toolbar);
@@ -137,7 +155,7 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * BottomNavigationView setup
      */
-
+    /*
     private void setupBottomNavigationView(){
         Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
         BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
@@ -169,7 +187,7 @@ public class ProfileActivity extends AppCompatActivity {
      * Checks if the @param "user" is logged in.
      * @param user
      */
-
+    /*
     private void checkCurrentUser(FirebaseUser user){
         Log.d(TAG, "checkCurrentUser: checking if user is logged in.");
 
@@ -203,5 +221,5 @@ public class ProfileActivity extends AppCompatActivity {
                 // ...
             }
         };
-    }
+    } */
 }
