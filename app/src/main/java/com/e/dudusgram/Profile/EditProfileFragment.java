@@ -191,14 +191,41 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         //case2: user changed their email
         if (!mUserSettings.getUser().getEmail().equals(email)) {
 
-            //step1: Reauthenticate
             ConfirmPasswordDialog dialog = new ConfirmPasswordDialog();
             dialog.show(getFragmentManager(), getString(R.string.confirm_password_dialog));
             dialog.setTargetFragment(EditProfileFragment.this, 1);
 
-            //step2: check if email is already registered
+        }
 
-            //step3: change the email
+        if (!mUserSettings.getSettings().getDisplay_name().equals(displayName)){
+
+            //update the display name
+            mFirebaseMethods.updateUserAccountSettings(displayName, null, null, 0);
+
+        }
+
+        /**
+         * Change the rest of the settings that do not have to be unique
+         */
+
+        if (!mUserSettings.getSettings().getWebsite().equals(website)){
+
+            //update the website
+            mFirebaseMethods.updateUserAccountSettings(null, website, null, 0);
+
+        }
+
+        if (!mUserSettings.getSettings().getDescription().equals(description)){
+
+            //update the description
+            mFirebaseMethods.updateUserAccountSettings(null, null, description, 0);
+
+        }
+
+        if (!mUserSettings.getSettings().getProfile_photo().equals(phoneNumber)){
+
+            //update the phone number
+            mFirebaseMethods.updateUserAccountSettings(null, null, null, phoneNumber);
 
         }
     }
