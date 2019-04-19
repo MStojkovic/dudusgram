@@ -25,5 +25,10 @@
     <string name="calling_activity">calling_activity</string>
     <string name="profile_activity">Profile Activity</string>
     <string name="field_username">username</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="cancel">CANCEL</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="confirm_password_dialog">ConfirmPasswordDialog</string>
+    <string name="field_email">email</string>
 
 </resources>
