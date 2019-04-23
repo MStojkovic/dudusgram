@@ -1,15 +1,10 @@
 <resources>
+
     <string name="app_name">Dudusgram</string>
+
+    <!-- Fragments -->
     <string name="edit_profile_fragment">Edit Profile</string>
     <string name="sign_out_fragment">Sign Out</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
-    <string name="login">Login</string>
-    <string name="no_account">No account yet? Create one now!</string>
-    <string name="please_wait">Please wait...</string>
-    <string name="register_new_account">REGISTER A NEW ACCOUNT</string>
-    <string name="full_name">Full name</string>
-    <string name="register">REGISTER</string>
     <string name="profile_fragment">Profile Fragment</string>
 
     <!-- Firebase msgs -->
@@ -19,20 +14,37 @@
     <!-- Firebase databse fields -->
     <string name="dbname_users">users</string>
     <string name="dbname_user_account_settings">user_account_settings</string>
-    <string name="are_you_sure_you_want_to_sign_out">Are you sure you want to sign out?</string>
-    <string name="sign_out">Sign Out</string>
-    <string name="signing_out">Signing Out...</string>
-    <string name="calling_activity">calling_activity</string>
-    <string name="profile_activity">Profile Activity</string>
     <string name="field_username">username</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="cancel">CANCEL</string>
-    <string name="confirm">CONFIRM</string>
-    <string name="confirm_password_dialog">ConfirmPasswordDialog</string>
     <string name="field_email">email</string>
     <string name="field_display_name">display_name</string>
     <string name="field_website">website</string>
     <string name="field_description">description</string>
     <string name="field_phone_number">phone_number</string>
+
+    <!-- Strings -->
+    <string name="gallery">Gallery</string>
+    <string name="photo">Photo</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="full_name">Full name</string>
+    <string name="register">REGISTER</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="confirm">Confirm</string>
+    <string name="confirm_password_dialog">ConfirmPasswordDialog</string>
+    <string name="open_camera">Open Camera</string>
+
+    <!-- Msgs -->
+    <string name="no_account">No account yet? Create one now!</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="register_new_account">REGISTER A NEW ACCOUNT</string>
+    <string name="are_you_sure_you_want_to_sign_out">Are you sure you want to sign out?</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="signing_out">Signing Out…</string>
+
+    <!-- Activity -->
+    <string name="calling_activity">calling_activity</string>
+    <string name="profile_activity">Profile Activity</string>
+
 
 </resources>
