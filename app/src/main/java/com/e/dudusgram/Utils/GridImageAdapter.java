@@ -46,7 +46,7 @@ public class GridImageAdapter extends ArrayAdapter<String> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         /*
-        Viewholder build pattern (Similar to recycleview
+        Viewholder build pattern (Similar to recycleview)
          */
 
         final ViewHolder holder;
