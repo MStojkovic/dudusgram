@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.e.dudusgram.R;
+import com.e.dudusgram.models.Photo;
 import com.e.dudusgram.models.User;
 import com.e.dudusgram.models.UserAccountSettings;
 import com.e.dudusgram.models.UserSettings;
@@ -25,6 +26,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class FirebaseMethods {
 
@@ -52,7 +58,7 @@ public class FirebaseMethods {
         }
     }
 
-    public void uploadNewPhoto (String photoType, String caption, int count, String imgUrl){
+    public void uploadNewPhoto (String photoType, final String caption, final int count, final String imgUrl){
 
         Log.d(TAG, "uploadNewPhoto: attempting to upload new photo.");
 
@@ -82,6 +88,7 @@ public class FirebaseMethods {
                     Toast.makeText(mContext, "Photo upload success", Toast.LENGTH_SHORT).show();
 
                     //add the new photo to 'photo' and 'user_photos' node
+                    addPhotoToDatabase(caption, firebaseUrl.toString());
 
                     //navigate to the main feed
                 }
@@ -99,7 +106,7 @@ public class FirebaseMethods {
 
                     double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
 
-                    if (progress - 10 > mPhotoUploadProgress){
+                    if (progress - 7 > mPhotoUploadProgress){
                         Toast.makeText(mContext, String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
                         mPhotoUploadProgress = progress;
                     }
@@ -112,6 +119,34 @@ public class FirebaseMethods {
 
             Log.d(TAG, "uploadNewPhoto: uploading new profile photo");
         }
+    }
+
+    private String getTimestamp(){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'z'", Locale.UK);
+        sdf.setTimeZone(TimeZone.getTimeZone("Europe/Zagreb"));
+
+        return sdf.format(new Date());
+    }
+
+    private void addPhotoToDatabase(String caption, String url){
+
+        Log.d(TAG, "addPhotoToDatabase: adding photo to database.");
+
+        String tags = StringManipulation.getTags(caption);
+        String newPhotoKey = myRef.child(mContext.getString(R.string.dbname_photos)).push().getKey();
+        Photo photo = new Photo();
+        photo.setCaption(caption);
+        photo.setDate_created(getTimestamp());
+        photo.setImage_path(url.toString());
+        photo.setTags(tags);
+        photo.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        photo.setPhoto_id(newPhotoKey);
+
+        myRef.child(mContext.getString(R.string.dbname_user_photos)).child(FirebaseAuth.getInstance().getCurrentUser()
+                .getUid()).child(newPhotoKey).setValue(photo);
+        myRef.child(mContext.getString(R.string.dbname_photos)).child(newPhotoKey).setValue(photo);
+
     }
 
     public int getImageCount (DataSnapshot dataSnapshot){

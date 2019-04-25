@@ -97,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 Intent intent = new Intent(mContext, HomeActivity.class);
                                                 startActivity(intent);
                                             } else {
+                                                user.sendEmailVerification();
                                                 Toast.makeText(mContext, "Email is not verified \n Check your email inbox", Toast.LENGTH_SHORT).show();
                                                 mProgressBar.setVisibility(View.GONE);
                                                 mPleaseWait.setVisibility(View.GONE);
