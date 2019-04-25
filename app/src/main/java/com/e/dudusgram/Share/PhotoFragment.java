@@ -64,10 +64,10 @@ public class PhotoFragment extends Fragment {
         
         if (requestCode == CAMERA_REQUEST_CODE){
 
-            Log.d(TAG, "onActivityResult: done taking a photo.");
+            Log.d(TAG, "onActivityResult: done taking a Photo.");
             Log.d(TAG, "onActivityResult: attempting to navigate to final screen.");
 
-            //navigate to the final share screen to publish photo
+            //navigate to the final share screen to publish Photo
         }
     }
 }

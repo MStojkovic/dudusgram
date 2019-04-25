@@ -121,7 +121,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setProfileImage(){
-        Log.d(TAG, "setProfileImage: setting profile photo.");
+        Log.d(TAG, "setProfileImage: setting profile Photo.");
         String imgURL = "www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwje-qbTo8HhAhUHVhoKHTv5C8wQ_AUIDigB&biw=958&bih=927#imgrc=YEf-yiDuXoPh4M:";
         UniversalImageLoader.setImage(imgURL, profilePhoto, mProgressBar, "https://");
 

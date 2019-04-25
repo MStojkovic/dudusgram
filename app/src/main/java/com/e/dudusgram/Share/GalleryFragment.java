@@ -93,6 +93,8 @@ public class GalleryFragment extends Fragment {
             directories = FileSearch.getDirectoryPaths(filePaths.PICTURES);
         }
 
+        directories.add(filePaths.CAMERA);
+
         ArrayList<String> directoryNames = new ArrayList<>();
 
         for (int i = 0; i < directories.size(); i++){
@@ -101,8 +103,6 @@ public class GalleryFragment extends Fragment {
             String string = directories.get(i).substring(index).replace("/", "");
             directoryNames.add(string);
         }
-
-        directories.add(filePaths.CAMERA);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, directoryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

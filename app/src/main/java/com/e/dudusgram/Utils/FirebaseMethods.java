@@ -1,6 +1,8 @@
 package com.e.dudusgram.Utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,6 +12,8 @@ import com.e.dudusgram.models.User;
 import com.e.dudusgram.models.UserAccountSettings;
 import com.e.dudusgram.models.UserSettings;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +21,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class FirebaseMethods {
 
@@ -26,19 +34,98 @@ public class FirebaseMethods {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
+    private StorageReference mStorageReference;
     private String userID;
 
     private Context mContext;
+    private double mPhotoUploadProgress = 0;
 
     public FirebaseMethods(Context context){
         mContext = context;
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
+        mStorageReference = FirebaseStorage.getInstance().getReference();
 
         if(mAuth.getCurrentUser() != null){
             userID = mAuth.getCurrentUser().getUid();
         }
+    }
+
+    public void uploadNewPhoto (String photoType, String caption, int count, String imgUrl){
+
+        Log.d(TAG, "uploadNewPhoto: attempting to upload new photo.");
+
+        FilePaths filePaths = new FilePaths();
+
+        if (photoType.equals(mContext.getString(R.string.new_photo))){
+
+            Log.d(TAG, "uploadNewPhoto: uploading new photo.");
+
+            String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            StorageReference storageReference = mStorageReference
+                    .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + user_id + "/photo" + (count + 1));
+
+            //convert image url to bitmap
+            Bitmap bm = ImageManager.getBitmap(imgUrl);
+            byte[] bytes = ImageManager.getBytesFromBitmap(bm, 100);
+
+            UploadTask uploadTask = null;
+            uploadTask = storageReference.putBytes(bytes);
+
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    Task<Uri> firebaseUrl = mStorageReference.getDownloadUrl();
+
+                    Toast.makeText(mContext, "Photo upload success", Toast.LENGTH_SHORT).show();
+
+                    //add the new photo to 'photo' and 'user_photos' node
+
+                    //navigate to the main feed
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    Log.d(TAG, "onFailure: Photo upload failed.");
+                    Toast.makeText(mContext, "Photo upload failed.", Toast.LENGTH_SHORT).show();
+
+                }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                    if (progress - 10 > mPhotoUploadProgress){
+                        Toast.makeText(mContext, String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+                        mPhotoUploadProgress = progress;
+                    }
+
+                    Log.d(TAG, "onProgress: upload progress: " + progress + "% done");
+                }
+            });
+
+        } else if (photoType.equals(mContext.getString(R.string.profile_photo))){
+
+            Log.d(TAG, "uploadNewPhoto: uploading new profile photo");
+        }
+    }
+
+    public int getImageCount (DataSnapshot dataSnapshot){
+
+        int count = 0;
+
+        for (DataSnapshot ds: dataSnapshot
+                .child(mContext.getString(R.string.dbname_user_photos))
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .getChildren()){
+            count++;
+        }
+
+        return count;
     }
 
     /**
