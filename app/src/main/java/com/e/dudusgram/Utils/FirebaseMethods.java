@@ -73,7 +73,7 @@ public class FirebaseMethods {
             Log.d(TAG, "uploadNewPhoto: uploading new photo.");
 
             String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            StorageReference storageReference = mStorageReference
+            final StorageReference storageReference = mStorageReference
                     .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + user_id + "/photo" + (count + 1));
 
             //convert image url to bitmap
@@ -87,12 +87,23 @@ public class FirebaseMethods {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                    Task<Uri> firebaseUrl = mStorageReference.getDownloadUrl();
+                    Log.d(TAG, "onSuccess: Tu sam");
+
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+
+                            String firebaseUrl = uri.toString();
+                            Log.d(TAG, "onSuccess: SUCCESS" + firebaseUrl);
+                            addPhotoToDatabase(caption, firebaseUrl);
+
+                        }
+                    });
 
                     Toast.makeText(mContext, "Photo upload success", Toast.LENGTH_SHORT).show();
-
+s
                     //add the new photo to 'photo' and 'user_photos' node
-                    addPhotoToDatabase(caption, firebaseUrl.toString());
+
 
                     //navigate to the main feed
                     Intent intent = new Intent(mContext, HomeActivity.class);
@@ -133,7 +144,7 @@ public class FirebaseMethods {
             );
 
             String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            StorageReference storageReference = mStorageReference
+            final StorageReference storageReference = mStorageReference
                     .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + user_id + "/profile_photo");
 
             //convert image url to bitmap
@@ -147,12 +158,26 @@ public class FirebaseMethods {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                    Task<Uri> firebaseUrl = mStorageReference.getDownloadUrl();
+
+                    storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+
+                            String firebaseUrl = uri.toString();
+                            Log.d(TAG, "onSuccess: url: " + firebaseUrl);
+                            //insert into 'user_account_settings'
+                            setProfilePhoto(firebaseUrl);
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d(TAG, "onFailure: FAILED");
+                        }
+                    });
 
                     Toast.makeText(mContext, "Photo upload success", Toast.LENGTH_SHORT).show();
 
-                    //insert into 'user_account_settings'
-                    setProfilePhoto(firebaseUrl.toString());
 
                 }
             }).addOnFailureListener(new OnFailureListener() {
