@@ -115,7 +115,11 @@ public class ProfileFragment extends Fragment {
         //User user = userSettings.getUser();
         UserAccountSettings settings = userSettings.getSettings();
 
+        Log.d(TAG, "setProfileWidgets: ERROR BEGIN " + settings.getProfile_photo() + mProfilePhoto);
+
         UniversalImageLoader.setImage(settings.getProfile_photo(), mProfilePhoto, null, "");
+
+        Log.d(TAG, "setProfileWidgets: ERROR END");
 
         mDisplayName.setText(settings.getDisplay_name());
         mUsername.setText(settings.getUsername());

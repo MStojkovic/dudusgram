@@ -7,9 +7,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private EditText mEmail, mPassword;
     private TextView mPleaseWait;
+    private LinearLayout mLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         mPleaseWait = findViewById(R.id.pleaseWait);
         mEmail = findViewById(R.id.input_email);
         mPassword = findViewById(R.id.input_password);
+        mLayout = findViewById(R.id.linLayout);
         mContext = LoginActivity.this;
 
         Log.d(TAG, "onCreate: started.");
@@ -51,6 +56,12 @@ public class LoginActivity extends AppCompatActivity {
         setupFirebaseAuth();
 
         init();
+    }
+
+    protected void hideKeyboard(View view)
+    {
+        InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private boolean isStringNull(String string){
@@ -64,6 +75,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void init(){
+
+        //Add on touch listener to hide the virtual keyboard
+        mLayout.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent ev)
+            {
+                hideKeyboard(view);
+                return false;
+            }
+        });
 
         //initialize the button for logging in
         Button btnLogin = findViewById(R.id.btn_login);
@@ -97,7 +119,6 @@ public class LoginActivity extends AppCompatActivity {
                                                 Intent intent = new Intent(mContext, HomeActivity.class);
                                                 startActivity(intent);
                                             } else {
-                                                user.sendEmailVerification();
                                                 Toast.makeText(mContext, "Email is not verified \n Check your email inbox", Toast.LENGTH_SHORT).show();
                                                 mProgressBar.setVisibility(View.GONE);
                                                 mPleaseWait.setVisibility(View.GONE);

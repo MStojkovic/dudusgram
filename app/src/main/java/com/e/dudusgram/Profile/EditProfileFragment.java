@@ -1,5 +1,6 @@
 package com.e.dudusgram.Profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.e.dudusgram.R;
+import com.e.dudusgram.Share.ShareActivity;
 import com.e.dudusgram.Utils.FirebaseMethods;
 import com.e.dudusgram.Utils.UniversalImageLoader;
 import com.e.dudusgram.dialogs.ConfirmPasswordDialog;
@@ -278,6 +280,8 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         User user = userSettings.getUser();
         UserAccountSettings settings = userSettings.getSettings();
 
+        Log.d(TAG, "setProfileWidgets: " + settings.getProfile_photo() + mProfilePhoto);
+
         UniversalImageLoader.setImage(settings.getProfile_photo(), mProfilePhoto, null, "");
 
         mDisplayName.setText(settings.getDisplay_name());
@@ -286,6 +290,19 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         mDescription.setText(settings.getDescription());
         mEmail.setText(user.getEmail());
         mPhoneNumber.setText(String.valueOf(user.getPhone_number()));
+
+        mChangeProfilePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.d(TAG, "onClick: changing profile photo.");
+
+                Intent intent = new Intent(getActivity(), ShareActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().startActivity(intent);
+                getActivity().finish();
+            }
+        });
     }
 
     //<-----------------------------------Firebase---------------------------------------------->

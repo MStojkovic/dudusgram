@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.e.dudusgram.Profile.AccountSettingsActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.FilePaths;
 import com.e.dudusgram.Utils.FileSearch;
@@ -74,15 +75,35 @@ public class GalleryFragment extends Fragment {
 
                 Log.d(TAG, "onClick: navigating to the final share screen.");
 
-                Intent intent = new Intent(getActivity(), NextActivity.class);
-                intent.putExtra(getString(R.string.selected_image), mSelectedImage);
-                startActivity(intent);
+                if (isRootTask()) {
+
+                    Intent intent = new Intent(getActivity(), NextActivity.class);
+                    intent.putExtra(getString(R.string.selected_image), mSelectedImage);
+                    startActivity(intent);
+
+                } else {
+
+                    Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
+                    intent.putExtra(getString(R.string.selected_image), mSelectedImage);
+                    intent.putExtra(getString(R.string.return_to_fragment), getString(R.string.edit_profile_fragment));
+                    startActivity(intent);
+                    getActivity().finish();
+                }
             }
         });
 
         init();
 
         return view;
+    }
+
+    private boolean isRootTask(){
+
+        if (((ShareActivity)getActivity()).getTask() == 0){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void init(){
