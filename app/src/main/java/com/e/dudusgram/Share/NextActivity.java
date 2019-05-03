@@ -1,6 +1,7 @@
 package com.e.dudusgram.Share;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,6 +32,8 @@ public class NextActivity extends AppCompatActivity {
     private String mAppend = "file:/";
     private int imageCount = 0;
     private String imgURL;
+    private Bitmap bitmap;
+    private Intent intent;
 
     //Firebase
     private FirebaseAuth mAuth;
@@ -73,26 +76,22 @@ public class NextActivity extends AppCompatActivity {
 
                 String caption = mCaption.getText().toString();
 
-                Toast.makeText(NextActivity.this, "Attempting to upload new photo", Toast.LENGTH_SHORT).show();
-                mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, imgURL);
+                if(intent.hasExtra(getString(R.string.selected_image))){
+
+                    imgURL = intent.getStringExtra(getString(R.string.selected_image));
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, imgURL, null);
+
+                }else if(intent.hasExtra(getString(R.string.selected_bitmap))){
+
+                    bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, null, bitmap);
+                }
+
             }
         });
 
         setImage();
 
-    }
-
-    private void someMethod(){
-
-        //create a data model for Photos
-
-        //Add properties to the Photo Objects (caption, date, imageURL, photo_id, tags, user_id)
-
-        //Count the number of photos the user already has
-
-        //Upload the Photo to FireBase Storage and insert two new nodes in the FireBase Database:
-            //Photo node
-            //user_photo node
     }
 
     /**
@@ -101,11 +100,24 @@ public class NextActivity extends AppCompatActivity {
 
     private void setImage(){
 
-        Intent intent = getIntent();
+        intent = getIntent();
         ImageView image = findViewById(R.id.imageShare);
-        imgURL = intent.getStringExtra(getString(R.string.selected_image));
 
-        UniversalImageLoader.setImage(intent.getStringExtra(getString(R.string.selected_image)), image, null, mAppend);
+        if(intent.hasExtra(getString(R.string.selected_image))){
+
+            imgURL = intent.getStringExtra(getString(R.string.selected_image));
+            Log.d(TAG, "setImage: got new image url " + imgURL);
+            UniversalImageLoader.setImage(intent.getStringExtra(getString(R.string.selected_image)), image, null, mAppend);
+
+        }else if(intent.hasExtra(getString(R.string.selected_bitmap))){
+
+            bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
+            Log.d(TAG, "setImage: got new bitmap");
+            image.setImageBitmap(bitmap);
+
+        }
+
+
     }
 
     //<-----------------------------------Firebase---------------------------------------------->

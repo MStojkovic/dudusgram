@@ -12,7 +12,7 @@ public class StringManipulation {
 
     public static String getTags(String string) {
 
-        if (string.indexOf("#") > 0){
+        if (string.contains("#")){
 
             StringBuilder sb = new StringBuilder();
             char[] charArray = string.toCharArray();
