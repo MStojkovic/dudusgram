@@ -50,20 +50,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         init();
 
-        /*
-        mProgressBar = findViewById(R.id.profileProgressBar);
-        mProgressBar.setVisibility(View.GONE);
-
-
-        setupFirebaseAuth();
-
-        setupBottomNavigationView();
-        setupToolBar();
-        setupActivityWidget();
-        setProfileImage();
-
-        tempGridSetup();
-        */
     }
 
     private void init(){
@@ -75,39 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
         transaction.addToBackStack(getString(R.string.profile_fragment));
         transaction.commit();
     }
-    /*
-    private void tempGridSetup(){
-        ArrayList<String> imgURLs = new ArrayList<>();
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=6COT3TOpW0YSEM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=8OMT8aPmmhjb7M:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=bqTJL6ymCq4AgM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=qeURZMg52aWoHM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=1xQbcdcH6trwuM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=YEf-yiDuXoPh4M:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=wMIB21i8Ir66GM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=4_MAtHmXz09UnM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=dU-R6qPQC7RNwM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=eXfmBMoYJXdxHM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=8MGimE6KBIAZUM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=bK16nXzxq9fAFM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
-        imgURLs.add("https://www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwiDje66uMPhAhWto4sKHe8fCWoQ_AUIDigB&biw=958&bih=927#imgrc=rHniKhLfU-oOZM:");
 
-
-        setupImageGrid(imgURLs);
-    }
 
     private void setupImageGrid(ArrayList<String> imgURLs){
         GridView gridView = findViewById(R.id.gridView);
@@ -133,93 +87,4 @@ public class ProfileActivity extends AppCompatActivity {
         profilePhoto = findViewById(R.id.profile_photo);
     }
 
-    /**
-     * Responsible for setting up the profile toolbar
-     */
-    /*
-    private void setupToolBar(){
-        Toolbar toolbar = findViewById(R.id.profileToolBar);
-        setSupportActionBar(toolbar);
-
-        ImageView profileMenu = findViewById(R.id.profileMenu);
-        profileMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: Navigating to account settings.");
-                Intent intent = new Intent(mContext, AccountSettingsActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-    /**
-     * BottomNavigationView setup
-     */
-    /*
-    private void setupBottomNavigationView(){
-        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
-        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, bottomNavigationViewEx);
-        Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-        menuItem.setChecked(true);
-    }
-
-    //<-----------------------------------Firebase---------------------------------------------->
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        mAuth.addAuthStateListener(mAuthListener);
-        checkCurrentUser(mAuth.getCurrentUser());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
-    }
-
-    /**
-     * Checks if the @param "user" is logged in.
-     * @param user
-     */
-    /*
-    private void checkCurrentUser(FirebaseUser user){
-        Log.d(TAG, "checkCurrentUser: checking if user is logged in.");
-
-        if (user == null){
-            Intent intent = new Intent(mContext, LoginActivity.class);
-            startActivity(intent);
-        }
-
-    }
-
-    private void setupFirebaseAuth(){
-        Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
-
-        mAuth = FirebaseAuth.getInstance();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-
-                //check if the user is logged in
-                checkCurrentUser(user);
-
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        };
-    } */
 }
