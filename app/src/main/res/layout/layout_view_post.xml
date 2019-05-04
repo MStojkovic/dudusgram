@@ -25,7 +25,8 @@
                     app:civ_border_color="@color/black"
                     app:civ_border_width="0.5dp"
                     android:layout_marginLeft="25dp"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="25dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -37,7 +38,8 @@
                     android:layout_centerVertical="true"
                     android:id="@+id/username"
                     android:textColor="@color/black"
-                    />
+                    android:layout_toEndOf="@+id/profile_photo"
+                    android:layout_marginStart="10dp" />
 
                 <ImageView
                     android:layout_width="30dp"
@@ -46,14 +48,17 @@
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="20dp"
-                    android:id="@+id/ivEllipses"/>
+                    android:id="@+id/ivEllipses"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="20dp" />
             </RelativeLayout>
 
             <com.e.dudusgram.Utils.SquareImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_image"
-                android:layout_below="@id/relLayout1"/>
+                android:layout_below="@id/relLayout1"
+                android:scaleType="centerCrop"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -64,8 +69,8 @@
                 <RelativeLayout
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
-                    android:id="@+id/heartLayout">
-                    <!--android:background="@color/white">-->
+                    android:id="@+id/heartLayout"
+                    android:background="@color/white">
 
                     <ImageView
                         android:layout_width="35dp"
@@ -74,7 +79,8 @@
                         android:layout_centerInParent="true"
                         android:layout_marginLeft="20dp"
                         android:src="@drawable/ic_heart_red"
-                        android:visibility="invisible"/>
+                        android:visibility="invisible"
+                        android:layout_marginStart="20dp" />
 
                     <ImageView
                         android:layout_width="35dp"
@@ -95,7 +101,9 @@
                     android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_speech_bubble"
                     android:visibility="visible"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/heartLayout"
+                    android:layout_marginStart="10dp" />
 
             </RelativeLayout>
 
