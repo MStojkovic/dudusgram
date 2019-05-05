@@ -32,7 +32,9 @@
                 android:layout_marginLeft="30dp"
                 android:text="Photo"
                 android:textColor="@color/black"
-                android:id="@+id/tvBackLabel"/>
+                android:id="@+id/tvBackLabel"
+                android:layout_toEndOf="@id/backArrow"
+                android:layout_marginStart="30dp" />
 
         </RelativeLayout>
 

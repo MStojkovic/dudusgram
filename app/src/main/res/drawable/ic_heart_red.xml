@@ -2,10 +2,9 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle">
-            <!-- Ako zakomentiramo solid tag dobivamo samo oblik srca bez pozadine -->
-            <!-- <solid android:color="#fff"/> -->
+
+            <solid android:color="#fff"/>
             <size android:height="48dp"
                   android:width="48dp"/>
         </shape>
