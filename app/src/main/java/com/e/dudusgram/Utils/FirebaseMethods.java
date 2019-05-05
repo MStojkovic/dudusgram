@@ -217,8 +217,8 @@ public class FirebaseMethods {
 
     private String getTimestamp(){
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'z'", Locale.UK);
-        sdf.setTimeZone(TimeZone.getTimeZone("Europe/Zagreb"));
+        SimpleDateFormat sdf = new SimpleDateFormat(mContext.getString(R.string.date_pattern), Locale.UK);
+        sdf.setTimeZone(TimeZone.getTimeZone(mContext.getString(R.string.timezone)));
 
         return sdf.format(new Date());
     }
@@ -430,7 +430,8 @@ public class FirebaseMethods {
                 0,
                 profile_photo,
                 StringManipulation.condenseUsername(username),
-                webiste
+                webiste,
+                userID
         );
 
 

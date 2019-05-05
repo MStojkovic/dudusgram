@@ -23,6 +23,7 @@
     <string name="field_phone_number">phone_number</string>
     <string name="dbname_photos">photos</string>
     <string name="dbname_user_photos">user_photos</string>
+    <string name="field_user_id">user_id</string>
 
     <!-- Msgs -->
     <string name="no_account">No account yet? Create one now!</string>
@@ -48,6 +49,10 @@
     <string name="new_photo">new_photo</string>
     <string name="profile_photo">profile_photo</string>
 
+    <!-- time strings -->
+    <string name="timezone">Europe/Zagreb</string>
+    <string name="date_pattern">yyyy-MM-dd\'T\'HH:mm:ss\'z\'</string>
+
     <!-- Strings -->
     <string name="gallery">gallery</string>
     <string name="photo">Photo</string>
@@ -63,6 +68,8 @@
     <string name="next">Next</string>
     <string name="description">Description</string>
     <string name="share">Share</string>
+    <string name="days_ago">days ago</string>
+    <string name="today">Today</string>
 
 
 
