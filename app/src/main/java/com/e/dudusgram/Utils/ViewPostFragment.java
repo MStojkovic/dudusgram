@@ -1,4 +1,4 @@
-package com.e.dudusgram;
+package com.e.dudusgram.Utils;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,19 +6,18 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.e.dudusgram.Login.LoginActivity;
-import com.e.dudusgram.Utils.BottomNavigationViewHelper;
-import com.e.dudusgram.Utils.FirebaseMethods;
-import com.e.dudusgram.Utils.SquareImageView;
-import com.e.dudusgram.Utils.UniversalImageLoader;
+import com.e.dudusgram.R;
 import com.e.dudusgram.models.Photo;
 import com.e.dudusgram.models.UserAccountSettings;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,6 +51,8 @@ public class ViewPostFragment extends Fragment{
     private String photoUsername;
     private String photoUrl;
     private UserAccountSettings mUserAccountSettings;
+    private GestureDetector mGestureDetector;
+    private Heart mheart;
 
     private SquareImageView mPostImage;
     private BottomNavigationViewEx bottomNavigationView;
@@ -81,6 +82,11 @@ public class ViewPostFragment extends Fragment{
         mHeartWhite = view.findViewById(R.id.image_heart);
         mProfileImage = view.findViewById(R.id.profile_photo);
 
+        mHeartRed.setVisibility(View.GONE);
+        mHeartWhite.setVisibility(View.VISIBLE);
+        mheart = new Heart(mHeartWhite, mHeartRed);
+        mGestureDetector = new GestureDetector(getActivity(), new GestureListener());
+
         try{
 
             mPhoto = getPhotoFromBundle();
@@ -95,7 +101,44 @@ public class ViewPostFragment extends Fragment{
         setupBottomNavigationView();
         getPhotoDetails();
 
+        testToggle();
+
         return view;
+    }
+
+    private  void testToggle(){
+        mHeartRed.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d(TAG, "onTouch: red heart touch detected.");
+
+                return mGestureDetector.onTouchEvent(motionEvent);
+            }
+        });
+
+        mHeartWhite.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.d(TAG, "onTouch: white heart touch detected.");
+
+                return mGestureDetector.onTouchEvent(motionEvent);
+            }
+        });
+    }
+
+    public class GestureListener extends GestureDetector.SimpleOnGestureListener{
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            Log.d(TAG, "onDoubleTap: double tap detected.");
+            mheart.toggleLike();
+
+            return true;
+        }
     }
 
     private void getPhotoDetails(){
