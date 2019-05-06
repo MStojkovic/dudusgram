@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
-                    android:text="placeholder.tekst"
+                    android:text="Test account"
                     android:layout_toRightOf="@+id/profile_photo"
                     android:layout_marginLeft="10dp"
                     android:layout_centerVertical="true"
@@ -44,7 +44,7 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_ellipses"
+                    app:srcCompat="@drawable/ic_ellipses"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="20dp"
@@ -90,7 +90,8 @@
                         android:layout_centerInParent="true"
                         android:layout_marginLeft="20dp"
                         android:src="@drawable/ic_heart_white"
-                        android:visibility="visible"/>
+                        android:visibility="visible"
+                        android:layout_marginStart="20dp" />
 
                 </RelativeLayout>
 
@@ -120,7 +121,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Lajkali su Dino, Mile, Dorky i 10 drugih"
+                    android:text="Liked by test"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:id="@+id/image_likes"/>
@@ -128,7 +129,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dino.jukic #kodiranje #testiranje #RMA"
+                    android:text="Dudusgram #test"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:id="@+id/image_caption"
@@ -138,7 +139,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View all 3 comments"
+                    android:text="View all x comments"
                     android:textColor="@color/grey"
                     android:textSize="18sp"
                     android:id="@+id/image_comments_link"
@@ -148,7 +149,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 DAYS AGO"
+                    android:text="X DAYS AGO"
                     android:textColor="@color/grey"
                     android:textSize="18sp"
                     android:id="@+id/image_time_posted"

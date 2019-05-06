@@ -24,6 +24,12 @@
     <string name="dbname_photos">photos</string>
     <string name="dbname_user_photos">user_photos</string>
     <string name="field_user_id">user_id</string>
+    <string name="field_likes">likes</string>
+    <string name="field_caption">caption</string>
+    <string name="field_date_created">date_created</string>
+    <string name="field_photo_id">photo_id</string>
+    <string name="field_tags">tags</string>
+    <string name="field_image_path">image_path</string>
 
     <!-- Msgs -->
     <string name="no_account">No account yet? Create one now!</string>
@@ -32,6 +38,11 @@
     <string name="are_you_sure_you_want_to_sign_out">Are you sure you want to sign out?</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="signing_out">Signing Out…</string>
+    <string name="no_likes">No likes yet, be the first person to like!</string>
+    <string name="liked_by">Liked by </string>
+    <string name="others">others</string>
+    <string name="and">and</string>
+    <string name="add_a_comment">Add a comment…</string>
 
     <!-- Activity -->
     <string name="profile_activity">Profile Activity</string>
@@ -70,7 +81,5 @@
     <string name="share">Share</string>
     <string name="days_ago">days ago</string>
     <string name="today">Today</string>
-
-
 
 </resources>
