@@ -47,6 +47,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                               @NonNull List<Comment> objects) {
         super(context, resource, objects);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mContext = context;
         layoutResource = resource;
     }
 
@@ -106,8 +107,9 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
                     ImageLoader imageLoader = ImageLoader.getInstance();
 
-                    imageLoader.displayImage(singleSnapshot.getValue(UserAccountSettings.class).getProfile_photo(),
-                    holder.profileImage);
+                    imageLoader.displayImage(
+                            singleSnapshot.getValue(UserAccountSettings.class).getProfile_photo(),
+                            holder.profileImage);
                 }
             }
 
@@ -141,7 +143,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
         String difference = "";
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK);
+        SimpleDateFormat sdf = new SimpleDateFormat(mContext.getString(R.string.date_pattern), Locale.UK);
         sdf.setTimeZone(TimeZone.getTimeZone("Europe/Zagreb"));
         Date today = c.getTime();
         sdf.format(today);

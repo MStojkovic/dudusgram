@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -30,6 +31,7 @@ import com.e.dudusgram.models.User;
 import com.e.dudusgram.models.UserAccountSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,7 +45,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class ViewCommentsFragment extends Fragment {
@@ -114,6 +119,29 @@ public class ViewCommentsFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void setupWidgets(){
+
+        CommentListAdapter adapter = new CommentListAdapter(getActivity(),
+                R.layout.layout_comment, mComments);
+        mListView.setAdapter(adapter);
+
+        mCheckMark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(!mComment.getText().toString().equals("")){
+                    Log.d(TAG, "onClick: attempting to submit new comment.");
+                    addNewComment(mComment.getText().toString());
+
+                    mComment.setText("");
+                    closeKeyboard();
+                }else{
+                    Toast.makeText(getActivity(), "you can't post a blank comment", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void closeKeyboard(){
@@ -215,6 +243,101 @@ public class ViewCommentsFragment extends Fragment {
             }
         };
 
+        myRef.child(getString(R.string.dbname_photos))
+                .child(mPhoto.getPhoto_id())
+                .child(getString(R.string.field_comments))
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        Query query = myRef
+                                .child(getString(R.string.dbname_photos))
+                                .orderByChild(getString(R.string.field_photo_id))
+                                .equalTo(mPhoto.getPhoto_id());
+
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+
+                                    Photo photo = new Photo();
+                                    Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
+
+                                    photo.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
+                                    photo.setTags(objectMap.get(getString(R.string.field_tags)).toString());
+                                    photo.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
+                                    photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
+                                    photo.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
+                                    photo.setImage_path(objectMap.get(getString(R.string.field_image_path)).toString());
+
+                                    mComments.clear();
+
+                                    Comment firstComment = new Comment();
+                                    firstComment.setComment(mPhoto.getCaption());
+                                    firstComment.setUser_id(mPhoto.getUser_id());
+                                    firstComment.setDate_created(mPhoto.getDate_created());
+
+                                    mComments.add(firstComment);
+
+                                    for (DataSnapshot dSnapshot : singleSnapshot
+                                            .child(getString(R.string.field_comments)).getChildren()){
+
+                                        Comment comment = new Comment();
+                                        comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
+                                        comment.setComment(dSnapshot.getValue(Comment.class).getComment());
+                                        comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+                                        mComments.add(comment);
+                                    }
+
+                                    photo.setComments(mComments);
+
+                                    mPhoto = photo;
+
+                                    setupWidgets();
+
+//                    List<Like> likesList = new ArrayList<Like>();
+//
+//                    for (DataSnapshot dSnapshot : singleSnapshot.child(getString(R.string.field_likes))
+//                            .getChildren()){
+//
+//                        Like like = new Like();
+//                        like.setUser_id(dSnapshot.getValue(Like.class).getUser_id());
+//                        likesList.add(like);
+//                    }
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                Log.d(TAG, "onCancelled: query canceled.");
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     /**
