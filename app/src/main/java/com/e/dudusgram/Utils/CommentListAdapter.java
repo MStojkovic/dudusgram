@@ -71,6 +71,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             holder.timestamp = (TextView) convertView.findViewById(R.id.comment_time_posted);
             holder.reply = (TextView) convertView.findViewById(R.id.comment_reply);
             holder.like = (ImageView) convertView.findViewById(R.id.comment_like);
+            holder.likes = (TextView) convertView.findViewById(R.id.comment_likes);
             holder.profileImage = (CircleImageView) convertView.findViewById(R.id.comment_profile_image);
 
             convertView.setTag(holder);
@@ -116,6 +117,16 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             }
         });
 
+        try{
+            if(position == 0){
+                holder.like.setVisibility(View.GONE);
+                holder.likes.setVisibility(View.GONE);
+                holder.reply.setVisibility(View.GONE);
+            }
+        }catch(NullPointerException e){
+            Log.e(TAG, "getView: NullPointerException " + e.getMessage());
+        }
+
         return convertView;
     }
 
@@ -130,8 +141,8 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
         String difference = "";
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat(mContext.getString(R.string.date_pattern), Locale.UK);
-        sdf.setTimeZone(TimeZone.getTimeZone(mContext.getString(R.string.timezone)));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.UK);
+        sdf.setTimeZone(TimeZone.getTimeZone("Europe/Zagreb"));
         Date today = c.getTime();
         sdf.format(today);
         Date timestamp;

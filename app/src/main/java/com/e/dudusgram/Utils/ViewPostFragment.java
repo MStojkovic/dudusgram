@@ -350,7 +350,7 @@ public class ViewPostFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: navigating back");
-
+                mOnCommentThreadSelectedListener.onCommentThreadSelectedListener(mPhoto);
             }
         });
 
@@ -422,7 +422,7 @@ public class ViewPostFragment extends Fragment{
 
         Bundle bundle = this.getArguments();
         if (bundle != null){
-            return bundle.getParcelable(getString(R.string.photo));
+            return bundle.getParcelable("Photo");
         } else{
             return null;
         }

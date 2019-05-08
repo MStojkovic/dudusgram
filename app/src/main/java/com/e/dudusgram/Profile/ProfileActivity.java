@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.GridImageAdapter;
 import com.e.dudusgram.Utils.UniversalImageLoader;
+import com.e.dudusgram.Utils.ViewCommentsFragment;
 import com.e.dudusgram.Utils.ViewPostFragment;
 import com.e.dudusgram.models.Photo;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +29,17 @@ public class ProfileActivity extends AppCompatActivity implements
 
     @Override
     public void onCommentThreadSelectedListener(Photo photo) {
+        Log.d(TAG, "onCommentThreadSelectedListener: selected a comment thread");
 
+        ViewCommentsFragment fragment = new ViewCommentsFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(getString(R.string.photo), photo);
+        fragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(getString(R.string.view_comments_fragment));
+        transaction.commit();
     }
 
     @Override

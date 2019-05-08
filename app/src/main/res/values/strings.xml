@@ -7,6 +7,7 @@
     <string name="view_post_fragment">View Post</string>
     <string name="sign_out_fragment">Sign Out</string>
     <string name="profile_fragment">Profile Fragment</string>
+    <string name="view_comments_fragment">View Comments</string>
 
     <!-- Firebase msgs -->
     <string name="auth_failed">Authentication failed.</string>
@@ -30,6 +31,7 @@
     <string name="field_photo_id">photo_id</string>
     <string name="field_tags">tags</string>
     <string name="field_image_path">image_path</string>
+    <string name="field_comments">comments</string>
 
     <!-- Msgs -->
     <string name="no_account">No account yet? Create one now!</string>
