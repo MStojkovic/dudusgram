@@ -8,6 +8,7 @@
     <string name="sign_out_fragment">Sign Out</string>
     <string name="profile_fragment">Profile Fragment</string>
     <string name="view_comments_fragment">View Comments</string>
+    <string name="view_profile_fragment">View Profile Fragment</string>
 
     <!-- Firebase msgs -->
     <string name="auth_failed">Authentication failed.</string>
@@ -48,12 +49,14 @@
 
     <!-- Activity -->
     <string name="profile_activity">Profile Activity</string>
+    <string name="search_activity">Search Activity</string>
 
     <!-- Intent Extras -->
     <string name="calling_activity">calling_activity</string>
     <string name="selected_image">selected_image</string>
     <string name="return_to_fragment">return_to_fragment</string>
     <string name="selected_bitmap">selected_bitmap</string>
+    <string name="intent_user">intent_user</string>
 
     <!-- Bundle args names -->
     <string name="activity_number">activity_number</string>
