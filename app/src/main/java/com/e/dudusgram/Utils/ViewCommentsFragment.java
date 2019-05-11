@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.e.dudusgram.Home.HomeActivity;
 import com.e.dudusgram.Login.LoginActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.models.Comment;
@@ -149,7 +150,13 @@ public class ViewCommentsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: navigating back");
-                getActivity().getSupportFragmentManager().popBackStack();
+
+                if(getCallingActivityFromBundle().equals(getString(R.string.home_activity))){
+                    getActivity().getSupportFragmentManager().popBackStack();
+                    ((HomeActivity)getActivity()).showLayout();
+                }else{
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
             }
         });
     }
@@ -195,6 +202,22 @@ public class ViewCommentsFragment extends Fragment {
         sdf.setTimeZone(TimeZone.getTimeZone(getActivity().getString(R.string.timezone)));
 
         return sdf.format(new Date());
+    }
+
+    /**
+     * Get the photo from the bundle
+     * @return
+     */
+
+    private String getCallingActivityFromBundle(){
+        //Log.d(TAG, "getCallingActivityFromBundle: calling activity from bundle: " + getArguments());
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null){
+            return bundle.getString(getString(R.string.home_activity));
+        } else{
+            return null;
+        }
     }
 
     /**

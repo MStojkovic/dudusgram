@@ -57,6 +57,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mLayoutResource = resource;
         this.mContext = context;
+        mReference = FirebaseDatabase.getInstance().getReference();
     }
 
     static class ViewHolder {
@@ -95,7 +96,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
             holder.comments = (TextView) convertView.findViewById(R.id.image_comments_link);
             holder.caption = (TextView) convertView.findViewById(R.id.image_caption);
             holder.timeDelta = (TextView) convertView.findViewById(R.id.image_time_posted);
-            holder.mProfileImage = (CircleImageView) convertView.findViewById(R.id.profile_image);
+            holder.mProfileImage = (CircleImageView) convertView.findViewById(R.id.profile_photo);
             holder.heart = new Heart(holder.heartWhite, holder.heartRed);
             holder.photo = getItem(position);
             holder.detector = new GestureDetector(mContext, new GestureListener(holder));
@@ -116,13 +117,14 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
         //set the comment
         List<Comment> comments = getItem(position).getComments();
         holder.comments.setText("View all " + comments.size() + " comments");
-        holder.comment.setOnClickListener(new View.OnClickListener() {
+        holder.comments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: loading comment thread for " + getItem(position).getPhoto_id());
-                ((HomeActivity)mContext).onCommentThreadSelected(getItem(position), holder.settings);
+                ((HomeActivity)mContext).onCommentThreadSelected(getItem(position),
+                        mContext.getString(R.string.home_activity));
 
-                //spoilers :O
+                ((HomeActivity)mContext).hideLayout();
             }
         });
 
@@ -192,9 +194,10 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
                     holder.comment.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            ((HomeActivity)mContext).onCommentThreadSelected(getItem(position), holder.settings);
+                            ((HomeActivity)mContext).onCommentThreadSelected(getItem(position),
+                                    mContext.getString(R.string.home_activity));
 
-                            //more spoilers :O
+                            ((HomeActivity)mContext).hideLayout();
                         }
                     });
                 }
@@ -207,6 +210,28 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
         });
 
         //get the user object
+        Query userQuery = mReference
+                .child(mContext.getString(R.string.dbname_users))
+                .orderByChild(mContext.getString(R.string.field_user_id))
+                .equalTo(getItem(position).getUser_id());
+
+        userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                    Log.d(TAG, "onDataChange: found user: " +
+                            singleSnapshot.getValue(User.class).getUsername());
+
+                    holder.user = singleSnapshot.getValue(User.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         return convertView;
     }
@@ -371,7 +396,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
 
                                 String[] splitUsers = holder.users.toString().split(",");
 
-                                if (holder.users.toString().contains(holder.user.getUsername() + ",")){
+                                if (holder.users.toString().contains(currentUsername + ",")){
                                     holder.likeByCurrentUser = true;
                                 } else {
                                     holder.likeByCurrentUser = false;
