@@ -199,8 +199,6 @@ public class ViewPostFragment extends Fragment{
     }
 
     private void getLikesString(){
-
-
         Log.d(TAG, "getLikesString: getting likes string.");
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -341,7 +339,7 @@ public class ViewPostFragment extends Fragment{
                                     .removeValue();
 
                             myRef.child(getString(R.string.dbname_user_photos))
-                                    .child(mPhoto.getUser_id()) // Maybe should be mPhoto.getPhoto_id()
+                                    .child(mPhoto.getUser_id())
                                     .child(mPhoto.getPhoto_id())
                                     .child(getString(R.string.field_likes))
                                     .child(keyID)

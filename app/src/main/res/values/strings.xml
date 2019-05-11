@@ -52,6 +52,7 @@
     <!-- Activity -->
     <string name="profile_activity">Profile Activity</string>
     <string name="search_activity">Search Activity</string>
+    <string name="home_activity">Home Activity</string>
 
     <!-- Intent Extras -->
     <string name="calling_activity">calling_activity</string>
@@ -62,6 +63,8 @@
 
     <!-- Bundle args names -->
     <string name="activity_number">activity_number</string>
+    <string name="bundle_photo">bundle_photo</string>
+    <string name="bundle_user_account_settings">bundle_user_account_settings</string>
 
     <!-- photo types -->
     <string name="new_photo">new_photo</string>
