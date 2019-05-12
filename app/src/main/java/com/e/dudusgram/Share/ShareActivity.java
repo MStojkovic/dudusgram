@@ -68,7 +68,7 @@ public class ShareActivity extends AppCompatActivity {
         adapter.addFragment(new GalleryFragment());
         adapter.addFragment(new PhotoFragment());
 
-        mViewPager = findViewById(R.id.container);
+        mViewPager = findViewById(R.id.viewpager_container);
         mViewPager.setAdapter(adapter);
 
         TabLayout tabLayout = findViewById(R.id.tabsBottom);

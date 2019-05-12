@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import com.e.dudusgram.Login.LoginActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.BottomNavigationViewHelper;
+import com.e.dudusgram.Utils.MainfeedListAdapter;
 import com.e.dudusgram.Utils.SectionsPagerAdapter;
 import com.e.dudusgram.Utils.UniversalImageLoader;
 import com.e.dudusgram.Utils.ViewCommentsFragment;
@@ -28,7 +29,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity
+        implements MainfeedListAdapter.OnLoadMoreItemsListener {
+
+    @Override
+    public void onLoadMoreItems() {
+        Log.d(TAG, "onLoadMoreItems: displaying more photos");
+
+        HomeFragment fragment = (HomeFragment)getSupportFragmentManager()
+                .findFragmentByTag("android:switcher:" + R.id.viewpager_container + ":" + mViewPager.getCurrentItem());
+
+        if(fragment != null){
+            fragment.displayMorePhotos();
+        }
+    }
 
     private static final String TAG = "HomeActivity";
     private static final int ACTIVITY_NUM = 0;

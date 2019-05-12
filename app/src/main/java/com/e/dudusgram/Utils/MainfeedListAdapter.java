@@ -43,6 +43,12 @@ import java.util.TimeZone;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainfeedListAdapter extends ArrayAdapter<Photo> {
+    public interface OnLoadMoreItemsListener{
+        void onLoadMoreItems();
+    }
+
+    OnLoadMoreItemsListener mOnLoadMoreItemsListener;
+
     private static final String TAG = "MainfeedListAdapter";
 
     private LayoutInflater mInflater;
@@ -113,6 +119,9 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
 
         // get likes string
         getLikesString(holder);
+
+        // set the caption
+        holder.caption.setText(getItem(position).getCaption());
 
         //set the comment
         List<Comment> comments = getItem(position).getComments();
@@ -233,7 +242,30 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
             }
         });
 
+        if(reachedEndOfList(position)){
+            loadMoreData();
+        }
+
         return convertView;
+    }
+
+    private boolean reachedEndOfList(int position){
+        return position == getCount() - 1;
+    }
+
+    private void loadMoreData(){
+        try{
+            mOnLoadMoreItemsListener = (OnLoadMoreItemsListener) getContext();
+        }catch(ClassCastException e){
+            Log.e(TAG, "loadMoreData: ClassCastException: " + e.getMessage());
+        }
+
+        try{
+            mOnLoadMoreItemsListener.onLoadMoreItems();
+        }catch(NullPointerException e){
+            Log.e(TAG, "loadMoreData: NullPointerException: " + e.getMessage());
+        }
+
     }
 
     public class GestureListener extends GestureDetector.SimpleOnGestureListener {
