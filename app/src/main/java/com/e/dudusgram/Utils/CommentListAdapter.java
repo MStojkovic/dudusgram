@@ -87,7 +87,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         String timestampDifference = getTimestampDifference(getItem(position));
 
         if(!timestampDifference.equals("0")){
-            holder.timestamp.setText(String.format("%s %s", timestampDifference, mContext.getString(R.string.days_ago)));
+            holder.timestamp.setText(String.format("%s %s", timestampDifference, mContext.getString(R.string.days)));
         }else{
             holder.timestamp.setText(mContext.getString(R.string.today));
         }

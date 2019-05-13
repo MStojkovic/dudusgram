@@ -110,5 +110,6 @@
     <string name="edit_your_profile">Edit your profile</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
+    <string name="days">d</string>
 
 </resources>
