@@ -3,7 +3,6 @@ package com.e.dudusgram.Share;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -99,11 +98,7 @@ public class GalleryFragment extends Fragment {
 
     private boolean isRootTask(){
 
-        if (((ShareActivity)getActivity()).getTask() == 0){
-            return true;
-        } else {
-            return false;
-        }
+        return ((ShareActivity) getActivity()).getTask() == 0;
     }
 
     private void init(){
@@ -125,7 +120,7 @@ public class GalleryFragment extends Fragment {
             directoryNames.add(string);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, directoryNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, directoryNames);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         directorySpinner.setAdapter(adapter);
 

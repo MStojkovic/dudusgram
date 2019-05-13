@@ -35,7 +35,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dinoslav.jukara"
                 android:id="@+id/comment_username"
                 android:layout_marginLeft="15dp"
                 android:textColor="@color/black"
@@ -46,7 +45,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="This is a comment"
                 android:layout_marginLeft="5dp"
                 android:textColor="@color/black"
                 android:textSize="15sp"
@@ -58,7 +56,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3 d"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
                 android:id="@+id/comment_time_posted"
@@ -70,7 +67,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="420 likes"
                 android:textStyle="bold"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
@@ -85,7 +81,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reply"
                 android:textStyle="bold"
                 android:textColor="@color/grey"
                 android:textSize="14sp"

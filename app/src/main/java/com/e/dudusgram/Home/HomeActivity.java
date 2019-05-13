@@ -65,9 +65,9 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Log.d(TAG, "onCreate: starting.");
 
-        mViewPager = (ViewPager) findViewById(R.id.viewpager_container);
-        mFrameLayout = (FrameLayout) findViewById(R.id.container);
-        mRelativeLayout = (RelativeLayout) findViewById(R.id.relLayoutParent);
+        mViewPager = findViewById(R.id.viewpager_container);
+        mFrameLayout = findViewById(R.id.container);
+        mRelativeLayout = findViewById(R.id.relLayoutParent);
 
         setupFirebaseAuth();
 

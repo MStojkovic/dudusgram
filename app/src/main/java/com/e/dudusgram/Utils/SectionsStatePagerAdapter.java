@@ -1,6 +1,5 @@
 package com.e.dudusgram.Utils;
 
-import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -53,31 +52,4 @@ public class SectionsStatePagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-    /**
-     * returns the fragment with name @param
-     * @param fragment
-     * @return
-     */
-
-    public Integer getFragmentNumber (Fragment fragment){
-        if (mFragmentNumbers.containsKey(fragment)){
-            return mFragmentNumbers.get(fragment);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * returns the fragment with name @param
-     * @param fragmentNumber
-     * @return
-     */
-
-    public String getFragmentName (Integer fragmentNumber){
-        if (mFragmentNames.containsKey(fragmentNumber)){
-            return mFragmentNames.get(fragmentNumber);
-        } else {
-            return null;
-        }
-    }
 }

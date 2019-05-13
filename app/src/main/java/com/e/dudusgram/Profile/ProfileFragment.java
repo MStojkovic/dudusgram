@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,8 +18,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-
 import com.e.dudusgram.Login.LoginActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.BottomNavigationViewHelper;
@@ -30,7 +27,6 @@ import com.e.dudusgram.Utils.UniversalImageLoader;
 import com.e.dudusgram.models.Comment;
 import com.e.dudusgram.models.Like;
 import com.e.dudusgram.models.Photo;
-import com.e.dudusgram.models.User;
 import com.e.dudusgram.models.UserAccountSettings;
 import com.e.dudusgram.models.UserSettings;
 import com.google.firebase.auth.FirebaseAuth;
@@ -185,7 +181,7 @@ public class ProfileFragment extends Fragment {
 
                         photo.setComments(comments);
 
-                        List<Like> likesList = new ArrayList<Like>();
+                        List<Like> likesList = new ArrayList<>();
 
                         for (DataSnapshot dSnapshot : singleSnapshot.child(getString(R.string.field_likes))
                                 .getChildren()){
@@ -311,7 +307,6 @@ public class ProfileFragment extends Fragment {
 
         Log.d(TAG, "setProfileWidgets: populating widgets with data retrieved from firebase");
 
-        //User user = userSettings.getUser();
         UserAccountSettings settings = userSettings.getSettings();
 
         Log.d(TAG, "setProfileWidgets: " + settings.getProfile_photo() + mProfilePhoto);
@@ -403,17 +398,11 @@ public class ProfileFragment extends Fragment {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                //retrieve user information from the database
                 setProfileWidgets(mFirebaseMethods.getUserSettings(dataSnapshot));
-
-                //retireve images for the user in question
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }
@@ -430,6 +419,5 @@ public class ProfileFragment extends Fragment {
             Intent intent = new Intent(mContext, LoginActivity.class);
             startActivity(intent);
         }
-
     }
 }

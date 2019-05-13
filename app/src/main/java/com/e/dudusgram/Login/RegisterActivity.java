@@ -6,10 +6,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,9 +37,9 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView loadingPleaseWait;
     private Button btnRegister;
     private ProgressBar mProgressBar;
+    private RelativeLayout mLayout;
 
     private FirebaseAuth mAuth;
-    private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseMethods firebaseMethods;
@@ -48,6 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         mContext = RegisterActivity.this;
+        mLayout = findViewById(R.id.relLayoutMaster);
         firebaseMethods = new FirebaseMethods(mContext);
         Log.d(TAG, "onCreate: started.");
 
@@ -68,10 +72,27 @@ public class RegisterActivity extends AppCompatActivity {
                     mProgressBar.setVisibility(View.VISIBLE);
                     loadingPleaseWait.setVisibility(View.VISIBLE);
 
-                    firebaseMethods.registerNewEmail(email, password, username);
+                    firebaseMethods.registerNewEmail(email, password);
                 }
             }
         });
+
+
+        mLayout.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent ev)
+            {
+                hideKeyboard(view);
+                return false;
+            }
+        });
+    }
+
+    protected void hideKeyboard(View view)
+    {
+        InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private boolean checkInputs(String email, String username, String password){
@@ -102,16 +123,6 @@ public class RegisterActivity extends AppCompatActivity {
         loadingPleaseWait.setVisibility(View.GONE);
     }
 
-    private boolean isStringNull(String string){
-        Log.d(TAG, "isStringNull: checking if the string is null");
-
-        if (string.equals("")){
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     //<----------------------------------------Firebase------------------------------------------->
 
     @Override
@@ -135,7 +146,7 @@ public class RegisterActivity extends AppCompatActivity {
         Log.d(TAG, "instance initializer: setting up firebase auth.");
 
         mAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -194,7 +205,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
 
-                String mUsername = "";
+                String mUsername;
 
                 mUsername = username + append;
 

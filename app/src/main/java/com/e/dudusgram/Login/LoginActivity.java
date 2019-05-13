@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
         //initialize the button for logging in
         Button btnLogin = findViewById(R.id.btn_login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -208,4 +209,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
     }
+
 }

@@ -10,11 +10,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class ImageManager {
+class ImageManager {
 
     private static final String TAG = "ImageManager";
 
-    public static Bitmap getBitmap(String imgUrl){
+    static Bitmap getBitmap(String imgUrl){
 
         File imageFile = new File(imgUrl);
         FileInputStream fis = null;
@@ -44,7 +44,7 @@ public class ImageManager {
      * @return
      */
 
-    public static byte[] getBytesFromBitmap(Bitmap bm, int quality){
+    static byte[] getBytesFromBitmap(Bitmap bm, int quality){
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.JPEG, quality, stream);

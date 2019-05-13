@@ -7,23 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.e.dudusgram.R;
-import com.e.dudusgram.Utils.GridImageAdapter;
-import com.e.dudusgram.Utils.UniversalImageLoader;
 import com.e.dudusgram.Utils.ViewCommentsFragment;
 import com.e.dudusgram.Utils.ViewPostFragment;
 import com.e.dudusgram.Utils.ViewProfileFragment;
 import com.e.dudusgram.models.Photo;
 import com.e.dudusgram.models.User;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
 
 public class ProfileActivity extends AppCompatActivity implements
         ProfileFragment.OnGridImageSelectedListener ,
@@ -64,17 +55,7 @@ public class ProfileActivity extends AppCompatActivity implements
 
     }
 
-    private static final int ACTIVITY_NUM = 4;
-    private static final int NUM_GRID_COLUMNS = 3;
-
     private Context mContext = ProfileActivity.this;
-
-    private ProgressBar mProgressBar;
-    private ImageView profilePhoto;
-
-    //firebase
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -135,30 +116,4 @@ public class ProfileActivity extends AppCompatActivity implements
         }
         
     }
-
-
-    private void setupImageGrid(ArrayList<String> imgURLs){
-        GridView gridView = findViewById(R.id.gridView);
-
-        int gridWidth = getResources().getDisplayMetrics().widthPixels;
-        int imageWidth = gridWidth/NUM_GRID_COLUMNS;
-        gridView.setColumnWidth(imageWidth);
-
-        GridImageAdapter adapter = new GridImageAdapter(mContext, R.layout.layout_grid_imageview, "",imgURLs);
-        gridView.setAdapter(adapter);
-    }
-
-    private void setProfileImage(){
-        Log.d(TAG, "setProfileImage: setting profile Photo.");
-        String imgURL = "www.google.com/search?q=conrad+von+h%C3%B6tzendorf&source=lnms&tbm=isch&sa=X&ved=0ahUKEwje-qbTo8HhAhUHVhoKHTv5C8wQ_AUIDigB&biw=958&bih=927#imgrc=YEf-yiDuXoPh4M:";
-        UniversalImageLoader.setImage(imgURL, profilePhoto, mProgressBar, "https://");
-
-    }
-
-    private void setupActivityWidget(){
-        mProgressBar = findViewById(R.id.profileProgressBar);
-        mProgressBar.setVisibility(View.GONE);
-        profilePhoto = findViewById(R.id.profile_photo);
-    }
-
 }

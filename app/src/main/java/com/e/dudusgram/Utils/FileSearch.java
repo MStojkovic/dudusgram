@@ -17,10 +17,10 @@ public class FileSearch {
         File file = new File(directory);
         File[] listFiles = file.listFiles();
 
-        for (int i = 0; i < listFiles.length; i++){
+        for (File listFile : listFiles) {
 
-            if (listFiles[i].isDirectory()){
-                pathArray.add(listFiles[i].getAbsolutePath());
+            if (listFile.isDirectory()) {
+                pathArray.add(listFile.getAbsolutePath());
             }
         }
 
@@ -39,10 +39,10 @@ public class FileSearch {
         File file = new File(directory);
         File[] listFiles = file.listFiles();
 
-        for (int i = 0; i < listFiles.length; i++){
+        for (File listFile : listFiles) {
 
-            if (listFiles[i].isFile()){
-                pathArray.add(listFiles[i].getAbsolutePath());
+            if (listFile.isFile()) {
+                pathArray.add(listFile.getAbsolutePath());
             }
         }
 

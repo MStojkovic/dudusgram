@@ -23,6 +23,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,8 +35,6 @@ import java.util.TimeZone;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static android.app.PendingIntent.getActivity;
-
 public class CommentListAdapter extends ArrayAdapter<Comment> {
 
     private static final String TAG = "CommentListAdapter";
@@ -43,8 +43,8 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
     private int layoutResource;
     private Context mContext;
 
-    public CommentListAdapter(@NonNull Context context, @LayoutRes int resource,
-                              @NonNull List<Comment> objects) {
+    CommentListAdapter(@NonNull Context context, @LayoutRes int resource,
+                       @NonNull List<Comment> objects) {
         super(context, resource, objects);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = context;
@@ -67,13 +67,13 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             convertView = mInflater.inflate(layoutResource, parent, false);
             holder = new ViewHolder();
 
-            holder.comment = (TextView) convertView.findViewById(R.id.comment);
-            holder.username = (TextView) convertView.findViewById(R.id.comment_username);
-            holder.timestamp = (TextView) convertView.findViewById(R.id.comment_time_posted);
-            holder.reply = (TextView) convertView.findViewById(R.id.comment_reply);
-            holder.like = (ImageView) convertView.findViewById(R.id.comment_like);
-            holder.likes = (TextView) convertView.findViewById(R.id.comment_likes);
-            holder.profileImage = (CircleImageView) convertView.findViewById(R.id.comment_profile_image);
+            holder.comment = convertView.findViewById(R.id.comment);
+            holder.username = convertView.findViewById(R.id.comment_username);
+            holder.timestamp = convertView.findViewById(R.id.comment_time_posted);
+            holder.reply = convertView.findViewById(R.id.comment_reply);
+            holder.like = convertView.findViewById(R.id.comment_like);
+            holder.likes = convertView.findViewById(R.id.comment_likes);
+            holder.profileImage = convertView.findViewById(R.id.comment_profile_image);
 
             convertView.setTag(holder);
         }else{
@@ -87,9 +87,9 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         String timestampDifference = getTimestampDifference(getItem(position));
 
         if(!timestampDifference.equals("0")){
-            holder.timestamp.setText(timestampDifference + " d");
+            holder.timestamp.setText(String.format("%s %s", timestampDifference, mContext.getString(R.string.days_ago)));
         }else{
-            holder.timestamp.setText("today");
+            holder.timestamp.setText(mContext.getString(R.string.today));
         }
 
         // set the username and profile image
@@ -100,7 +100,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                 .equalTo(getItem(position).getUser_id());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                 for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
                     holder.username.setText(
                             singleSnapshot.getValue(UserAccountSettings.class).getUsername());
@@ -114,7 +114,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NotNull DatabaseError databaseError) {
                 Log.d(TAG, "onCancelled: query cancelled.");
             }
         });
@@ -141,7 +141,6 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
         Log.d(TAG, "getTimestampDifference: getting timestamp difference.");
 
-        String difference = "";
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat(mContext.getString(R.string.date_pattern), Locale.UK);
         sdf.setTimeZone(TimeZone.getTimeZone("Europe/Zagreb"));
@@ -150,6 +149,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         Date timestamp;
         final String photoTimestamp = comment.getDate_created();
 
+        String difference;
         try{
 
             timestamp = sdf.parse(photoTimestamp);

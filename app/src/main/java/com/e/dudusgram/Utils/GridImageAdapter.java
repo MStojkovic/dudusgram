@@ -4,12 +4,10 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.e.dudusgram.R;
@@ -21,19 +19,15 @@ import java.util.ArrayList;
 
 public class GridImageAdapter extends ArrayAdapter<String> {
 
-    private Context mContext;
     private LayoutInflater mInflater;
     private int layoutResource;
     private String mAppend;
-    private ArrayList<String> imgURLs;
 
     public GridImageAdapter(Context mContext, int layoutResource, String mAppend, ArrayList<String> imgURLs) {
         super(mContext, layoutResource, imgURLs);
         this.mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.mContext = mContext;
         this.layoutResource = layoutResource;
         this.mAppend = mAppend;
-        this.imgURLs = imgURLs;
     }
 
     private static class ViewHolder{
@@ -44,10 +38,6 @@ public class GridImageAdapter extends ArrayAdapter<String> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
-        /*
-        Viewholder build pattern (Similar to recycleview)
-         */
 
         final ViewHolder holder;
 

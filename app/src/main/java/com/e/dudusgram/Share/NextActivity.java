@@ -11,9 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.e.dudusgram.Login.LoginActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.FirebaseMethods;
 import com.e.dudusgram.Utils.UniversalImageLoader;
@@ -29,7 +26,6 @@ public class NextActivity extends AppCompatActivity {
 
     private static final String TAG = "NextActivity";
 
-    private String mAppend = "file:/";
     private int imageCount = 0;
     private String imgURL;
     private Bitmap bitmap;
@@ -107,6 +103,7 @@ public class NextActivity extends AppCompatActivity {
 
             imgURL = intent.getStringExtra(getString(R.string.selected_image));
             Log.d(TAG, "setImage: got new image url " + imgURL);
+            String mAppend = "file:/";
             UniversalImageLoader.setImage(intent.getStringExtra(getString(R.string.selected_image)), image, null, mAppend);
 
         }else if(intent.hasExtra(getString(R.string.selected_bitmap))){

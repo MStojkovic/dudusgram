@@ -1,4 +1,5 @@
-    <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    <merge xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         >
 
         <android.support.design.widget.AppBarLayout
@@ -19,8 +20,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="roki"
-                        android:textSize="20dp"
+                        android:textSize="20sp"
                         android:textColor="@color/black"
                         android:layout_marginStart="15dp"
                         android:id="@+id/username"
@@ -34,7 +34,8 @@
                         android:layout_marginRight="20dp"
                         android:layout_centerVertical="true"
                         android:id="@+id/profileMenu"
-                        android:src="@drawable/ic_ellipses"/>
+                        app:srcCompat="@drawable/ic_ellipses"
+                        android:layout_alignParentEnd="true" />
 
                 </RelativeLayout>
 

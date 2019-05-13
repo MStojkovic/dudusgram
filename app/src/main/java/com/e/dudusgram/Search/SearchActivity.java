@@ -29,10 +29,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class SearchActivity extends AppCompatActivity {
     private static final String TAG = "SearchActivity";
@@ -52,8 +50,8 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        mSearchParam = (EditText) findViewById(R.id.search);
-        mListView = (ListView) findViewById(R.id.listView);
+        mSearchParam = findViewById(R.id.search);
+        mListView =  findViewById(R.id.listView);
         Log.d(TAG, "onCreate: started.");
 
         hideSoftKeyboard();
@@ -91,9 +89,7 @@ public class SearchActivity extends AppCompatActivity {
         mUserList.clear();
 
         // update the users list view
-        if(keyword.length() == 0){
-
-        }else{
+        if (keyword.length() != 0) {
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference.child(getString(R.string.dbname_users))
                     .orderByChild(getString(R.string.field_username)).equalTo(keyword);
@@ -105,7 +101,6 @@ public class SearchActivity extends AppCompatActivity {
 
                         mUserList.add(singleSnapshot.getValue(User.class));
 
-                        // update the users list view
                         updateUsersList();
                     }
                 }

@@ -23,7 +23,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Change photo"
+                android:text="@string/change_photo"
                 android:id="@+id/changeProfilePhoto"
                 android:layout_below="@+id/profile_photo"
                 android:layout_centerHorizontal="true"
@@ -42,8 +42,9 @@
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/ic_username"
-                    android:layout_centerVertical="true"/>
+                    app:srcCompat="@drawable/ic_username"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@string/profile_photo" />
 
                 <EditText
                     android:layout_width="match_parent"
@@ -54,7 +55,7 @@
                     android:layout_marginLeft="40dp"
                     android:background="@null"
                     android:inputType="textNoSuggestions"
-                    android:hint="username"/>
+                    android:hint="@string/username"/>
 
             </RelativeLayout>
 
@@ -70,7 +71,7 @@
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/ic_display_name"
+                    app:srcCompat="@drawable/ic_display_name"
                     android:layout_centerVertical="true"/>
 
                 <EditText
@@ -82,7 +83,7 @@
                     android:layout_marginLeft="40dp"
                     android:background="@null"
                     android:inputType="textNoSuggestions"
-                    android:hint="display name"/>
+                    android:hint="@string/display_name"/>
 
             </RelativeLayout>
 
@@ -98,7 +99,7 @@
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/ic_website"
+                    app:srcCompat="@drawable/ic_website"
                     android:layout_centerVertical="true"/>
 
                 <EditText
@@ -110,7 +111,8 @@
                     android:layout_marginLeft="40dp"
                     android:background="@null"
                     android:inputType="textNoSuggestions"
-                    android:hint="Website"/>
+                    android:hint="@string/website"
+                    android:linksClickable="true"/>
 
             </RelativeLayout>
 
@@ -126,7 +128,7 @@
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/ic_description"
+                    app:srcCompat="@drawable/ic_description"
                     android:layout_centerVertical="true"/>
 
                 <EditText
@@ -138,7 +140,7 @@
                     android:layout_marginLeft="40dp"
                     android:background="@null"
                     android:inputType="textNoSuggestions"
-                    android:hint="Description"/>
+                    android:hint="@string/description"/>
 
             </RelativeLayout>
 
@@ -146,7 +148,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="25sp"
-                android:text="PRIVATE INFORMATION"
+                android:text="@string/private_information"
                 android:layout_below="@id/relLayout4"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
@@ -167,7 +169,7 @@
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/ic_email"
+                    app:srcCompat="@drawable/ic_email"
                     android:layout_centerVertical="true"/>
 
                 <EditText
@@ -178,8 +180,8 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginLeft="40dp"
                     android:background="@null"
-                    android:inputType="textNoSuggestions"
-                    android:hint="Email"/>
+                    android:inputType="textEmailAddress"
+                    android:hint="@string/email"/>
 
             </RelativeLayout>
 
@@ -195,7 +197,7 @@
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/ic_phone"
+                    app:srcCompat="@drawable/ic_phone"
                     android:layout_centerVertical="true"/>
 
                 <EditText
@@ -206,8 +208,8 @@
                     android:layout_marginStart="40dp"
                     android:layout_marginLeft="40dp"
                     android:background="@null"
-                    android:inputType="textNoSuggestions"
-                    android:hint="Phone number"/>
+                    android:inputType="phone"
+                    android:hint="@string/phone_number"/>
 
             </RelativeLayout>
 

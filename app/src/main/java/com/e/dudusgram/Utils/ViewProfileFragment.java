@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 
 import com.e.dudusgram.Login.LoginActivity;
 import com.e.dudusgram.Profile.AccountSettingsActivity;
-import com.e.dudusgram.Profile.ProfileActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.models.Comment;
 import com.e.dudusgram.models.Like;
@@ -73,7 +71,6 @@ public class ViewProfileFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference myRef;
 
     // vars
     private User mUser;
@@ -98,10 +95,10 @@ public class ViewProfileFragment extends Fragment {
         mProgressBar = view.findViewById(R.id.profileProgressBar);
         gridView = view.findViewById(R.id.gridView);
         bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
-        mFollow = (TextView) view.findViewById(R.id.follow);
-        mUnfollow = (TextView) view.findViewById(R.id.unfollow);
-        editProfile = (TextView) view.findViewById(R.id.textEditProfile);
-        mBackArrow = (ImageView) view.findViewById(R.id.backArrow);
+        mFollow = view.findViewById(R.id.follow);
+        mUnfollow = view.findViewById(R.id.unfollow);
+        editProfile = view.findViewById(R.id.textEditProfile);
+        mBackArrow = view.findViewById(R.id.backArrow);
         mContext = getActivity();
 
         Log.d(TAG, "onCreateView: started.");
@@ -166,8 +163,6 @@ public class ViewProfileFragment extends Fragment {
                 setUnfollowing();
             }
         });
-
-        //setupGridView();
 
         editProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -514,7 +509,6 @@ public class ViewProfileFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        myRef = mFirebaseDatabase.getReference();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

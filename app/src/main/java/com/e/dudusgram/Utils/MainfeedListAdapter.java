@@ -47,7 +47,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
         void onLoadMoreItems();
     }
 
-    OnLoadMoreItemsListener mOnLoadMoreItemsListener;
+    private OnLoadMoreItemsListener mOnLoadMoreItemsListener;
 
     private static final String TAG = "MainfeedListAdapter";
 
@@ -76,7 +76,6 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
         UserAccountSettings settings = new UserAccountSettings();
         User user = new User();
         StringBuilder users;
-        String mLikesString;
         boolean likeByCurrentUser;
         Heart heart;
         GestureDetector detector;
@@ -93,16 +92,16 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
             convertView = mInflater.inflate(mLayoutResource, parent, false);
             holder = new ViewHolder();
 
-            holder.username = (TextView) convertView.findViewById(R.id.username);
-            holder.image = (SquareImageView) convertView.findViewById(R.id.post_image);
-            holder.heartRed = (ImageView) convertView.findViewById(R.id.image_heart_red);
-            holder.heartWhite = (ImageView) convertView.findViewById(R.id.image_heart);
-            holder.comment = (ImageView) convertView.findViewById(R.id.speech_bubble);
-            holder.likes = (TextView) convertView.findViewById(R.id.image_likes);
-            holder.comments = (TextView) convertView.findViewById(R.id.image_comments_link);
-            holder.caption = (TextView) convertView.findViewById(R.id.image_caption);
-            holder.timeDelta = (TextView) convertView.findViewById(R.id.image_time_posted);
-            holder.mProfileImage = (CircleImageView) convertView.findViewById(R.id.profile_photo);
+            holder.username = convertView.findViewById(R.id.username);
+            holder.image = convertView.findViewById(R.id.post_image);
+            holder.heartRed = convertView.findViewById(R.id.image_heart_red);
+            holder.heartWhite = convertView.findViewById(R.id.image_heart);
+            holder.comment = convertView.findViewById(R.id.speech_bubble);
+            holder.likes = convertView.findViewById(R.id.image_likes);
+            holder.comments = convertView.findViewById(R.id.image_comments_link);
+            holder.caption = convertView.findViewById(R.id.image_caption);
+            holder.timeDelta = convertView.findViewById(R.id.image_time_posted);
+            holder.mProfileImage = convertView.findViewById(R.id.profile_photo);
             holder.heart = new Heart(holder.heartWhite, holder.heartRed);
             holder.photo = getItem(position);
             holder.detector = new GestureDetector(mContext, new GestureListener(holder));
@@ -125,7 +124,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
 
         //set the comment
         List<Comment> comments = getItem(position).getComments();
-        holder.comments.setText("View all " + comments.size() + " comments");
+        holder.comments.setText(String.format(Locale.ENGLISH, "%s %d %s", mContext.getString(R.string.ViewAll), comments.size(), mContext.getString(R.string.comments)));
         holder.comments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,9 +140,9 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
         String timestampDifference = getTimestampDifference(getItem(position));
 
         if(!timestampDifference.equals("0")){
-            holder.timeDelta.setText(timestampDifference + " DAYS AGO");
+            holder.timeDelta.setText(String.format("%s %s", timestampDifference, mContext.getString(R.string.days_ago)));
         }else{
-            holder.timeDelta.setText("TODAY");
+            holder.timeDelta.setText(mContext.getString(R.string.today));
         }
 
         //set profile image
@@ -272,7 +271,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
 
         ViewHolder mHolder;
 
-        public GestureListener(ViewHolder holder) {
+        GestureListener(ViewHolder holder) {
             mHolder = holder;
         }
 
@@ -428,11 +427,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
 
                                 String[] splitUsers = holder.users.toString().split(",");
 
-                                if (holder.users.toString().contains(currentUsername + ",")){
-                                    holder.likeByCurrentUser = true;
-                                } else {
-                                    holder.likeByCurrentUser = false;
-                                }
+                                holder.likeByCurrentUser = holder.users.toString().contains(currentUsername + ",");
 
                                 int length = splitUsers.length;
 
@@ -517,7 +512,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
 
         Log.d(TAG, "getTimestampDifference: getting timestamp difference.");
 
-        String difference = "";
+        String difference;
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat(mContext.getString(R.string.date_pattern), Locale.UK);
         sdf.setTimeZone(TimeZone.getTimeZone(mContext.getString(R.string.timezone)));

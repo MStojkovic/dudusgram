@@ -1,4 +1,5 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
     <android.support.design.widget.AppBarLayout
@@ -22,7 +23,7 @@
                     android:layout_marginEnd="20dp"
                     android:layout_centerVertical="true"
                     android:id="@+id/backArrow"
-                    android:src="@drawable/ic_backarrow"
+                    app:srcCompat="@drawable/ic_backarrow"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="20dp" />
 
@@ -46,16 +47,13 @@
                     android:layout_marginEnd="20dp"
                     android:layout_centerVertical="true"
                     android:id="@+id/saveChanges"
-                    android:src="@drawable/ic_checkmark"
+                    app:srcCompat="@drawable/ic_checkmark"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="20dp"
-                    android:layout_alignParentRight="true"/>
-
-
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
 
             </RelativeLayout>
-
-
 
         </android.support.v7.widget.Toolbar>
 

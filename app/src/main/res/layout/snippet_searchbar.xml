@@ -16,10 +16,10 @@
                 android:layout_height="match_parent">
 
                 <EditText
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:hint="Search..."
+                    android:hint="@string/search"
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:layout_marginStart="5dp"
@@ -27,11 +27,7 @@
                     android:layout_marginLeft="5dp"
                     android:background="@null"/>
 
-
-
             </RelativeLayout>
-
-
 
         </android.support.v7.widget.Toolbar>
 

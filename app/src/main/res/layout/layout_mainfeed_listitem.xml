@@ -29,7 +29,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
-                    android:text="Test account"
                     android:layout_toRightOf="@+id/profile_photo"
                     android:layout_marginLeft="10dp"
                     android:layout_centerVertical="true"
@@ -118,7 +117,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Liked by test"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:id="@+id/image_likes"/>
@@ -126,7 +124,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Dudusgram #test"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:id="@+id/image_caption"
@@ -136,7 +133,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View all x comments"
                     android:textColor="@color/grey"
                     android:textSize="18sp"
                     android:id="@+id/image_comments_link"
@@ -146,7 +142,6 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="X DAYS AGO"
                     android:textColor="@color/grey"
                     android:textSize="18sp"
                     android:id="@+id/image_time_posted"

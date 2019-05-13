@@ -87,9 +87,28 @@
     <string name="confirm_password_dialog">ConfirmPasswordDialog</string>
     <string name="open_camera">Open Camera</string>
     <string name="next">Next</string>
-    <string name="description">Description</string>
     <string name="share">Share</string>
     <string name="days_ago">days ago</string>
     <string name="today">Today</string>
+    <string name="ViewAll">View all</string>
+    <string name="comments">comments</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="private_information">PRIVATE INFORMATION</string>
+    <string name="website">Website</string>
+    <string name="phone_number">Phone number</string>
+    <string name="display_name">Display name</string>
+    <string name="change_photo">Change photo</string>
+    <string name="username">Username</string>
+    <string name="description">Description</string>
+    <string name="search">Search...</string>
+    <string name="camera_fragment">Camera Fragment</string>
+    <string name="messages_fragment">Messages Fragment</string>
+    <string name="options">Options</string>
+    <string name="posts">posts</string>
+    <string name="followers">followers</string>
+    <string name="following">following</string>
+    <string name="edit_your_profile">Edit your profile</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
 
 </resources>

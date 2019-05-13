@@ -1,5 +1,6 @@
 package com.e.dudusgram.Home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.e.dudusgram.Login.LoginActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.MainfeedListAdapter;
 import com.e.dudusgram.models.Comment;
@@ -17,6 +19,7 @@ import com.e.dudusgram.models.Like;
 import com.e.dudusgram.models.Photo;
 import com.e.dudusgram.models.UserAccountSettings;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +39,6 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
 
     // vars
-
     private ArrayList<Photo> mPhotos;
     private ArrayList<Photo> mPaginatedPhotos;
     private ArrayList<String> mFollowing;
@@ -48,7 +50,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        mListView = (ListView) view.findViewById(R.id.listView);
+        mListView = view.findViewById(R.id.listView);
         mFollowing = new ArrayList<>();
         mPhotos = new ArrayList<>();
 
@@ -60,32 +62,41 @@ public class HomeFragment extends Fragment {
     private void getFollowing(){
         Log.d(TAG, "getFollowing: searching for following");
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        Query query = reference
-                .child(getString(R.string.dbname_following))
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        try {
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+            Query query = reference
+                    .child(getString(R.string.dbname_following))
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
-                    Log.d(TAG, "onDataChange: found user: " +
-                            singleSnapshot.child(getString(R.string.field_user_id)).getValue());
+                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                        Log.d(TAG, "onDataChange: found user: " +
+                                singleSnapshot.child(getString(R.string.field_user_id)).getValue());
 
-                    mFollowing.add(singleSnapshot.child(getString(R.string.field_user_id)).getValue().toString());
+                        mFollowing.add(singleSnapshot.child(getString(R.string.field_user_id)).getValue().toString());
+                    }
+
+                    mFollowing.add(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                    getPhotos();
                 }
 
-                mFollowing.add(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                getPhotos();
-            }
+                }
+            });
+            Log.d(TAG, "getFollowing: Ovo");
+        } catch (NullPointerException e){
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            Log.d(TAG, "getFollowing: Ono");
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
     }
 
     private void getPhotos(){

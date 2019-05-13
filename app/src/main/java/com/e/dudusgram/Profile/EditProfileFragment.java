@@ -1,5 +1,6 @@
 package com.e.dudusgram.Profile;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,10 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +39,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -48,9 +51,6 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Get auth credentials from the user for re-authentication. The example below shows
-        // email and password credentials but there are multiple possible providers,
-        // such as GoogleAuthProvider or FacebookAuthProvider.
         AuthCredential credential = EmailAuthProvider
                 .getCredential(mAuth.getCurrentUser().getEmail(), password);
 
@@ -122,15 +122,13 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
     //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference myRef;
     private FirebaseMethods mFirebaseMethods;
-    private String userID;
 
     //Widgets
     private EditText mDisplayName, mUsername, mWebsite, mDescription, mEmail, mPhoneNumber;
     private TextView mChangeProfilePhoto;
     private CircleImageView mProfilePhoto;
+    private RelativeLayout mLayout;
 
     private UserSettings mUserSettings;
 
@@ -146,10 +144,21 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         mEmail = view.findViewById(R.id.email);
         mPhoneNumber = view.findViewById(R.id.phoneNumber);
         mChangeProfilePhoto = view.findViewById(R.id.changeProfilePhoto);
+        mLayout = view.findViewById(R.id.relLayout2);
         mFirebaseMethods = new FirebaseMethods(getActivity());
 
         //setProfileImage();
         setupFirebaseAuth();
+
+        mLayout.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View view, MotionEvent ev)
+            {
+                hideKeyboard(view);
+                return false;
+            }
+        });
 
         //back arrow for navigating back to "Profile Activity"
         ImageView backArrow = view.findViewById(R.id.backArrow);
@@ -171,6 +180,12 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         });
 
         return view;
+    }
+
+    protected void hideKeyboard(View view)
+    {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     /**
@@ -206,10 +221,6 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
 
         }
 
-        /**
-         * Change the rest of the settings that do not have to be unique
-         */
-
         if (!mUserSettings.getSettings().getWebsite().equals(website)){
 
             //update the website
@@ -224,7 +235,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
 
         }
 
-        if (!mUserSettings.getSettings().getProfile_photo().equals(phoneNumber)){
+        if (mUserSettings.getUser().getPhone_number() != phoneNumber){
 
             //update the phone number
             mFirebaseMethods.updateUserAccountSettings(null, null, null, phoneNumber);
@@ -326,10 +337,8 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
         mAuth = FirebaseAuth.getInstance();
-        mFirebaseDatabase = FirebaseDatabase.getInstance();
-        myRef = mFirebaseDatabase.getReference();
-
-        userID = mAuth.getCurrentUser().getUid();
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = mFirebaseDatabase.getReference();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -343,24 +352,17 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                //retrieve user information from the database
                 setProfileWidgets(mFirebaseMethods.getUserSettings(dataSnapshot));
-
-                //retireve images for the user in question
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }

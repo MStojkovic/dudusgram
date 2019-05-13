@@ -1,6 +1,5 @@
 package com.e.dudusgram.Share;
 
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,25 +8,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TableLayout;
-
 import com.e.dudusgram.R;
-import com.e.dudusgram.Utils.BottomNavigationViewHelper;
 import com.e.dudusgram.Utils.Permissions;
 import com.e.dudusgram.Utils.SectionsPagerAdapter;
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class ShareActivity extends AppCompatActivity {
     private static final String TAG = "ShareActivity";
 
-    private static final int ACTIVITY_NUM = 2;
     private static final int VERIFY_PERMISSIONS_REQUEST = 1;
 
     private ViewPager mViewPager;
-
-    private Context mContext = ShareActivity.this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,8 +32,6 @@ public class ShareActivity extends AppCompatActivity {
         }else{
             verifyPermissions(Permissions.PERMISSIONS);
         }
-
-        //setupBottomNavigationView();
     }
 
     /**
@@ -110,10 +98,9 @@ public class ShareActivity extends AppCompatActivity {
 
         Log.d(TAG, "checkPermissionsArray: checking permissions array");
 
-        for (int i = 0; i < permissions.length; i++){
+        for (String check : permissions) {
 
-            String check = permissions[i];
-            if (!checkPermissions(check)){
+            if (!checkPermissions(check)) {
                 return false;
             }
         }
@@ -144,20 +131,5 @@ public class ShareActivity extends AppCompatActivity {
             return true;
 
         }
-    }
-    
-
-    /**
-     * BottomNavigationView setup
-     */
-
-    private void setupBottomNavigationView(){
-        Log.d(TAG, "setupBottomNavigationView: setting up BottomNavigationView");
-        BottomNavigationViewEx bottomNavigationViewEx = findViewById(R.id.bottomNavViewBar);
-        BottomNavigationViewHelper.setupBottomNavigationView(bottomNavigationViewEx);
-        BottomNavigationViewHelper.enableNavigation(mContext, this, bottomNavigationViewEx);
-        Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(ACTIVITY_NUM);
-        menuItem.setChecked(true);
     }
 }

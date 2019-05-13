@@ -1,4 +1,4 @@
-<merge xmlns:tools="http://schemas.android.com/tools"
+<merge
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -21,7 +21,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:orientation="horizontal"
-                android:weightSum="100">
+                android:weightSum="100"
+                android:baselineAligned="false">
 
 
                 <RelativeLayout
@@ -70,7 +71,6 @@
                     android:id="@+id/display_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Dudus"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -80,7 +80,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Teška DUDUSETINA"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -89,7 +88,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="Što je to web stranica?"
                     android:textColor="@color/link_blue"
                     android:textSize="16sp" />
 
@@ -118,7 +116,6 @@
 
 
             </RelativeLayout>
--->
 
         </RelativeLayout>
 

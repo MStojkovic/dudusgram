@@ -40,7 +40,6 @@ public class FirebaseMethods {
     private static final String TAG = "FirebaseMethods";
 
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private StorageReference mStorageReference;
@@ -83,7 +82,7 @@ public class FirebaseMethods {
 
             byte[] bytes = ImageManager.getBytesFromBitmap(bm, 100);
 
-            UploadTask uploadTask = null;
+            UploadTask uploadTask;
             uploadTask = storageReference.putBytes(bytes);
 
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -247,7 +246,7 @@ public class FirebaseMethods {
 
         int count = 0;
 
-        for (DataSnapshot ds: dataSnapshot
+        for (DataSnapshot ignored : dataSnapshot
                 .child(mContext.getString(R.string.dbname_user_photos))
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .getChildren()){
@@ -332,37 +331,14 @@ public class FirebaseMethods {
 
     }
 
-    /*
-    public boolean checkIfUsernameExists(String username, DataSnapshot datasnapshot){
-
-        Log.d(TAG, "checkIfUsernameExists: checking if username already exsists.");
-        Log.d(TAG, "checkIfUsernameExists: userID value: " + userID);
-
-        User user = new User();
-
-        for (DataSnapshot ds: datasnapshot.child(userID).getChildren()){
-            Log.d(TAG, "checkIfUsernameExists: datasnapshot" + ds);
-
-            user.setUsername(ds.getValue(User.class).getUsername());
-            Log.d(TAG, "checkIfUsernameExists: username: " + user.getUsername());
-
-            if(StringManipulation.expandUsername(user.getUsername()).equals(username)){
-                Log.d(TAG, "checkIfUsernameExists: FOUND A MATCH!" + user.getUsername());
-                return true;
-            }
-        }
-        return false;
-    }
-    */
 
     /**
      * Register a new email and password to firebase Authentication
      * @param email
      * @param password
-     * @param username
      */
 
-    public void registerNewEmail(final String email, String password, final String username){
+    public void registerNewEmail(final String email, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -387,7 +363,7 @@ public class FirebaseMethods {
                 });
     }
 
-    public void sendVerificationEmail(){
+    private void sendVerificationEmail(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null){
@@ -395,10 +371,8 @@ public class FirebaseMethods {
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-
-                            }else {
-                                Toast.makeText(mContext, "couldnt send verification email.", Toast.LENGTH_SHORT).show();
+                            if (!task.isSuccessful()) {
+                                Toast.makeText(mContext, "Could not send verification email.", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

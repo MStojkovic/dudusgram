@@ -34,6 +34,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,8 +65,6 @@ public class ViewPostFragment extends Fragment{
     // vars
     private Photo mPhoto;
     private int mActivityNumber = 0;
-    private String photoUsername;
-    private String profilePhotoUrl = "";
     private UserAccountSettings mUserAccountSettings;
     private GestureDetector mGestureDetector;
     private Heart mHeart;
@@ -76,15 +76,14 @@ public class ViewPostFragment extends Fragment{
     // widgets
     private SquareImageView mPostImage;
     private BottomNavigationViewEx bottomNavigationView;
-    private TextView mBackLabel, mCaption, mUsername, mTimestamp, mLikes, mComments;
-    private ImageView mBackArrow, mEllipses, mHeartRed, mHeartWhite, mProfileImage, mComment;
+    private TextView  mCaption, mUsername, mTimestamp, mLikes, mComments;
+    private ImageView mBackArrow, mHeartRed, mHeartWhite, mProfileImage, mComment;
 
     // Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
-    private FirebaseMethods mFirebaseMethods;
     
     @Nullable
     @Override
@@ -93,17 +92,15 @@ public class ViewPostFragment extends Fragment{
         mPostImage = view.findViewById(R.id.post_image);
         bottomNavigationView = view.findViewById(R.id.bottomNavViewBar);
         mBackArrow = view.findViewById(R.id.backArrow);
-        mBackLabel = view.findViewById(R.id.tvBackLabel);
         mCaption = view.findViewById(R.id.image_caption);
         mUsername = view.findViewById(R.id.username);
         mTimestamp = view.findViewById(R.id.image_time_posted);
-        mEllipses = view.findViewById(R.id.ivEllipses);
         mHeartRed = view.findViewById(R.id.image_heart_red);
         mHeartWhite = view.findViewById(R.id.image_heart);
         mProfileImage = view.findViewById(R.id.profile_photo);
         mLikes = view.findViewById(R.id.image_likes);
-        mComment = (ImageView) view.findViewById(R.id.speech_bubble);
-        mComments = (TextView) view.findViewById(R.id.image_comments_link);
+        mComment = view.findViewById(R.id.speech_bubble);
+        mComments = view.findViewById(R.id.image_comments_link);
 
         mHeart = new Heart(mHeartWhite, mHeartRed);
         mGestureDetector = new GestureDetector(getActivity(), new GestureListener());
@@ -117,7 +114,6 @@ public class ViewPostFragment extends Fragment{
     private void init(){
         try{
 
-            //mPhoto = getPhotoFromBundle();
             UniversalImageLoader.setImage(getPhotoFromBundle().getImage_path(), mPostImage, null, "");
             mActivityNumber = getActivityFromBundle();
             String photo_id = getPhotoFromBundle().getPhoto_id();
@@ -290,7 +286,7 @@ public class ViewPostFragment extends Fragment{
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                 for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
                     mCurrentUser = singleSnapshot.getValue(User.class);
                 }
@@ -299,7 +295,7 @@ public class ViewPostFragment extends Fragment{
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NotNull DatabaseError databaseError) {
                 Log.d(TAG, "onCancelled: query cancelled.");
             }
         });
@@ -404,14 +400,14 @@ public class ViewPostFragment extends Fragment{
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                 for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
                     mUserAccountSettings = singleSnapshot.getValue(UserAccountSettings.class);
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NotNull DatabaseError databaseError) {
                 Log.d(TAG, "onCancelled: query cancelled.");
             }
         });
@@ -421,7 +417,7 @@ public class ViewPostFragment extends Fragment{
 
         String timestampDiff = getTimestampDifference();
         if (!timestampDiff.equals("0")){
-            mTimestamp.setText(timestampDiff + getString(R.string.days_ago));
+            mTimestamp.setText(String.format("%s %s", timestampDiff, getString(R.string.days_ago)));
         } else {
             mTimestamp.setText(getString(R.string.today));
         }
@@ -432,7 +428,7 @@ public class ViewPostFragment extends Fragment{
         mCaption.setText(mPhoto.getCaption());
 
         if(mPhoto.getComments().size() > 0){
-            mComments.setText("View all " + mPhoto.getComments().size() + " comments");
+            mComments.setText(String.format(Locale.ENGLISH, "%s %d %s", getString(R.string.ViewAll), mPhoto.getComments().size(), getString(R.string.comments)));
         }else{
             mComments.setText("");
         }

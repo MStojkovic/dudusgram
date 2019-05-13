@@ -1,7 +1,6 @@
 package com.e.dudusgram.Utils;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -30,7 +29,6 @@ public class UserListAdapter extends ArrayAdapter<User> {
     private static final String TAG = "UserListAdapter";
 
     private LayoutInflater mInflater;
-    private List<User> mUsers = null;
     private int layoutResource;
     private Context mContext;
 
@@ -40,7 +38,6 @@ public class UserListAdapter extends ArrayAdapter<User> {
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layoutResource = resource;
-        this.mUsers = objects;
     }
 
     private static class ViewHolder{
@@ -58,9 +55,9 @@ public class UserListAdapter extends ArrayAdapter<User> {
             convertView = mInflater.inflate(layoutResource, parent, false);
             holder = new ViewHolder();
 
-            holder.username = (TextView) convertView.findViewById(R.id.username);
-            holder.email = (TextView) convertView.findViewById(R.id.email);
-            holder.profileImage = (CircleImageView) convertView.findViewById(R.id.profile_image);
+            holder.username = convertView.findViewById(R.id.username);
+            holder.email = convertView.findViewById(R.id.email);
+            holder.profileImage = convertView.findViewById(R.id.profile_image);
 
             convertView.setTag(holder);
         }else{

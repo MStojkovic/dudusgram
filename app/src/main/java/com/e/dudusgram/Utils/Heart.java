@@ -5,25 +5,24 @@ import android.animation.ObjectAnimator;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
-public class Heart {
+class Heart {
 
     private static final String TAG = "Heart";
 
     private static final DecelerateInterpolator DECELERATE_INTERPOLATOR = new DecelerateInterpolator();
     private static final AccelerateInterpolator ACCELERATE_INTERPOLATOR = new AccelerateInterpolator();
 
-    public ImageView heartWhite, heartRed;
+    private ImageView heartWhite, heartRed;
 
-    public Heart(ImageView heartWhite, ImageView heartRed) {
+    Heart(ImageView heartWhite, ImageView heartRed) {
         this.heartWhite = heartWhite;
         this.heartRed = heartRed;
     }
 
-    public void toggleLike(){
+    void toggleLike(){
         Log.d(TAG, "toggleLike: toggling heart.");
 
         AnimatorSet animationSet = new AnimatorSet();
