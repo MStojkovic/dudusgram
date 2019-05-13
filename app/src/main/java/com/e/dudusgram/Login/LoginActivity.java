@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -74,19 +73,32 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void init(){
+    private void initEditText(final EditText editText){
 
-        //Add on touch listener to hide the virtual keyboard
-        mLayout.setOnTouchListener(new View.OnTouchListener()
-        {
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent ev)
-            {
-                hideKeyboard(view);
-                return false;
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (hasFocus){
+                    editText.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            editText.setSelection(editText.getText().length());
+                        }
+                    });
+                } else {
+                    hideKeyboard(v);
+                }
             }
         });
 
+    }
+
+    private void init(){
+
+        //Add on touch listener to hide the virtual keyboard
+        initEditText(mEmail);
+        initEditText(mPassword);
 
         //initialize the button for logging in
         Button btnLogin = findViewById(R.id.btn_login);
