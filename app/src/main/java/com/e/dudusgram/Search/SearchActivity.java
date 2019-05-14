@@ -54,7 +54,7 @@ public class SearchActivity extends AppCompatActivity {
         mListView =  findViewById(R.id.listView);
         Log.d(TAG, "onCreate: started.");
 
-        hideSoftKeyboard();
+        initEditText(mSearchParam);
         setupBottomNavigationView();
         initTextListener();
     }
@@ -82,6 +82,33 @@ public class SearchActivity extends AppCompatActivity {
                 searchForMatch(text);
             }
         });
+    }
+
+    protected void hideKeyboard(View view)
+    {
+        InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    private void initEditText(final EditText editText){
+
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (hasFocus){
+                    editText.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            editText.setSelection(editText.getText().length());
+                        }
+                    });
+                } else {
+                    hideKeyboard(v);
+                }
+            }
+        });
+
     }
 
     private void searchForMatch(String keyword){
@@ -132,13 +159,6 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    private void hideSoftKeyboard(){
-        if(getCurrentFocus() != null){
-            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
     }
 
     /**

@@ -150,15 +150,12 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         //setProfileImage();
         setupFirebaseAuth();
 
-        mLayout.setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View view, MotionEvent ev)
-            {
-                hideKeyboard(view);
-                return false;
-            }
-        });
+        initEditText(mDisplayName);
+        initEditText(mUsername);
+        initEditText(mWebsite);
+        initEditText(mDescription);
+        initEditText(mEmail);
+        initEditText(mPhoneNumber);
 
         //back arrow for navigating back to "Profile Activity"
         ImageView backArrow = view.findViewById(R.id.backArrow);
@@ -180,6 +177,27 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         });
 
         return view;
+    }
+
+    private void initEditText(final EditText editText){
+
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (hasFocus){
+                    editText.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            editText.setSelection(editText.getText().length());
+                        }
+                    });
+                } else {
+                    hideKeyboard(v);
+                }
+            }
+        });
+
     }
 
     protected void hideKeyboard(View view)

@@ -73,7 +73,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:hint="@string/display_name"/>
 
                 <TextView
                     android:id="@+id/description"
@@ -81,7 +82,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:hint="@string/description"/>
 
                 <TextView
                     android:id="@+id/website"
@@ -89,7 +91,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:textColor="@color/link_blue"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:linksClickable="true"
+                    android:hint="@string/website"/>
 
 
             </LinearLayout>

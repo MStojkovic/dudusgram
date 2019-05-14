@@ -74,6 +74,8 @@ public class ViewCommentsFragment extends Fragment {
         mComments = new ArrayList<>();
         mContext = getActivity();
 
+        initEditText(mComment);
+
         try{
             mPhoto = getPhotoFromBundle();
             setupFirebaseAuth();
@@ -100,7 +102,6 @@ public class ViewCommentsFragment extends Fragment {
                     addNewComment(mComment.getText().toString());
 
                     mComment.setText("");
-                    closeKeyboard();
                 }else{
                     Toast.makeText(getActivity(), "you can't post a blank comment", Toast.LENGTH_SHORT).show();
                 }
@@ -108,6 +109,33 @@ public class ViewCommentsFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void initEditText(final EditText editText){
+
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (hasFocus){
+                    editText.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            editText.setSelection(editText.getText().length());
+                        }
+                    });
+                } else {
+                    hideKeyboard(v);
+                }
+            }
+        });
+
+    }
+
+    protected void hideKeyboard(View view)
+    {
+        InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private void setupWidgets(){
@@ -125,7 +153,6 @@ public class ViewCommentsFragment extends Fragment {
                     addNewComment(mComment.getText().toString());
 
                     mComment.setText("");
-                    closeKeyboard();
                 }else{
                     Toast.makeText(getActivity(), "you can't post a blank comment", Toast.LENGTH_SHORT).show();
                 }
@@ -145,15 +172,6 @@ public class ViewCommentsFragment extends Fragment {
                 }
             }
         });
-    }
-
-    private void closeKeyboard(){
-        View view = getActivity().getCurrentFocus();
-
-        if(view != null){
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
     }
 
     private void addNewComment(String newComment){

@@ -61,6 +61,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void init(){
+
+        initEditText(mEmail);
+        initEditText(mUsername);
+        initEditText(mPassword);
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,17 +81,27 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    private void initEditText(final EditText editText){
 
-        mLayout.setOnTouchListener(new View.OnTouchListener()
-        {
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent ev)
-            {
-                hideKeyboard(view);
-                return false;
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (hasFocus){
+                    editText.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            editText.setSelection(editText.getText().length());
+                        }
+                    });
+                } else {
+                    hideKeyboard(v);
+                }
             }
         });
+
     }
 
     protected void hideKeyboard(View view)

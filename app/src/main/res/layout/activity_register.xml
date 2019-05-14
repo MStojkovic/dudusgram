@@ -11,7 +11,10 @@
         android:orientation="vertical"
         android:paddingTop="55dp"
         android:paddingLeft="25dp"
-        android:paddingRight="25dp">
+        android:paddingRight="25dp"
+        android:clickable="true"
+        android:focusableInTouchMode="true"
+        android:focusable="true">
         
         <TextView
             android:layout_width="match_parent"
