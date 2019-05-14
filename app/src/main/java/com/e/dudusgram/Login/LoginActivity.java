@@ -94,7 +94,15 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(mContext, "Press back again to leave", Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
     private void init(){
+
+
 
         //Add on touch listener to hide the virtual keyboard
         initEditText(mEmail);
