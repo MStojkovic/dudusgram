@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -128,7 +127,6 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
     private EditText mDisplayName, mUsername, mWebsite, mDescription, mEmail, mPhoneNumber;
     private TextView mChangeProfilePhoto;
     private CircleImageView mProfilePhoto;
-    private RelativeLayout mLayout;
 
     private UserSettings mUserSettings;
 
@@ -144,7 +142,6 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         mEmail = view.findViewById(R.id.email);
         mPhoneNumber = view.findViewById(R.id.phoneNumber);
         mChangeProfilePhoto = view.findViewById(R.id.changeProfilePhoto);
-        mLayout = view.findViewById(R.id.relLayout2);
         mFirebaseMethods = new FirebaseMethods(getActivity());
 
         //setProfileImage();

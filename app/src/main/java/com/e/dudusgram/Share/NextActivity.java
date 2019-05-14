@@ -62,10 +62,13 @@ public class NextActivity extends AppCompatActivity {
             }
         });
 
-        TextView share = findViewById(R.id.tvShare);
+        final TextView share = findViewById(R.id.tvShare);
+        share.setClickable(true);
         share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                share.setClickable(false);
 
                //upload the image to firebase
                 Log.d(TAG, "onClick: Attempting to upload new photo.");
