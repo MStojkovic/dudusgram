@@ -111,5 +111,6 @@
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
     <string name="days">d</string>
+    <string name="reply">Reply</string>
 
 </resources>
