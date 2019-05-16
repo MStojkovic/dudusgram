@@ -8,10 +8,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.e.dudusgram.R;
+import com.e.dudusgram.Utils.CustomText;
 import com.e.dudusgram.Utils.FirebaseMethods;
 import com.e.dudusgram.Utils.UniversalImageLoader;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,7 +38,7 @@ public class NextActivity extends AppCompatActivity {
     private DatabaseReference myRef;
     private FirebaseMethods mFirebaseMethods;
 
-    private EditText mCaption;
+    private CustomText mCaption;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

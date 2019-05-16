@@ -12,14 +12,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.e.dudusgram.Profile.ProfileActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.BottomNavigationViewHelper;
+import com.e.dudusgram.Utils.CustomText;
 import com.e.dudusgram.Utils.UserListAdapter;
 import com.e.dudusgram.models.User;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +29,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +40,7 @@ public class SearchActivity extends AppCompatActivity {
     private Context mContext = SearchActivity.this;
 
     // widgets
-    private EditText mSearchParam;
+    private CustomText mSearchParam;
     private ListView mListView;
 
     // vars
@@ -57,7 +55,6 @@ public class SearchActivity extends AppCompatActivity {
         mListView =  findViewById(R.id.listView);
         Log.d(TAG, "onCreate: started.");
 
-        initEditText(mSearchParam);
         setupBottomNavigationView();
         initTextListener();
     }
@@ -85,33 +82,6 @@ public class SearchActivity extends AppCompatActivity {
                 searchForMatch(text);
             }
         });
-    }
-
-    protected void hideKeyboard(View view)
-    {
-        InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-    }
-
-    private void initEditText(final EditText editText){
-
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-                if (hasFocus){
-                    editText.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            editText.setSelection(editText.getText().length());
-                        }
-                    });
-                } else {
-                    hideKeyboard(v);
-                }
-            }
-        });
-
     }
 
     private void searchForMatch(String keyword){

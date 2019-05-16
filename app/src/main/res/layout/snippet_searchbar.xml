@@ -15,7 +15,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <EditText
+                <com.e.dudusgram.Utils.CustomText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -25,7 +25,8 @@
                     android:layout_marginStart="5dp"
                     android:id="@+id/search"
                     android:layout_marginLeft="5dp"
-                    android:background="@null"/>
+                    android:background="@null"
+                    android:maxLines="1"/>
 
             </RelativeLayout>
 

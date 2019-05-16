@@ -8,16 +8,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.e.dudusgram.Home.HomeActivity;
 import com.e.dudusgram.R;
+import com.e.dudusgram.Utils.CustomText;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -32,9 +30,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private Context mContext;
     private ProgressBar mProgressBar;
-    private EditText mEmail, mPassword;
+    private CustomText mEmail, mPassword;
     private TextView mPleaseWait;
-    private LinearLayout mLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,7 +41,6 @@ public class LoginActivity extends AppCompatActivity {
         mPleaseWait = findViewById(R.id.pleaseWait);
         mEmail = findViewById(R.id.input_email);
         mPassword = findViewById(R.id.input_password);
-        mLayout = findViewById(R.id.linLayout);
         mContext = LoginActivity.this;
 
         Log.d(TAG, "onCreate: started.");
@@ -57,12 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         init();
     }
 
-    protected void hideKeyboard(View view)
-    {
-        InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-    }
-
     private boolean isStringNull(String string){
         Log.d(TAG, "isStringNull: checking if the string is null");
 
@@ -73,26 +63,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void initEditText(final EditText editText){
-
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-                if (hasFocus){
-                    editText.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            editText.setSelection(editText.getText().length());
-                        }
-                    });
-                } else {
-                    hideKeyboard(v);
-                }
-            }
-        });
-
-    }
 
     @Override
     public void onBackPressed() {
@@ -101,12 +71,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void init(){
-
-
-
-        //Add on touch listener to hide the virtual keyboard
-        initEditText(mEmail);
-        initEditText(mPassword);
 
         //initialize the button for logging in
         Button btnLogin = findViewById(R.id.btn_login);

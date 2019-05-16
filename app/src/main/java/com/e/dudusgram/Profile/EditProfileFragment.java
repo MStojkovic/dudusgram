@@ -1,6 +1,5 @@
 package com.e.dudusgram.Profile;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,15 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.e.dudusgram.R;
 import com.e.dudusgram.Share.ShareActivity;
+import com.e.dudusgram.Utils.CustomText;
 import com.e.dudusgram.Utils.FirebaseMethods;
 import com.e.dudusgram.Utils.UniversalImageLoader;
 import com.e.dudusgram.dialogs.ConfirmPasswordDialog;
@@ -124,7 +121,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
     private FirebaseMethods mFirebaseMethods;
 
     //Widgets
-    private EditText mDisplayName, mUsername, mWebsite, mDescription, mEmail, mPhoneNumber;
+    private CustomText mDisplayName, mUsername, mWebsite, mDescription, mEmail, mPhoneNumber;
     private TextView mChangeProfilePhoto;
     private CircleImageView mProfilePhoto;
 
@@ -147,13 +144,6 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         //setProfileImage();
         setupFirebaseAuth();
 
-        initEditText(mDisplayName);
-        initEditText(mUsername);
-        initEditText(mWebsite);
-        initEditText(mDescription);
-        initEditText(mEmail);
-        initEditText(mPhoneNumber);
-
         //back arrow for navigating back to "Profile Activity"
         ImageView backArrow = view.findViewById(R.id.backArrow);
         backArrow.setOnClickListener(new View.OnClickListener() {
@@ -174,33 +164,6 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         });
 
         return view;
-    }
-
-    private void initEditText(final EditText editText){
-
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-                if (hasFocus){
-                    editText.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            editText.setSelection(editText.getText().length());
-                        }
-                    });
-                } else {
-                    hideKeyboard(v);
-                }
-            }
-        });
-
-    }
-
-    protected void hideKeyboard(View view)
-    {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     /**

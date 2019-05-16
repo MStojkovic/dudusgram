@@ -31,7 +31,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
 
-            <EditText
+            <com.e.dudusgram.Utils.CustomText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
@@ -46,12 +46,13 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
 
-            <EditText
+            <com.e.dudusgram.Utils.CustomText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:hint="@string/full_name"
-                android:id="@+id/input_username"/>
+                android:id="@+id/input_username"
+                android:maxLines="1"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -61,7 +62,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp">
 
-            <EditText
+            <com.e.dudusgram.Utils.CustomText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"

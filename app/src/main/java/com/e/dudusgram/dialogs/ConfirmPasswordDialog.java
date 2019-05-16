@@ -13,18 +13,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.e.dudusgram.R;
+import com.e.dudusgram.Utils.CustomText;
 
 public class ConfirmPasswordDialog extends DialogFragment {
 
     private static final String TAG = "ConfirmPasswordDialogs";
 
     public interface OnConfirmPasswordListener{
-        public void onConfirmPassword(String password);
+        void onConfirmPassword(String password);
     }
 
     OnConfirmPasswordListener mOnConfirmPasswordListener;
 
-    TextView mPassword;
+    CustomText mPassword;
 
     @Nullable
     @Override

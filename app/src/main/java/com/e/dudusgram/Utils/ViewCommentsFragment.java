@@ -10,13 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.e.dudusgram.Home.HomeActivity;
 import com.e.dudusgram.Login.LoginActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.models.Comment;
@@ -55,7 +52,7 @@ public class ViewCommentsFragment extends Fragment {
 
     // widgets
     private ImageView mBackArrow, mCheckMark;
-    private EditText mComment;
+    private CustomText mComment;
     private ListView mListView;
 
     // vars
@@ -73,8 +70,6 @@ public class ViewCommentsFragment extends Fragment {
         mListView = view.findViewById(R.id.listView);
         mComments = new ArrayList<>();
         mContext = getActivity();
-
-        initEditText(mComment);
 
         try{
             mPhoto = getPhotoFromBundle();
@@ -109,33 +104,6 @@ public class ViewCommentsFragment extends Fragment {
         });
 
         return view;
-    }
-
-    private void initEditText(final EditText editText){
-
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-                if (hasFocus){
-                    editText.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            editText.setSelection(editText.getText().length());
-                        }
-                    });
-                } else {
-                    hideKeyboard(v);
-                }
-            }
-        });
-
-    }
-
-    protected void hideKeyboard(View view)
-    {
-        InputMethodManager in = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private void setupWidgets(){

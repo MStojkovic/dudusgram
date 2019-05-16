@@ -6,17 +6,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.e.dudusgram.R;
+import com.e.dudusgram.Utils.CustomText;
 import com.e.dudusgram.Utils.FirebaseMethods;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,11 +30,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     private Context mContext;
     private String email, username, password;
-    private EditText mEmail, mPassword, mUsername;
+    private CustomText mEmail, mPassword, mUsername;
     private TextView loadingPleaseWait;
     private Button btnRegister;
     private ProgressBar mProgressBar;
-    private RelativeLayout mLayout;
 
     private FirebaseAuth mAuth;
     private DatabaseReference myRef;
@@ -51,7 +47,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         mContext = RegisterActivity.this;
-        mLayout = findViewById(R.id.relLayoutMaster);
         firebaseMethods = new FirebaseMethods(mContext);
         Log.d(TAG, "onCreate: started.");
 
@@ -61,10 +56,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void init(){
-
-        initEditText(mEmail);
-        initEditText(mUsername);
-        initEditText(mPassword);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,33 +72,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    private void initEditText(final EditText editText){
-
-        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-                if (hasFocus){
-                    editText.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            editText.setSelection(editText.getText().length());
-                        }
-                    });
-                } else {
-                    hideKeyboard(v);
-                }
-            }
-        });
-
-    }
-
-    protected void hideKeyboard(View view)
-    {
-        InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     private boolean checkInputs(String email, String username, String password){
