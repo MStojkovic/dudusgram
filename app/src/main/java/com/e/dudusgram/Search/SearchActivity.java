@@ -30,7 +30,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SearchActivity extends AppCompatActivity {
     private static final String TAG = "SearchActivity";
@@ -118,8 +121,12 @@ public class SearchActivity extends AppCompatActivity {
         // update the users list view
         if (keyword.length() != 0) {
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-            Query query = reference.child(getString(R.string.dbname_users))
-                    .orderByChild(getString(R.string.field_username)).equalTo(keyword);
+            Query query = reference
+                    .child(getString(R.string.dbname_users))
+                    .orderByChild(getString(R.string.field_username))
+                    .startAt(keyword)
+                    .endAt(keyword + "\uf8ff");
+
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -142,6 +149,13 @@ public class SearchActivity extends AppCompatActivity {
 
     private void updateUsersList(){
         Log.d(TAG, "updateUsersList: updating users list");
+
+        mListView.clearChoices();
+
+        Set<User> uniqueList = new LinkedHashSet<>(mUserList);
+        uniqueList.addAll(mUserList);
+        mUserList.clear();
+        mUserList.addAll(uniqueList);
 
         mAdapter = new UserListAdapter(SearchActivity.this, R.layout.layout_user_listitem, mUserList);
 
