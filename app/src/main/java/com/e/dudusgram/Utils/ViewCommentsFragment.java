@@ -103,6 +103,15 @@ public class ViewCommentsFragment extends Fragment {
             }
         });
 
+        mBackArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick: navigating back");
+
+                getActivity().onBackPressed();
+            }
+        });
+
         return view;
     }
 
