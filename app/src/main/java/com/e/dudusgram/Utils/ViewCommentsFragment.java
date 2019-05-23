@@ -256,6 +256,8 @@ public class ViewCommentsFragment extends Fragment {
             mPhoto.setComments(mComments);
 
             setupWidgets();
+
+            mComments.clear();
         }
 
         myRef.child(mContext.getString(R.string.dbname_photos))
