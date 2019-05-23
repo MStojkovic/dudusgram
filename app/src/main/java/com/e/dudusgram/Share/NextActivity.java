@@ -25,8 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 public class NextActivity extends AppCompatActivity {
 
     private static final String TAG = "NextActivity";
-
-    private int imageCount = 0;
+    
     private String imgURL;
     private Bitmap bitmap;
     private Intent intent;
@@ -78,12 +77,12 @@ public class NextActivity extends AppCompatActivity {
                 if(intent.hasExtra(getString(R.string.selected_image))){
 
                     imgURL = intent.getStringExtra(getString(R.string.selected_image));
-                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, imgURL, null);
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imgURL, null);
 
                 }else if(intent.hasExtra(getString(R.string.selected_bitmap))){
 
                     bitmap = intent.getParcelableExtra(getString(R.string.selected_bitmap));
-                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, imageCount, null, bitmap);
+                    mFirebaseMethods.uploadNewPhoto(getString(R.string.new_photo), caption, null, bitmap);
                 }
 
             }
@@ -143,7 +142,6 @@ public class NextActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
-        Log.d(TAG, "setupFirebaseAuth: image count: " + imageCount);
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -164,9 +162,7 @@ public class NextActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                imageCount = mFirebaseMethods.getImageCount(dataSnapshot);
-                Log.d(TAG, "onDataChange: image count: " + imageCount);
+                Log.d(TAG, "onDataChange: data changed.");
 
             }
 

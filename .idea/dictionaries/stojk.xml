@@ -10,6 +10,7 @@
       <w>msgs</w>
       <w>reauthenticate</w>
       <w>signout</w>
+      <w>unfollow</w>
     </words>
   </dictionary>
 </component>

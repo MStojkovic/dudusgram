@@ -112,5 +112,12 @@
     <string name="unfollow">Unfollow</string>
     <string name="days">d</string>
     <string name="reply">Reply</string>
+    <string name="deleted_photo_success">Successfully deleted the photo</string>
+    <string name="error_text">Something went wrong</string>
+    <string name="photo_upload_success">Photo upload success</string>
+    <string name="authentication_fail">Authentication failed.</string>
+    <string name="verification_email_send_fail">Could not send verification email.</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>

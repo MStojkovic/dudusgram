@@ -23,8 +23,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -60,7 +63,7 @@ public class FirebaseMethods {
         }
     }
 
-    public void uploadNewPhoto (String photoType, final String caption, final int count, final String imgUrl, Bitmap bm){
+    public void uploadNewPhoto (String photoType, final String caption, final String imgUrl, Bitmap bm){
 
         Log.d(TAG, "uploadNewPhoto: attempting to upload new photo.");
 
@@ -71,9 +74,11 @@ public class FirebaseMethods {
 
             Log.d(TAG, "uploadNewPhoto: uploading new photo.");
 
+            final String dateCreated = getTimestamp();
+
             String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
             final StorageReference storageReference = mStorageReference
-                    .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + user_id + "/photo" + getTimestamp());
+                    .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + user_id + "/photo" + dateCreated);
 
             //convert image url to bitmap
             if (bm == null){
@@ -96,12 +101,12 @@ public class FirebaseMethods {
                             String firebaseUrl = uri.toString();
                             Log.d(TAG, "onSuccess: SUCCESS" + firebaseUrl);
                             //add the new photo to 'photo' and 'user_photos' node
-                            addPhotoToDatabase(caption, firebaseUrl);
+                            addPhotoToDatabase(caption, firebaseUrl, dateCreated);
 
                         }
                     });
 
-                    Toast.makeText(mContext, "Photo upload success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getString(R.string.photo_upload_success), Toast.LENGTH_SHORT).show();
 
 
 
@@ -114,7 +119,7 @@ public class FirebaseMethods {
                 public void onFailure(@NonNull Exception e) {
 
                     Log.d(TAG, "onFailure: Photo upload failed.");
-                    Toast.makeText(mContext, "Photo upload failed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getString(R.string.error_text), Toast.LENGTH_SHORT).show();
 
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -169,7 +174,7 @@ public class FirebaseMethods {
                         }
                     });
 
-                    Toast.makeText(mContext, "Photo upload success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getString(R.string.photo_upload_success), Toast.LENGTH_SHORT).show();
 
                     ((AccountSettingsActivity)mContext).setViewPager(
                             ((AccountSettingsActivity)mContext).pagerAdapter
@@ -183,7 +188,7 @@ public class FirebaseMethods {
                 public void onFailure(@NonNull Exception e) {
 
                     Log.d(TAG, "onFailure: Photo upload failed.");
-                    Toast.makeText(mContext, "Photo upload failed.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getString(R.string.error_text), Toast.LENGTH_SHORT).show();
 
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -222,7 +227,7 @@ public class FirebaseMethods {
         return sdf.format(new Date());
     }
 
-    private void addPhotoToDatabase(String caption, String url){
+    private void addPhotoToDatabase(String caption, String url, String dateCreated){
 
         Log.d(TAG, "addPhotoToDatabase: adding photo to database.");
 
@@ -230,7 +235,7 @@ public class FirebaseMethods {
         String newPhotoKey = myRef.child(mContext.getString(R.string.dbname_photos)).push().getKey();
         Photo photo = new Photo();
         photo.setCaption(caption);
-        photo.setDate_created(getTimestamp());
+        photo.setDate_created(dateCreated);
         photo.setImage_path(url);
         photo.setTags(tags);
         photo.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -240,20 +245,6 @@ public class FirebaseMethods {
                 .getUid()).child(newPhotoKey).setValue(photo);
         myRef.child(mContext.getString(R.string.dbname_photos)).child(newPhotoKey).setValue(photo);
 
-    }
-
-    public int getImageCount (DataSnapshot dataSnapshot){
-
-        int count = 0;
-
-        for (DataSnapshot ignored : dataSnapshot
-                .child(mContext.getString(R.string.dbname_user_photos))
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .getChildren()){
-            count++;
-        }
-
-        return count;
     }
 
     /**
@@ -353,7 +344,7 @@ public class FirebaseMethods {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(mContext, "Authentication failed.",
+                            Toast.makeText(mContext, mContext.getString(R.string.authentication_fail),
                                     Toast.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
@@ -372,7 +363,7 @@ public class FirebaseMethods {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (!task.isSuccessful()) {
-                                Toast.makeText(mContext, "Could not send verification email.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, mContext.getString(R.string.verification_email_send_fail), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -520,5 +511,74 @@ public class FirebaseMethods {
 
         return new UserSettings(user, settings);
 
+    }
+
+    public void deletePhoto (String photo_id, String date_created){
+
+        FilePaths filePaths = new FilePaths();
+        String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        //delete from storage
+
+        StorageReference storageReference = mStorageReference
+                .child(filePaths.FIREBASE_IMAGE_STORAGE + "/" + user_id + "/photo" + date_created);
+
+        storageReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(mContext, mContext.getString(R.string.deleted_photo_success), Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(mContext, mContext.getString(R.string.error_text), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //delete from photos node
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        Query deletePhoto = databaseReference
+                .child(mContext.getString(R.string.dbname_photos))
+                .orderByChild(mContext.getString(R.string.field_photo_id))
+                .equalTo(photo_id);
+
+
+        deletePhoto.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot: dataSnapshot.getChildren()) {
+                    singleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled: error", databaseError.toException() );
+            }
+        });
+
+        //delete from user_photos node
+
+        Query deleteUserPhoto = databaseReference
+                .child(mContext.getString(R.string.dbname_user_photos))
+                .child(user_id)
+                .orderByChild(mContext.getString(R.string.field_photo_id))
+                .equalTo(photo_id);
+
+
+        deleteUserPhoto.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot: dataSnapshot.getChildren()) {
+                    singleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled: error", databaseError.toException() );
+            }
+        });
     }
 }

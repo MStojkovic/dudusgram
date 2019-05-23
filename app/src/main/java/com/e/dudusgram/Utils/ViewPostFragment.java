@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.e.dudusgram.Login.LoginActivity;
@@ -77,7 +78,7 @@ public class ViewPostFragment extends Fragment{
     private SquareImageView mPostImage;
     private BottomNavigationViewEx bottomNavigationView;
     private TextView  mCaption, mUsername, mTimestamp, mLikes, mComments;
-    private ImageView mBackArrow, mHeartRed, mHeartWhite, mProfileImage, mComment;
+    private ImageView mBackArrow, mHeartRed, mHeartWhite, mProfileImage, mComment, mOptions;
 
     // Firebase
     private FirebaseAuth mAuth;
@@ -101,6 +102,7 @@ public class ViewPostFragment extends Fragment{
         mLikes = view.findViewById(R.id.image_likes);
         mComment = view.findViewById(R.id.speech_bubble);
         mComments = view.findViewById(R.id.image_comments_link);
+        mOptions = view.findViewById(R.id.ivEllipses);
 
         mHeart = new Heart(mHeartWhite, mHeartRed);
         mGestureDetector = new GestureDetector(getActivity(), new GestureListener());
@@ -166,6 +168,34 @@ public class ViewPostFragment extends Fragment{
 
                     Log.d(TAG, "onCancelled: query canceled.");
 
+                }
+            });
+
+            mOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu options = new PopupMenu(getActivity(), v);
+                    options.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            Log.d(TAG, "onMenuItemClick: Selected item: " + item.getTitle());
+
+                            FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
+
+                            switch (item.getItemId()) {
+                                case R.id.text_edit:
+                                    return true;
+                                case R.id.text_delete:
+                                    firebaseMethods.deletePhoto(mPhoto.getPhoto_id(), mPhoto.getDate_created());
+                                    getActivity().onBackPressed();
+                                    return true;
+                                default:
+                                    return false;
+                            }
+                        }
+                    });
+                    options.inflate(R.menu.popup_menu);
+                    options.show();
                 }
             });
 
