@@ -17,6 +17,8 @@ import com.e.dudusgram.Profile.AccountSettingsActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.Permissions;
 
+import static android.app.Activity.RESULT_OK;
+
 public class PhotoFragment extends Fragment {
     private static final String TAG = "PhotoFragment";
 
@@ -74,42 +76,45 @@ public class PhotoFragment extends Fragment {
             Log.d(TAG, "onActivityResult: done taking a Photo.");
             Log.d(TAG, "onActivityResult: attempting to navigate to final screen.");
 
-            Bitmap bitmap;
-            bitmap = (Bitmap) data.getExtras().get("data");
+            if (resultCode == RESULT_OK){
+                Bitmap bitmap;
+                bitmap = (Bitmap) data.getExtras().get("data");
 
-            if (isRootTask()) {
+                if (isRootTask()) {
 
-                try{
+                    try{
 
-                    Log.d(TAG, "onActivityResult: received new bitmap from camera " + bitmap);
+                        Log.d(TAG, "onActivityResult: received new bitmap from camera " + bitmap);
 
-                    Intent intent = new Intent(getActivity(), NextActivity.class);
-                    intent.putExtra(getString(R.string.selected_bitmap), bitmap);
-                    startActivity(intent);
+                        Intent intent = new Intent(getActivity(), NextActivity.class);
+                        intent.putExtra(getString(R.string.selected_bitmap), bitmap);
+                        startActivity(intent);
 
-                } catch (NullPointerException e){
-                    Log.e(TAG, "onActivityResult: NullPointerException" + e.getMessage());
+                    } catch (NullPointerException e){
+                        Log.e(TAG, "onActivityResult: NullPointerException" + e.getMessage());
+                    }
+
+                } else {
+
+                    try{
+
+                        Log.d(TAG, "onActivityResult: received new bitmap from camera " + bitmap);
+
+                        Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
+                        intent.putExtra(getString(R.string.selected_bitmap), bitmap);
+                        intent.putExtra(getString(R.string.return_to_fragment), getString(R.string.edit_profile_fragment));
+                        startActivity(intent);
+                        getActivity().finish();
+
+                    } catch (NullPointerException e){
+                        Log.e(TAG, "onActivityResult: NullPointerException" + e.getMessage());
+                    }
+
+
                 }
-
             } else {
-
-                try{
-
-                    Log.d(TAG, "onActivityResult: received new bitmap from camera " + bitmap);
-
-                    Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
-                    intent.putExtra(getString(R.string.selected_bitmap), bitmap);
-                    intent.putExtra(getString(R.string.return_to_fragment), getString(R.string.edit_profile_fragment));
-                    startActivity(intent);
-                    getActivity().finish();
-
-                } catch (NullPointerException e){
-                    Log.e(TAG, "onActivityResult: NullPointerException" + e.getMessage());
-                }
-
-
+                Log.d(TAG, "onActivityResult: Camera closed by user.");
             }
-
 
         }
     }
