@@ -1,6 +1,7 @@
 package com.e.dudusgram.Utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -12,8 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.e.dudusgram.Profile.ProfileActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.models.Comment;
+import com.e.dudusgram.models.User;
 import com.e.dudusgram.models.UserAccountSettings;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,6 +45,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
     private LayoutInflater mInflater;
     private int layoutResource;
     private Context mContext;
+    private DatabaseReference mReference;
 
     CommentListAdapter(@NonNull Context context, @LayoutRes int resource,
                        @NonNull List<Comment> objects) {
@@ -49,12 +53,14 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = context;
         layoutResource = resource;
+        mReference = FirebaseDatabase.getInstance().getReference();
     }
 
     private static class ViewHolder {
         TextView comment, username, timestamp, reply, likes;
         CircleImageView profileImage;
         ImageView like;
+        User user = new User();
     }
 
     @NonNull
@@ -102,14 +108,49 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             @Override
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                 for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-                    holder.username.setText(
-                            singleSnapshot.getValue(UserAccountSettings.class).getUsername());
+                    Log.d(TAG, "onDataChange: found user: "
+                            + singleSnapshot.getValue(UserAccountSettings.class).getUsername());
+
+                    holder.username.setText(singleSnapshot.getValue(UserAccountSettings.class).getUsername());
+                    holder.username.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            holder.username.setClickable(false);
+                            Log.d(TAG, "onClick: navigating to profile of: "
+                                    + holder.user.getUsername());
+
+                            Intent intent = new Intent(mContext, ProfileActivity.class);
+                            intent.putExtra(mContext.getString(R.string.calling_activity),
+                                    mContext.getString(R.string.home_activity));
+                            intent.putExtra(mContext.getString(R.string.intent_user),
+                                    holder.user);
+                            mContext.startActivity(intent);
+                            holder.username.setClickable(true);
+                        }
+                    });
 
                     ImageLoader imageLoader = ImageLoader.getInstance();
 
                     imageLoader.displayImage(
                             singleSnapshot.getValue(UserAccountSettings.class).getProfile_photo(),
                             holder.profileImage);
+
+                    holder.profileImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            holder.profileImage.setClickable(false);
+                            Log.d(TAG, "onClick: navigating to profile of: "
+                                    + holder.user.getUsername());
+
+                            Intent intent = new Intent(mContext, ProfileActivity.class);
+                            intent.putExtra(mContext.getString(R.string.calling_activity),
+                                    mContext.getString(R.string.home_activity));
+                            intent.putExtra(mContext.getString(R.string.intent_user),
+                                    holder.user);
+                            mContext.startActivity(intent);
+                            holder.profileImage.setClickable(true);
+                        }
+                    });
                 }
             }
 
@@ -128,6 +169,30 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         }catch(NullPointerException e){
             Log.e(TAG, "getView: NullPointerException " + e.getMessage());
         }
+
+        //get the user object
+        Query userQuery = mReference
+                .child(mContext.getString(R.string.dbname_users))
+                .orderByChild(mContext.getString(R.string.field_user_id))
+                .equalTo(getItem(position).getUser_id());
+
+        userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                    Log.d(TAG, "onDataChange: found user: " +
+                            singleSnapshot.getValue(User.class).getUsername());
+
+                    holder.user = singleSnapshot.getValue(User.class);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         return convertView;
     }
