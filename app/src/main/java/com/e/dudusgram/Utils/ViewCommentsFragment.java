@@ -106,6 +106,7 @@ public class ViewCommentsFragment extends Fragment {
                     addNewComment(mComment.getText().toString());
 
                     mComment.setText("");
+                    mComment.clearFocus();
                 }else{
                     Toast.makeText(getActivity(), "you can't post a blank comment", Toast.LENGTH_SHORT).show();
                 }
