@@ -59,7 +59,7 @@ public class ViewCommentsFragment extends Fragment {
     private Photo mPhoto;
     private ArrayList<Comment> mComments;
     private Context mContext;
-    
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -87,30 +87,6 @@ public class ViewCommentsFragment extends Fragment {
         CommentListAdapter adapter = new CommentListAdapter(getActivity(),
                 R.layout.layout_comment, mComments);
         mListView.setAdapter(adapter);
-
-        mCheckMark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(!mComment.getText().toString().equals("")){
-                    Log.d(TAG, "onClick: attempting to submit new comment.");
-                    addNewComment(mComment.getText().toString());
-
-                    mComment.setText("");
-                }else{
-                    Toast.makeText(getActivity(), "you can't post a blank comment", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        mBackArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: navigating back");
-
-                getActivity().onBackPressed();
-            }
-        });
 
         return view;
     }
@@ -185,22 +161,6 @@ public class ViewCommentsFragment extends Fragment {
      * @return
      */
 
-    private String getCallingActivityFromBundle(){
-        //Log.d(TAG, "getCallingActivityFromBundle: calling activity from bundle: " + getArguments());
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null){
-            return bundle.getString(getString(R.string.home_activity));
-        } else{
-            return null;
-        }
-    }
-
-    /**
-     * Get the photo from the bundle
-     * @return
-     */
-
     private Photo getPhotoFromBundle(){
 
         Log.d(TAG, "getPhotoFromBundle: arguments: " + getArguments());
@@ -253,20 +213,9 @@ public class ViewCommentsFragment extends Fragment {
         };
 
         if(mPhoto.getComments().size() == 0){
-            mComments.clear();
-
-            Comment firstComment = new Comment();
-            firstComment.setComment(mPhoto.getCaption());
-            firstComment.setUser_id(mPhoto.getUser_id());
-            firstComment.setDate_created(mPhoto.getDate_created());
-
-            mComments.add(firstComment);
-
-            mPhoto.setComments(mComments);
 
             setupWidgets();
 
-            mComments.clear();
         }
 
         myRef.child(mContext.getString(R.string.dbname_photos))
