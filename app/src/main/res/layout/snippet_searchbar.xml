@@ -26,7 +26,10 @@
                     android:id="@+id/search"
                     android:layout_marginLeft="5dp"
                     android:background="@null"
-                    android:maxLines="1"/>
+                    android:maxLines="1"
+                    android:inputType="text"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"/>
 
             </RelativeLayout>
 
