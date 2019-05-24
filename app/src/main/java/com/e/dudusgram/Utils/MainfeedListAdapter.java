@@ -169,6 +169,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
                     holder.username.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            holder.username.setClickable(false);
                             Log.d(TAG, "onClick: navigating to profile of: "
                                     + holder.user.getUsername());
 
@@ -178,6 +179,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
                             intent.putExtra(mContext.getString(R.string.intent_user),
                                     holder.user);
                             mContext.startActivity(intent);
+                            holder.username.setClickable(true);
                         }
                     });
 
@@ -186,6 +188,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
                     holder.mProfileImage.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            holder.mProfileImage.setClickable(false);
                             Log.d(TAG, "onClick: navigating to profile of: "
                                     + holder.user.getUsername());
 
@@ -195,6 +198,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
                             intent.putExtra(mContext.getString(R.string.intent_user),
                                     holder.user);
                             mContext.startActivity(intent);
+                            holder.mProfileImage.setClickable(true);
                         }
                     });
 

@@ -100,6 +100,8 @@ public class SearchActivity extends AppCompatActivity {
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    mUserList.clear();
+
                     for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
                         Log.d(TAG, "onDataChange: found user: " + singleSnapshot.getValue(User.class).toString());
 
@@ -134,6 +136,7 @@ public class SearchActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mListView.setClickable(false);
                 Log.d(TAG, "onItemClick: selected user: " + mUserList.get(i).toString());
 
                 // navigate to profile activity
@@ -141,6 +144,7 @@ public class SearchActivity extends AppCompatActivity {
                 intent.putExtra(getString(R.string.calling_activity), getString(R.string.search_activity));
                 intent.putExtra(getString(R.string.intent_user), mUserList.get(i));
                 startActivity(intent);
+                mListView.setClickable(true);
             }
         });
     }
