@@ -1,32 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/relLayout1">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/relLayout1">
+            <!-- toolbar -->
+            <include layout="@layout/snippet_top_nexttoolbar"/>
 
-                <!-- toolbar -->
-                <include layout="@layout/snippet_top_nexttoolbar"/>
+        </RelativeLayout>
 
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/relLayout1"
-                android:id="@+id/relLayout2"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/relLayout1"
+            android:id="@+id/relLayout2"
                 android:background="@drawable/grey_border_bottom">
 
                 <ImageView
@@ -39,23 +31,27 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginBottom="40dp"/>
 
-                <com.e.dudusgram.Utils.CustomText
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/imageShare"
-                    android:id="@+id/caption"
-                    android:hint="@string/description"
                     android:layout_marginLeft="20dp"
                     android:layout_marginStart="20dp"
                     android:layout_centerVertical="true"
-                    android:background="@null"
-                    android:layout_toEndOf="@id/imageShare"
-                    android:inputType="textMultiLine"
-                    android:maxLength="30" />
+                    android:layout_toRightOf="@id/imageShare"
+                    android:layout_toEndOf="@id/imageShare">
+
+                    <com.e.dudusgram.Utils.CustomText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/caption"
+                        android:hint="@string/description"
+                        android:layout_centerVertical="true"
+                        android:background="@null"
+                        android:lines="3"
+                        android:inputType="textMultiLine"
+                        android:maxLength="200" />
+
+                </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
-
-
-        </RelativeLayout>
-    </ScrollView>
 
 </RelativeLayout>

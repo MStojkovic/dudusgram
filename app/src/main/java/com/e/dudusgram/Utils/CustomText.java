@@ -3,6 +3,7 @@ package com.e.dudusgram.Utils;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -10,6 +11,8 @@ import android.view.inputmethod.InputMethodManager;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class CustomText extends android.support.v7.widget.AppCompatEditText {
+
+    private static final int MAX_LINES = 5;
 
     public CustomText(Context context) {
         super(context);
@@ -43,5 +46,12 @@ public class CustomText extends android.support.v7.widget.AppCompatEditText {
     {
         InputMethodManager in = (InputMethodManager) getContext().getSystemService(INPUT_METHOD_SERVICE);
         in.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    @Override
+    protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
+        if (null != getLayout() && getLayout().getLineCount() > MAX_LINES) {
+            getText().delete(getText().length() - 1, getText().length());
+        }
     }
 }
