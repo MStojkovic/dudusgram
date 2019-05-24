@@ -53,8 +53,8 @@
             android:hint="@string/add_a_comment"
             android:textSize="14sp"
             android:id="@+id/comment"
-            android:inputType="text"
-            android:maxLines="3"/>
+            android:inputType="textMultiLine"
+            android:maxLength="30"/>
 
         <ImageView
             android:layout_width="40dp"

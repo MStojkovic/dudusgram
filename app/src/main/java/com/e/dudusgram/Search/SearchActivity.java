@@ -86,7 +86,6 @@ public class SearchActivity extends AppCompatActivity {
 
     private void searchForMatch(String keyword){
         Log.d(TAG, "searchForMatch: searching for a match: " + keyword);
-        mUserList.clear();
 
         // update the users list view
         if (keyword.length() != 0) {
