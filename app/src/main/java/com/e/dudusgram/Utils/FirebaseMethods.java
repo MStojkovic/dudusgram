@@ -413,7 +413,7 @@ public class FirebaseMethods {
 
     public UserSettings getUserSettings(DataSnapshot dataSnapshot) {
 
-        Log.d(TAG, "getUserSettings: retrieveing user account setting from Firebase");
+        Log.d(TAG, "getUserSettings: retrieving user account settings from Firebase");
 
         UserAccountSettings settings = new UserAccountSettings();
         User user = new User();
@@ -422,7 +422,7 @@ public class FirebaseMethods {
 
             //user_account_settings node
             if (ds.getKey().equals(mContext.getString(R.string.dbname_user_account_settings))) {
-                Log.d(TAG, "getUserSettings: datasnapshot: " + ds);
+                Log.d(TAG, "getUserSettings: user account settings node datasnapshot: " + ds);
 
                 try {
 
