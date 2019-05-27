@@ -59,6 +59,7 @@ public class ViewCommentsFragment extends Fragment {
     private Photo mPhoto;
     private ArrayList<Comment> mComments;
     private Context mContext;
+    int counter = 0;
 
     @Nullable
     @Override
@@ -82,7 +83,6 @@ public class ViewCommentsFragment extends Fragment {
     }
 
     private void setupWidgets(){
-
 
         CommentListAdapter adapter = new CommentListAdapter(mContext,
                 R.layout.layout_comment, mComments);
@@ -204,6 +204,7 @@ public class ViewCommentsFragment extends Fragment {
             }
         };
 
+
         if(mPhoto.getComments().size() == 0){
 
             Comment firstComment = new Comment();
@@ -212,97 +213,97 @@ public class ViewCommentsFragment extends Fragment {
             firstComment.setDate_created(mPhoto.getDate_created());
 
             mComments.add(firstComment);
-            CommentListAdapter adapter = new CommentListAdapter(getActivity(),
-                    R.layout.layout_comment, mComments);
-            mListView.setAdapter(adapter);
 
             setupWidgets();
 
-        }
+        } else {
 
-        myRef.child(mContext.getString(R.string.dbname_photos))
-                .child(mPhoto.getPhoto_id())
-                .child(mContext.getString(R.string.field_comments))
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        Query query = myRef
-                                .child(mContext.getString(R.string.dbname_photos))
-                                .orderByChild(mContext.getString(R.string.field_photo_id))
-                                .equalTo(mPhoto.getPhoto_id());
+            myRef.child(mContext.getString(R.string.dbname_photos))
+                    .child(mPhoto.getPhoto_id())
+                    .child(mContext.getString(R.string.field_comments))
+                    .addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            Query query = myRef
+                                    .child(mContext.getString(R.string.dbname_photos))
+                                    .orderByChild(mContext.getString(R.string.field_photo_id))
+                                    .equalTo(mPhoto.getPhoto_id());
 
-                        query.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 
-                                    Photo photo = new Photo();
-                                    Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
+                                        Photo photo = new Photo();
+                                        Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
-                                    photo.setCaption(objectMap.get(mContext.getString(R.string.field_caption)).toString());
-                                    photo.setTags(objectMap.get(mContext.getString(R.string.field_tags)).toString());
-                                    photo.setPhoto_id(objectMap.get(mContext.getString(R.string.field_photo_id)).toString());
-                                    photo.setUser_id(objectMap.get(mContext.getString(R.string.field_user_id)).toString());
-                                    photo.setDate_created(objectMap.get(mContext.getString(R.string.field_date_created)).toString());
-                                    photo.setImage_path(objectMap.get(mContext.getString(R.string.field_image_path)).toString());
+                                        photo.setCaption(objectMap.get(mContext.getString(R.string.field_caption)).toString());
+                                        photo.setTags(objectMap.get(mContext.getString(R.string.field_tags)).toString());
+                                        photo.setPhoto_id(objectMap.get(mContext.getString(R.string.field_photo_id)).toString());
+                                        photo.setUser_id(objectMap.get(mContext.getString(R.string.field_user_id)).toString());
+                                        photo.setDate_created(objectMap.get(mContext.getString(R.string.field_date_created)).toString());
+                                        photo.setImage_path(objectMap.get(mContext.getString(R.string.field_image_path)).toString());
 
-                                    mComments.clear();
+                                        mComments.clear();
 
-                                    Comment firstComment = new Comment();
-                                    firstComment.setComment(mPhoto.getCaption());
-                                    firstComment.setUser_id(mPhoto.getUser_id());
-                                    firstComment.setDate_created(mPhoto.getDate_created());
+                                        Comment firstComment = new Comment();
+                                        firstComment.setComment(mPhoto.getCaption());
+                                        firstComment.setUser_id(mPhoto.getUser_id());
+                                        firstComment.setDate_created(mPhoto.getDate_created());
 
-                                    mComments.add(firstComment);
+                                        mComments.add(firstComment);
 
-                                    for (DataSnapshot dSnapshot : singleSnapshot
-                                            .child(mContext.getString(R.string.field_comments)).getChildren()){
-                                        Comment comment = new Comment();
-                                        comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
-                                        comment.setComment(dSnapshot.getValue(Comment.class).getComment());
-                                        comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
-                                        mComments.add(comment);
+                                        for (DataSnapshot dSnapshot : singleSnapshot
+                                                .child(mContext.getString(R.string.field_comments)).getChildren()) {
+                                            Comment comment = new Comment();
+                                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
+                                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
+                                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+                                            mComments.add(comment);
+                                        }
+
+                                        photo.setComments(mComments);
+                                        mPhoto = photo;
                                     }
 
-                                    photo.setComments(mComments);
-
-                                    mPhoto = photo;
-
-                                    setupWidgets();
+                                    //this is a hack
+                                    if (counter < 1) {
+                                        setupWidgets();
+                                    }
+                                    counter++;
                                 }
 
-                            }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Log.d(TAG, "onCancelled: query canceled.");
 
-                                Log.d(TAG, "onCancelled: query canceled.");
+                                }
+                            });
+                        }
 
-                            }
-                        });
-                    }
+                        @Override
+                        public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        }
 
-                    }
+                        @Override
+                        public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                        }
 
-                    }
+                        @Override
+                        public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        }
 
-                    }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                        }
+                    });
+        }
     }
 
     /**

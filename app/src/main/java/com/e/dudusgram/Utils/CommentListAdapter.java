@@ -88,7 +88,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
         // set the comment
         holder.comment.setText(getItem(position).getComment());
-        //holder.username.setText(getItem(position).getUser_id());
+        holder.username.setText(getItem(0).getUser_id());
 
         // set the timestamp difference
         String timestampDifference = getTimestampDifference(getItem(position));
@@ -108,6 +108,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+
                 for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
                     Log.d(TAG, "onDataChange: found user: "
                             + singleSnapshot.getValue(UserAccountSettings.class).getUsername());
@@ -152,6 +153,8 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                             holder.profileImage.setClickable(true);
                         }
                     });
+
+                    break;
                 }
             }
 
@@ -166,10 +169,12 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                 holder.like.setVisibility(View.GONE);
                 holder.likes.setVisibility(View.GONE);
                 holder.reply.setVisibility(View.GONE);
+                //holder.username.setText(getItem(0).getUser_id());
             }
         }catch(NullPointerException e){
             Log.e(TAG, "getView: NullPointerException " + e.getMessage());
         }
+
 
         //get the user object
         Query userQuery = mReference
