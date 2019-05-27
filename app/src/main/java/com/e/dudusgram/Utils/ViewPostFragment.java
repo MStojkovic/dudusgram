@@ -457,12 +457,9 @@ public class ViewPostFragment extends Fragment{
         mLikes.setText(mLikesString);
         mCaption.setText(mPhoto.getCaption());
 
-        if(mPhoto.getComments().size() > 0){
-            mComments.setText(String.format(Locale.ENGLISH, "%s %d %s", getString(R.string.ViewAll), mPhoto.getComments().size(), getString(R.string.comments)));
-        }else{
-            mComments.setText("");
-        }
 
+        mComments.setText(String.format(Locale.ENGLISH, "%s %d %s", getString(R.string.ViewAll), mPhoto.getComments().size(), getString(R.string.comments)));
+        
         mComments.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

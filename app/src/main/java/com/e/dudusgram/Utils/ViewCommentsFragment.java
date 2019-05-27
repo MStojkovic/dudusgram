@@ -78,20 +78,11 @@ public class ViewCommentsFragment extends Fragment {
             Log.e(TAG, "onCreateView: NullPointerException: " + e.getMessage());
         }
 
-        Comment firstComment = new Comment();
-        firstComment.setComment(mPhoto.getCaption());
-        firstComment.setUser_id(mPhoto.getUser_id());
-        firstComment.setDate_created(mPhoto.getDate_created());
-
-        mComments.add(firstComment);
-        CommentListAdapter adapter = new CommentListAdapter(getActivity(),
-                R.layout.layout_comment, mComments);
-        mListView.setAdapter(adapter);
-
         return view;
     }
 
     private void setupWidgets(){
+
 
         CommentListAdapter adapter = new CommentListAdapter(mContext,
                 R.layout.layout_comment, mComments);
@@ -214,6 +205,16 @@ public class ViewCommentsFragment extends Fragment {
         };
 
         if(mPhoto.getComments().size() == 0){
+
+            Comment firstComment = new Comment();
+            firstComment.setComment(mPhoto.getCaption());
+            firstComment.setUser_id(mPhoto.getUser_id());
+            firstComment.setDate_created(mPhoto.getDate_created());
+
+            mComments.add(firstComment);
+            CommentListAdapter adapter = new CommentListAdapter(getActivity(),
+                    R.layout.layout_comment, mComments);
+            mListView.setAdapter(adapter);
 
             setupWidgets();
 

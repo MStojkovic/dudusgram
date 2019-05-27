@@ -324,7 +324,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
 
                             mHolder.heart.toggleLike();
                             getLikesString(mHolder);
-                        } else if(!mHolder.likeByCurrentUser){
+                        } else{
                             addNewLike(mHolder);
                             break;
                         }

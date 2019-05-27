@@ -88,6 +88,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
         // set the comment
         holder.comment.setText(getItem(position).getComment());
+        //holder.username.setText(getItem(position).getUser_id());
 
         // set the timestamp difference
         String timestampDifference = getTimestampDifference(getItem(position));

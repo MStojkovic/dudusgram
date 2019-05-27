@@ -89,11 +89,9 @@ public class HomeFragment extends Fragment {
 
                 }
             });
-            Log.d(TAG, "getFollowing: Ovo");
         } catch (NullPointerException e){
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
-            Log.d(TAG, "getFollowing: Ono");
         }
 
 
