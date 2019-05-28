@@ -41,7 +41,7 @@ public class UserListAdapter extends ArrayAdapter<User> {
     }
 
     private static class ViewHolder{
-        TextView username, email;
+        TextView username, displayName;
         CircleImageView profileImage;
     }
 
@@ -56,7 +56,7 @@ public class UserListAdapter extends ArrayAdapter<User> {
             holder = new ViewHolder();
 
             holder.username = convertView.findViewById(R.id.username);
-            holder.email = convertView.findViewById(R.id.email);
+            holder.displayName = convertView.findViewById(R.id.display_name);
             holder.profileImage = convertView.findViewById(R.id.profile_image);
 
             convertView.setTag(holder);
@@ -65,7 +65,6 @@ public class UserListAdapter extends ArrayAdapter<User> {
         }
 
         holder.username.setText(getItem(position).getUsername());
-        holder.email.setText(getItem(position).getEmail());
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference.child(mContext.getString(R.string.dbname_user_account_settings))
@@ -83,6 +82,8 @@ public class UserListAdapter extends ArrayAdapter<User> {
 
                     imageLoader.displayImage(singleSnapshot.getValue(UserAccountSettings.class).getProfile_photo(),
                             holder.profileImage);
+
+                    holder.displayName.setText(singleSnapshot.getValue(UserAccountSettings.class).getDisplay_name());
                 }
             }
 

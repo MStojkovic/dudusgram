@@ -42,7 +42,7 @@
                 android:textSize="15sp"
                 android:layout_centerVertical="true"
                 android:textColor="@color/grey"
-                android:id="@+id/email"
+                android:id="@+id/display_name"
                 android:layout_marginStart="10dp" />
 
         </RelativeLayout>
