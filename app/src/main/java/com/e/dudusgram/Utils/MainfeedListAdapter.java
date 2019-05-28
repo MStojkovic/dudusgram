@@ -276,6 +276,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
 
         ViewHolder mHolder;
 
+
         GestureListener(ViewHolder holder) {
             mHolder = holder;
         }
@@ -300,14 +301,18 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                    Boolean foundLike = false;
                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
 
                         String keyID = singleSnapshot.getKey();
 
-                        if (mHolder.likeByCurrentUser
-                        //        && singleSnapshot.getValue(Like.class).getUser_id()
-                        //        .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        ){
+                        Log.d(TAG, "Test: ID" + keyID);
+                        Log.d(TAG, "Test: Liked " + mHolder.likeByCurrentUser);
+                        Log.d(TAG, "Test: SS " + singleSnapshot.getValue(Like.class).getUser_id());
+                        Log.d(TAG, "Test: User " + FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                        if (singleSnapshot.getValue(Like.class).getUser_id()
+                                .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
 
                             mReference.child(mContext.getString(R.string.dbname_photos))
                                     .child(mHolder.photo.getPhoto_id())
@@ -324,13 +329,10 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
 
                             mHolder.heart.toggleLike();
                             getLikesString(mHolder);
-                        } else{
-                            addNewLike(mHolder);
-                            break;
+                            foundLike = true;
                         }
-
                     }
-                    if (!dataSnapshot.exists()){
+                    if (!dataSnapshot.exists() || !foundLike){
                         addNewLike(mHolder);
                     }
                 }
