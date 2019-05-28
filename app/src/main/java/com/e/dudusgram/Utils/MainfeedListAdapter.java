@@ -276,7 +276,6 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
 
         ViewHolder mHolder;
 
-
         GestureListener(ViewHolder holder) {
             mHolder = holder;
         }
@@ -305,11 +304,6 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
 
                         String keyID = singleSnapshot.getKey();
-
-                        Log.d(TAG, "Test: ID" + keyID);
-                        Log.d(TAG, "Test: Liked " + mHolder.likeByCurrentUser);
-                        Log.d(TAG, "Test: SS " + singleSnapshot.getValue(Like.class).getUser_id());
-                        Log.d(TAG, "Test: User " + FirebaseAuth.getInstance().getCurrentUser().getUid());
 
                         if (singleSnapshot.getValue(Like.class).getUser_id()
                                 .equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
