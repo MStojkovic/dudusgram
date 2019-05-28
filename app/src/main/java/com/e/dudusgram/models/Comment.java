@@ -8,6 +8,7 @@ public class Comment {
     private String user_id;
     private List<Like> likes;
     private String date_created;
+    private Boolean isDescription;
 
     public Comment() {
 
@@ -18,6 +19,7 @@ public class Comment {
         this.user_id = user_id;
         this.likes = likes;
         this.date_created = date_created;
+        this.isDescription = false;
     }
 
     public String getComment() {
@@ -50,6 +52,14 @@ public class Comment {
 
     public void setDate_created(String date_created) {
         this.date_created = date_created;
+    }
+
+    public Boolean getDescription() {
+        return isDescription;
+    }
+
+    public void setDescription(Boolean description) {
+        isDescription = description;
     }
 
     @Override

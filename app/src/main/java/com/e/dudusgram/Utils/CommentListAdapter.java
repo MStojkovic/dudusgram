@@ -84,6 +84,9 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
+            holder.like.setVisibility(View.VISIBLE);
+            holder.likes.setVisibility(View.VISIBLE);
+            holder.reply.setVisibility(View.VISIBLE);
         }
 
         // set the comment
@@ -164,14 +167,13 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             }
         });
 
-        try{
-            if(position == 0){
+        try {
+            if (getItem(position).getDescription()) {
                 holder.like.setVisibility(View.GONE);
                 holder.likes.setVisibility(View.GONE);
                 holder.reply.setVisibility(View.GONE);
-                //holder.username.setText(getItem(0).getUser_id());
             }
-        }catch(NullPointerException e){
+        } catch (NullPointerException e) {
             Log.e(TAG, "getView: NullPointerException " + e.getMessage());
         }
 

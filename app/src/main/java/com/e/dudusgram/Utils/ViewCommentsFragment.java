@@ -211,6 +211,7 @@ public class ViewCommentsFragment extends Fragment {
             firstComment.setComment(mPhoto.getCaption());
             firstComment.setUser_id(mPhoto.getUser_id());
             firstComment.setDate_created(mPhoto.getDate_created());
+            firstComment.setDescription(true);
 
             mComments.add(firstComment);
 
@@ -251,6 +252,7 @@ public class ViewCommentsFragment extends Fragment {
                                         firstComment.setComment(mPhoto.getCaption());
                                         firstComment.setUser_id(mPhoto.getUser_id());
                                         firstComment.setDate_created(mPhoto.getDate_created());
+                                        firstComment.setDescription(true);
 
                                         mComments.add(firstComment);
 
