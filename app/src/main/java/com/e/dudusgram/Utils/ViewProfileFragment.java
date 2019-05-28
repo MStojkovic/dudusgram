@@ -404,7 +404,7 @@ public class ViewProfileFragment extends Fragment {
         gridView.setColumnWidth(imageWidth);
 
         ArrayList<String> imgUrls = new ArrayList<>();
-        for (int i = 0; i < photos.size(); i++){
+        for (int i = photos.size() - 1; i >= 0; i--){
             imgUrls.add(photos.get(i).getImage_path());
         }
 
@@ -414,7 +414,7 @@ public class ViewProfileFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                mOnGridImageSelectedListener.onGridImageSelected(photos.get(position), ACTIVITY_NUM);
+                mOnGridImageSelectedListener.onGridImageSelected(photos.get(photos.size() - 1 - position), ACTIVITY_NUM);
             }
         });
     }
