@@ -8,11 +8,13 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.e.dudusgram.Home.HomeActivity;
@@ -56,6 +58,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
     private Context mContext;
     private DatabaseReference mReference;
     private String currentUsername = "";
+    private String currentUserID = "";
 
     public MainfeedListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Photo> objects) {
         super(context, resource, objects);
@@ -71,7 +74,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
         String likesString;
         TextView username, timeDelta, caption, likes, comments;
         SquareImageView image;
-        ImageView heartRed, heartWhite, comment;
+        ImageView heartRed, heartWhite, comment, options;
 
         UserAccountSettings settings = new UserAccountSettings();
         User user = new User();
@@ -102,6 +105,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
             holder.caption = convertView.findViewById(R.id.image_caption);
             holder.timeDelta = convertView.findViewById(R.id.image_time_posted);
             holder.mProfileImage = convertView.findViewById(R.id.profile_photo);
+            holder.options = convertView.findViewById(R.id.ivEllipses);
 
             convertView.setTag(holder);
 
@@ -165,6 +169,42 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
                     //currentUsername = singleSnapshot.getValue(UserAccountSettings.class).getUsername();
                     Log.d(TAG, "onDataChange: found user: "
                             + singleSnapshot.getValue(UserAccountSettings.class).getUsername());
+
+                    Log.d(TAG, "Test: " + currentUserID);
+                    Log.d(TAG, "Test: " + singleSnapshot.getValue(UserAccountSettings.class).getUser_id());
+
+                    if (currentUserID.equals(singleSnapshot.getValue(UserAccountSettings.class).getUser_id())) {
+
+                        holder.options.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                PopupMenu options = new PopupMenu(mContext, v);
+                                options.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(MenuItem item) {
+                                        Log.d(TAG, "onMenuItemClick: Selected item: " + item.getTitle());
+
+                                        FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
+
+                                        switch (item.getItemId()) {
+                                            case R.id.text_edit:
+                                                return true;
+                                            case R.id.text_delete:
+                                                firebaseMethods.deletePhoto(holder.photo.getPhoto_id(), holder.photo.getDate_created());
+                                                return true;
+                                            default:
+                                                return false;
+                                        }
+                                    }
+                                });
+                                options.inflate(R.menu.popup_menu);
+                                options.show();
+                            }
+                        });
+                        holder.options.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.options.setVisibility(View.GONE);
+                    }
 
                     holder.username.setText(singleSnapshot.getValue(UserAccountSettings.class).getUsername());
                     holder.username.setOnClickListener(new View.OnClickListener() {
@@ -382,6 +422,7 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
 
                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                     currentUsername = singleSnapshot.getValue(UserAccountSettings.class).getUsername();
+                    currentUserID = singleSnapshot.getValue(UserAccountSettings.class).getUser_id();
                 }
             }
 

@@ -115,7 +115,6 @@ public class ViewPostFragment extends Fragment{
 
     private void init(){
         try{
-
             UniversalImageLoader.setImage(getPhotoFromBundle().getImage_path(), mPostImage, null, "");
             mActivityNumber = getActivityFromBundle();
             String photo_id = getPhotoFromBundle().getPhoto_id();
@@ -170,35 +169,6 @@ public class ViewPostFragment extends Fragment{
 
                 }
             });
-
-            mOptions.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    PopupMenu options = new PopupMenu(getActivity(), v);
-                    options.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            Log.d(TAG, "onMenuItemClick: Selected item: " + item.getTitle());
-
-                            FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
-
-                            switch (item.getItemId()) {
-                                case R.id.text_edit:
-                                    return true;
-                                case R.id.text_delete:
-                                    firebaseMethods.deletePhoto(mPhoto.getPhoto_id(), mPhoto.getDate_created());
-                                    getActivity().onBackPressed();
-                                    return true;
-                                default:
-                                    return false;
-                            }
-                        }
-                    });
-                    options.inflate(R.menu.popup_menu);
-                    options.show();
-                }
-            });
-
 
         } catch (NullPointerException e){
             Log.e(TAG, "onCreateView: NullPointerException: " + e.getMessage());
@@ -476,6 +446,39 @@ public class ViewPostFragment extends Fragment{
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
+
+        if (mUserAccountSettings.getUser_id().equals(mCurrentUser.getUser_id())) {
+
+            mOptions.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu options = new PopupMenu(getActivity(), v);
+                    options.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            Log.d(TAG, "onMenuItemClick: Selected item: " + item.getTitle());
+
+                            FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
+
+                            switch (item.getItemId()) {
+                                case R.id.text_edit:
+                                    return true;
+                                case R.id.text_delete:
+                                    firebaseMethods.deletePhoto(mPhoto.getPhoto_id(), mPhoto.getDate_created());
+                                    getActivity().onBackPressed();
+                                    return true;
+                                default:
+                                    return false;
+                            }
+                        }
+                    });
+                    options.inflate(R.menu.popup_menu);
+                    options.show();
+                }
+            });
+        } else {
+            mOptions.setVisibility(View.GONE);
+        }
 
         mComment.setOnClickListener(new View.OnClickListener() {
             @Override
