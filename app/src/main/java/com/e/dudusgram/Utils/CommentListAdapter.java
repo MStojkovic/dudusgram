@@ -124,7 +124,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                     Log.d(TAG, "onDataChange: found user: "
                             + singleSnapshot.getValue(UserAccountSettings.class).getUsername());
 
-                    mCurrentUserID = singleSnapshot.getValue(UserAccountSettings.class).getUser_id();
+                    mCurrentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                     holder.username.setText(singleSnapshot.getValue(UserAccountSettings.class).getUsername());
                     holder.username.setOnClickListener(new View.OnClickListener() {
@@ -167,44 +167,26 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                         }
                     });
 
-                    if (!getItem(position).getDescription()) {
+                    Log.d(TAG, "Test: " + mCurrentUserID);
+                    Log.d(TAG, "Test: " + getItem(position).getUser_id());
+                    Log.d(TAG, "Test: " + mPostOwner);
+                    Log.d(TAG, "Test: " + mPostID);
 
-                        if (mCurrentUserID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                || mCurrentUserID.equals(mPostOwner)) {
+                    if (mCurrentUserID.equals(getItem(position).getUser_id())
+                            || mCurrentUserID.equals(mPostOwner)) {
 
-                            holder.delete.setVisibility(View.VISIBLE);
-
-                            holder.delete.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    PopupMenu options = new PopupMenu(mContext, v);
-                                    options.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                        @Override
-                                        public boolean onMenuItemClick(MenuItem item) {
-                                            Log.d(TAG, "onMenuItemClick: Selected item: " + item.getTitle());
-
-                                            FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
-
-                                            switch (item.getItemId()) {
-                                                case R.id.text_edit:
-                                                    return true;
-                                                case R.id.text_delete:
-                                                    firebaseMethods.deleteComment(mPostOwner, mPostID, getItem(position).getComment_id());
-                                                    return true;
-                                                default:
-                                                    return false;
-                                            }
-                                        }
-                                    });
-                                    options.inflate(R.menu.popup_menu);
-                                    options.show();
-                                }
-                            });
-                        } else {
-                            holder.delete.setVisibility(View.GONE);
-                        }
-
+                        holder.delete.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Log.d(TAG, "Test: clicked");
+                                FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
+                                firebaseMethods.deleteComment(mPostOwner, mPostID, getItem(position).getComment_id());
+                            }
+                        });
+                    } else {
+                        holder.delete.setVisibility(View.GONE);
                     }
+
 
                     break;
                 }
@@ -220,6 +202,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             if (getItem(position).getDescription()) {
                 holder.like.setVisibility(View.GONE);
                 holder.likes.setVisibility(View.GONE);
+                holder.delete.setVisibility(View.GONE);
                 holder.delete.setVisibility(View.GONE);
             }
         } catch (NullPointerException e) {
@@ -250,9 +233,6 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
             }
         });
-
-        Log.d(TAG, "Test: " + holder.user.getUser_id());
-        Log.d(TAG, "Test: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         return convertView;
     }

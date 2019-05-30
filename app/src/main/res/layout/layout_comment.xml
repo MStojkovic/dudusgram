@@ -90,7 +90,10 @@
                 android:layout_toRightOf="@+id/comment_likes"
                 android:layout_marginStart="15dp"
                 android:layout_toEndOf="@+id/comment_likes"
-                android:text="@string/delete"/>
+                android:text="@string/delete"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"/>
 
         </RelativeLayout>
 
