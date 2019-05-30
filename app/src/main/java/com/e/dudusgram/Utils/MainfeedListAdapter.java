@@ -170,9 +170,6 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
                     Log.d(TAG, "onDataChange: found user: "
                             + singleSnapshot.getValue(UserAccountSettings.class).getUsername());
 
-                    Log.d(TAG, "Test: " + currentUserID);
-                    Log.d(TAG, "Test: " + singleSnapshot.getValue(UserAccountSettings.class).getUser_id());
-
                     if (currentUserID.equals(singleSnapshot.getValue(UserAccountSettings.class).getUser_id())) {
 
                         holder.options.setOnClickListener(new View.OnClickListener() {

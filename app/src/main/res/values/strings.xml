@@ -111,7 +111,6 @@
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
     <string name="days">d</string>
-    <string name="reply">Reply</string>
     <string name="deleted_photo_success">Successfully deleted the photo</string>
     <string name="error_text">Something went wrong</string>
     <string name="photo_upload_success">Photo upload success</string>

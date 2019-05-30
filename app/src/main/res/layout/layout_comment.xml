@@ -83,18 +83,19 @@
                 android:textStyle="bold"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
-                android:id="@+id/comment_reply"
+                android:id="@+id/comment_delete"
                 android:layout_marginTop="15dp"
                 android:layout_marginLeft="15dp"
                 android:layout_below="@+id/comment"
                 android:layout_toRightOf="@+id/comment_likes"
                 android:layout_marginStart="15dp"
                 android:layout_toEndOf="@+id/comment_likes"
-                android:text="@string/reply"/>
+                android:text="@string/delete"/>
 
         </RelativeLayout>
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/comment_like"
             android:layout_width="20dp"
             android:layout_height="20dp"

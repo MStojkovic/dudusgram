@@ -9,17 +9,19 @@ public class Comment {
     private List<Like> likes;
     private String date_created;
     private Boolean isDescription;
+    private String comment_id;
 
     public Comment() {
 
     }
 
-    public Comment(String comment, String user_id, List<Like> likes, String date_created) {
+    public Comment(String comment, String user_id, List<Like> likes, String date_created, String comment_id) {
         this.comment = comment;
         this.user_id = user_id;
         this.likes = likes;
         this.date_created = date_created;
         this.isDescription = false;
+        this.comment_id = comment_id;
     }
 
     public String getComment() {
@@ -60,6 +62,14 @@ public class Comment {
 
     public void setDescription(Boolean description) {
         isDescription = description;
+    }
+
+    public String getComment_id() {
+        return comment_id;
+    }
+
+    public void setComment_id(String comment_id) {
+        this.comment_id = comment_id;
     }
 
     @Override

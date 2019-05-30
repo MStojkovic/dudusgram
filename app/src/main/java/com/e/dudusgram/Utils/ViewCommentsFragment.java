@@ -85,7 +85,7 @@ public class ViewCommentsFragment extends Fragment {
     private void setupWidgets(){
 
         CommentListAdapter adapter = new CommentListAdapter(mContext,
-                R.layout.layout_comment, mComments);
+                R.layout.layout_comment, mComments, mPhoto.getPhoto_id(), mPhoto.getUser_id());
         mListView.setAdapter(adapter);
 
         mCheckMark.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +123,7 @@ public class ViewCommentsFragment extends Fragment {
         comment.setComment(newComment);
         comment.setDate_created(getTimestamp());
         comment.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        comment.setComment_id(commentID);
 
         // insert into photos node
         myRef.child(getString(R.string.dbname_photos))

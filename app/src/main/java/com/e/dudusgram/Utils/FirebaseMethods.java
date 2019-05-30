@@ -375,11 +375,11 @@ public class FirebaseMethods {
      * @param email
      * @param username
      * @param description
-     * @param webiste
+     * @param website
      * @param profile_photo
      */
 
-    public void addNewUser(String email, String username, String description, String webiste, String profile_photo){
+    public void addNewUser(String email, String username, String description, String website, String profile_photo){
 
         User user = new User(userID, 1, email, StringManipulation.condenseUsername(username));
 
@@ -395,7 +395,7 @@ public class FirebaseMethods {
                 0,
                 profile_photo,
                 StringManipulation.condenseUsername(username),
-                webiste,
+                website,
                 userID
         );
 
@@ -580,5 +580,55 @@ public class FirebaseMethods {
                 Log.e(TAG, "onCancelled: error", databaseError.toException() );
             }
         });
+    }
+
+    public void deleteComment (String photoOwnerID, String photoID, String commentID){
+
+        //delete from photos node
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        Query deleteCommentPhoto = databaseReference
+                .child(mContext.getString(R.string.dbname_photos))
+                .child(photoID)
+                .orderByChild(mContext.getString(R.string.field_comments))
+                .equalTo(commentID);
+
+        deleteCommentPhoto.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot: dataSnapshot.getChildren()) {
+                    singleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled: error", databaseError.toException() );
+            }
+        });
+
+        //delete from user_photos node
+
+        Query deleteCommentUserPhoto = databaseReference
+                .child(mContext.getString(R.string.dbname_user_photos))
+                .child(photoOwnerID)
+                .child(photoID)
+                .orderByChild(mContext.getString(R.string.field_comments))
+                .equalTo(commentID);
+
+        deleteCommentUserPhoto.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot singleSnapshot: dataSnapshot.getChildren()) {
+                    singleSnapshot.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "onCancelled: error", databaseError.toException() );
+            }
+        });
+
     }
 }

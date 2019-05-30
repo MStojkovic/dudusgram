@@ -7,10 +7,12 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.e.dudusgram.Profile.ProfileActivity;
@@ -18,6 +20,7 @@ import com.e.dudusgram.R;
 import com.e.dudusgram.models.Comment;
 import com.e.dudusgram.models.User;
 import com.e.dudusgram.models.UserAccountSettings;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,18 +49,23 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
     private int layoutResource;
     private Context mContext;
     private DatabaseReference mReference;
+    private String mPostOwner;
+    private String mPostID;
+    private String mCurrentUserID = "";
 
     CommentListAdapter(@NonNull Context context, @LayoutRes int resource,
-                       @NonNull List<Comment> objects) {
+                       @NonNull List<Comment> objects, @NonNull String postID, @NonNull String postOwner) {
         super(context, resource, objects);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = context;
         layoutResource = resource;
         mReference = FirebaseDatabase.getInstance().getReference();
+        mPostID = postID;
+        mPostOwner = postOwner;
     }
 
     private static class ViewHolder {
-        TextView comment, username, timestamp, reply, likes;
+        TextView comment, username, timestamp, likes, delete;
         CircleImageView profileImage;
         ImageView like;
         User user = new User();
@@ -65,7 +73,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         final ViewHolder holder;
 
@@ -76,7 +84,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             holder.comment = convertView.findViewById(R.id.comment);
             holder.username = convertView.findViewById(R.id.comment_username);
             holder.timestamp = convertView.findViewById(R.id.comment_time_posted);
-            holder.reply = convertView.findViewById(R.id.comment_reply);
+            holder.delete = convertView.findViewById(R.id.comment_delete);
             holder.like = convertView.findViewById(R.id.comment_like);
             holder.likes = convertView.findViewById(R.id.comment_likes);
             holder.profileImage = convertView.findViewById(R.id.comment_profile_image);
@@ -86,7 +94,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             holder = (ViewHolder) convertView.getTag();
             holder.like.setVisibility(View.VISIBLE);
             holder.likes.setVisibility(View.VISIBLE);
-            holder.reply.setVisibility(View.VISIBLE);
+            holder.delete.setVisibility(View.VISIBLE);
         }
 
         // set the comment
@@ -115,6 +123,8 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                 for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
                     Log.d(TAG, "onDataChange: found user: "
                             + singleSnapshot.getValue(UserAccountSettings.class).getUsername());
+
+                    mCurrentUserID = singleSnapshot.getValue(UserAccountSettings.class).getUser_id();
 
                     holder.username.setText(singleSnapshot.getValue(UserAccountSettings.class).getUsername());
                     holder.username.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +167,45 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                         }
                     });
 
+                    if (!getItem(position).getDescription()) {
+
+                        if (mCurrentUserID.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                || mCurrentUserID.equals(mPostOwner)) {
+
+                            holder.delete.setVisibility(View.VISIBLE);
+
+                            holder.delete.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    PopupMenu options = new PopupMenu(mContext, v);
+                                    options.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                                        @Override
+                                        public boolean onMenuItemClick(MenuItem item) {
+                                            Log.d(TAG, "onMenuItemClick: Selected item: " + item.getTitle());
+
+                                            FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
+
+                                            switch (item.getItemId()) {
+                                                case R.id.text_edit:
+                                                    return true;
+                                                case R.id.text_delete:
+                                                    firebaseMethods.deleteComment(mPostOwner, mPostID, getItem(position).getComment_id());
+                                                    return true;
+                                                default:
+                                                    return false;
+                                            }
+                                        }
+                                    });
+                                    options.inflate(R.menu.popup_menu);
+                                    options.show();
+                                }
+                            });
+                        } else {
+                            holder.delete.setVisibility(View.GONE);
+                        }
+
+                    }
+
                     break;
                 }
             }
@@ -171,7 +220,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             if (getItem(position).getDescription()) {
                 holder.like.setVisibility(View.GONE);
                 holder.likes.setVisibility(View.GONE);
-                holder.reply.setVisibility(View.GONE);
+                holder.delete.setVisibility(View.GONE);
             }
         } catch (NullPointerException e) {
             Log.e(TAG, "getView: NullPointerException " + e.getMessage());
@@ -201,6 +250,9 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
             }
         });
+
+        Log.d(TAG, "Test: " + holder.user.getUser_id());
+        Log.d(TAG, "Test: " + FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         return convertView;
     }
