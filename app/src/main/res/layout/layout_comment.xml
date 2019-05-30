@@ -3,7 +3,10 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white">
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="45dp"
@@ -90,10 +93,7 @@
                 android:layout_toRightOf="@+id/comment_likes"
                 android:layout_marginStart="15dp"
                 android:layout_toEndOf="@+id/comment_likes"
-                android:text="@string/delete"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"/>
+                android:text="@string/delete" />
 
         </RelativeLayout>
 

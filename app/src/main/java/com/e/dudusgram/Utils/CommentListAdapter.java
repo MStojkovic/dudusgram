@@ -1,5 +1,6 @@
 package com.e.dudusgram.Utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -88,6 +89,7 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             holder.like = convertView.findViewById(R.id.comment_like);
             holder.likes = convertView.findViewById(R.id.comment_likes);
             holder.profileImage = convertView.findViewById(R.id.comment_profile_image);
+            holder.delete.setVisibility(View.VISIBLE);
 
             convertView.setTag(holder);
         }else{
@@ -96,6 +98,8 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             holder.likes.setVisibility(View.VISIBLE);
             holder.delete.setVisibility(View.VISIBLE);
         }
+
+        mCurrentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         // set the comment
         holder.comment.setText(getItem(position).getComment());
@@ -123,8 +127,6 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                 for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
                     Log.d(TAG, "onDataChange: found user: "
                             + singleSnapshot.getValue(UserAccountSettings.class).getUsername());
-
-                    mCurrentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                     holder.username.setText(singleSnapshot.getValue(UserAccountSettings.class).getUsername());
                     holder.username.setOnClickListener(new View.OnClickListener() {
@@ -167,26 +169,16 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                         }
                     });
 
-                    Log.d(TAG, "Test: " + mCurrentUserID);
-                    Log.d(TAG, "Test: " + getItem(position).getUser_id());
-                    Log.d(TAG, "Test: " + mPostOwner);
-                    Log.d(TAG, "Test: " + mPostID);
-
-                    if (mCurrentUserID.equals(getItem(position).getUser_id())
-                            || mCurrentUserID.equals(mPostOwner)) {
-
-                        holder.delete.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Log.d(TAG, "Test: clicked");
-                                FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
-                                firebaseMethods.deleteComment(mPostOwner, mPostID, getItem(position).getComment_id());
-                            }
-                        });
-                    } else {
-                        holder.delete.setVisibility(View.GONE);
-                    }
-
+                    holder.delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            holder.delete.setClickable(false);
+                            FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
+                            firebaseMethods.deleteComment(mPostOwner, mPostID, getItem(position).getComment_id());
+                            remove(getItem(position));
+                            notifyDataSetChanged();
+                        }
+                    });
 
                     break;
                 }
@@ -198,11 +190,17 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             }
         });
 
+        if (mCurrentUserID.equals(getItem(position).getUser_id())
+                || mCurrentUserID.equals(mPostOwner)) {
+            holder.delete.setVisibility(View.VISIBLE);
+        } else {
+            holder.delete.setVisibility(View.GONE);
+        }
+
         try {
             if (getItem(position).getDescription()) {
                 holder.like.setVisibility(View.GONE);
                 holder.likes.setVisibility(View.GONE);
-                holder.delete.setVisibility(View.GONE);
                 holder.delete.setVisibility(View.GONE);
             }
         } catch (NullPointerException e) {

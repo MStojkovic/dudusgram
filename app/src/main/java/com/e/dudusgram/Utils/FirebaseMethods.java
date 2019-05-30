@@ -586,16 +586,12 @@ public class FirebaseMethods {
 
         //delete from photos node
 
-        Log.d(TAG, "Test2: " + mContext.getString(R.string.dbname_photos));
-        Log.d(TAG, "Test2: " + photoID);
-        Log.d(TAG, "Test2: " + mContext.getString(R.string.field_comments));
-        Log.d(TAG, "Test2: " + commentID);
-
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         Query deleteCommentPhoto = databaseReference
                 .child(mContext.getString(R.string.dbname_photos))
                 .child(photoID)
                 .child(mContext.getString(R.string.field_comments))
+                .orderByChild("comment_id")
                 .equalTo(commentID);
 
         deleteCommentPhoto.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -619,6 +615,7 @@ public class FirebaseMethods {
                 .child(photoOwnerID)
                 .child(photoID)
                 .child(mContext.getString(R.string.field_comments))
+                .orderByChild("comment_id")
                 .equalTo(commentID);
 
         deleteCommentUserPhoto.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -635,5 +632,6 @@ public class FirebaseMethods {
             }
         });
 
+        Toast.makeText(mContext, "Successfully deleted the comment", Toast.LENGTH_SHORT).show();
     }
 }

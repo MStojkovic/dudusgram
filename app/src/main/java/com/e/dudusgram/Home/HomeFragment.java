@@ -58,7 +58,19 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
-
+/*
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "Test: Proba");
+        if (mAdapter != null) {
+            mAdapter.clear();
+            getFollowing();
+            mAdapter.notifyDataSetChanged();
+            Log.d(TAG, "Test: U on resume");
+        }
+    }
+*/
     private void getFollowing(){
         Log.d(TAG, "getFollowing: searching for following");
 
@@ -142,9 +154,9 @@ public class HomeFragment extends Fragment {
                         mPhotos.add(photo);
                     }
 
-                    if(count >= mFollowing.size() - 1){
-                        displayPhotos();
-                    }
+                    //if(count >= mFollowing.size() - 1){
+                    displayPhotos();
+                    //}
                 }
 
                 @Override

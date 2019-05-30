@@ -60,6 +60,7 @@ public class ViewCommentsFragment extends Fragment {
     private ArrayList<Comment> mComments;
     private Context mContext;
     int counter = 0;
+    private CommentListAdapter adapter;
 
     @Nullable
     @Override
@@ -74,6 +75,8 @@ public class ViewCommentsFragment extends Fragment {
 
         try{
             mPhoto = getPhotoFromBundle();
+            adapter = new CommentListAdapter(mContext,
+                    R.layout.layout_comment, mComments, mPhoto.getPhoto_id(), mPhoto.getUser_id());
             setupFirebaseAuth();
         }catch (NullPointerException e){
             Log.e(TAG, "onCreateView: NullPointerException: " + e.getMessage());
@@ -84,8 +87,6 @@ public class ViewCommentsFragment extends Fragment {
 
     private void setupWidgets(){
 
-        CommentListAdapter adapter = new CommentListAdapter(mContext,
-                R.layout.layout_comment, mComments, mPhoto.getPhoto_id(), mPhoto.getUser_id());
         mListView.setAdapter(adapter);
 
         mCheckMark.setOnClickListener(new View.OnClickListener() {
@@ -95,9 +96,11 @@ public class ViewCommentsFragment extends Fragment {
                 if(!mComment.getText().toString().equals("")){
                     Log.d(TAG, "onClick: attempting to submit new comment.");
                     addNewComment(mComment.getText().toString());
+                    adapter.notifyDataSetChanged();
 
                     mComment.setText("");
                     mComment.clearFocus();
+
                 }else{
                     Toast.makeText(getActivity(), "you can't post a blank comment", Toast.LENGTH_SHORT).show();
                 }
@@ -125,6 +128,9 @@ public class ViewCommentsFragment extends Fragment {
         comment.setUser_id(FirebaseAuth.getInstance().getCurrentUser().getUid());
         comment.setComment_id(commentID);
 
+        mComments.add(comment);
+        setupWidgets();
+
         // insert into photos node
         myRef.child(getString(R.string.dbname_photos))
                 .child(mPhoto.getPhoto_id())
@@ -139,6 +145,7 @@ public class ViewCommentsFragment extends Fragment {
                 .child(getString(R.string.field_comments))
                 .child(commentID)
                 .setValue(comment);
+
     }
 
     private String getTimestamp(){
@@ -263,11 +270,13 @@ public class ViewCommentsFragment extends Fragment {
                                             comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
                                             comment.setComment(dSnapshot.getValue(Comment.class).getComment());
                                             comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+                                            comment.setComment_id(dSnapshot.getValue(Comment.class).getComment_id());
                                             mComments.add(comment);
                                         }
 
                                         photo.setComments(mComments);
                                         mPhoto = photo;
+                                        adapter.notifyDataSetChanged();
                                     }
 
                                     //this is a hack
