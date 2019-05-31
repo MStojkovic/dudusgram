@@ -35,6 +35,7 @@
     <string name="field_tags">tags</string>
     <string name="field_image_path">image_path</string>
     <string name="field_comments">comments</string>
+    <string name="field_token">token</string>
 
     <!-- Msgs -->
     <string name="no_account">No account yet? Create one now!</string>

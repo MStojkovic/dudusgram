@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.e.dudusgram.Login.LoginActivity;
+import com.e.dudusgram.Login.RegisterActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.BottomNavigationViewHelper;
 import com.e.dudusgram.Utils.MainfeedListAdapter;
@@ -26,8 +27,13 @@ import com.e.dudusgram.Utils.UniversalImageLoader;
 import com.e.dudusgram.Utils.ViewCommentsFragment;
 import com.e.dudusgram.models.Photo;
 import com.e.dudusgram.models.UserAccountSettings;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -55,6 +61,7 @@ public class HomeActivity extends AppCompatActivity
     //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference myRef;
 
     //Widgets
     private ViewPager mViewPager;
@@ -196,11 +203,13 @@ public class HomeActivity extends AppCompatActivity
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
         mAuth = FirebaseAuth.getInstance();
+        FirebaseDatabase mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                final FirebaseUser user = firebaseAuth.getCurrentUser();
 
                 //check if the user is logged in
                 checkCurrentUser(user);
@@ -208,6 +217,20 @@ public class HomeActivity extends AppCompatActivity
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    String newToken = "";
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(HomeActivity.this, new OnSuccessListener<InstanceIdResult>() {
+                        @Override
+                        public void onSuccess(InstanceIdResult instanceIdResult) {
+                            String newToken = instanceIdResult.getToken();
+                            Log.d("newToken",newToken);
+
+                            myRef.child(mContext.getString(R.string.dbname_users))
+                                    .child(user.getUid())
+                                    .child(mContext.getString(R.string.field_token))
+                                    .setValue(newToken);
+                        }
+                    });
+
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
