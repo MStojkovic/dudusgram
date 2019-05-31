@@ -1,6 +1,8 @@
 package com.e.dudusgram.Utils;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -181,13 +183,24 @@ public class MainfeedListAdapter extends ArrayAdapter<Photo> {
                                     public boolean onMenuItemClick(MenuItem item) {
                                         Log.d(TAG, "onMenuItemClick: Selected item: " + item.getTitle());
 
-                                        FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
+                                        final FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
 
                                         switch (item.getItemId()) {
                                             case R.id.text_edit:
                                                 return true;
                                             case R.id.text_delete:
-                                                firebaseMethods.deletePhoto(holder.photo.getPhoto_id(), holder.photo.getDate_created());
+                                                new AlertDialog.Builder(mContext)
+                                                        .setTitle("Delete")
+                                                        .setMessage("Do you really want to delete the post?")
+                                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                                                            public void onClick(DialogInterface dialog, int whichButton) {
+                                                                firebaseMethods.deletePhoto(holder.photo.getPhoto_id(), holder.photo.getDate_created());
+                                                                remove(getItem(position));
+                                                                notifyDataSetChanged();
+                                                            }})
+                                                        .setNegativeButton(android.R.string.no, null).show();
                                                 return true;
                                             default:
                                                 return false;

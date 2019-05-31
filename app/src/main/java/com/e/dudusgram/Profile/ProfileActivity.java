@@ -120,6 +120,9 @@ public class ProfileActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         getSupportFragmentManager().popBackStack();
-        finish();
+        //this is a hack
+        if (getSupportFragmentManager().getBackStackEntryCount() < 2) {
+            finish();
+        }
     }
 }

@@ -1,6 +1,8 @@
 package com.e.dudusgram.Utils;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -458,14 +460,24 @@ public class ViewPostFragment extends Fragment{
                         public boolean onMenuItemClick(MenuItem item) {
                             Log.d(TAG, "onMenuItemClick: Selected item: " + item.getTitle());
 
-                            FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
+                            final FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
 
                             switch (item.getItemId()) {
                                 case R.id.text_edit:
                                     return true;
                                 case R.id.text_delete:
-                                    firebaseMethods.deletePhoto(mPhoto.getPhoto_id(), mPhoto.getDate_created());
-                                    getActivity().onBackPressed();
+                                    new AlertDialog.Builder(getActivity())
+                                            .setTitle("Delete")
+                                            .setMessage("Do you really want to delete the post?")
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                                                public void onClick(DialogInterface dialog, int whichButton) {
+                                                    firebaseMethods.deletePhoto(mPhoto.getPhoto_id(), mPhoto.getDate_created());
+                                                    getActivity().getSupportFragmentManager().popBackStack();
+                                                }})
+                                            .setNegativeButton(android.R.string.no, null).show();
+
                                     return true;
                                 default:
                                     return false;

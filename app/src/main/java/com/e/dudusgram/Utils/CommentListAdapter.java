@@ -1,7 +1,9 @@
 package com.e.dudusgram.Utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.LayoutRes;
@@ -173,10 +175,24 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
                         @Override
                         public void onClick(View v) {
                             holder.delete.setClickable(false);
-                            FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
-                            firebaseMethods.deleteComment(mPostOwner, mPostID, getItem(position).getComment_id());
-                            remove(getItem(position));
-                            notifyDataSetChanged();
+                            new AlertDialog.Builder(mContext)
+                                    .setTitle("Delete")
+                                    .setMessage("Do you really want to delete the comment?")
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                                        public void onClick(DialogInterface dialog, int whichButton) {
+                                            FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
+                                            firebaseMethods.deleteComment(mPostOwner, mPostID, getItem(position).getComment_id());
+                                            remove(getItem(position));
+                                            notifyDataSetChanged();
+                                        }})
+                                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            holder.delete.setClickable(true);
+                                        }
+                                    }).show();
                         }
                     });
 
