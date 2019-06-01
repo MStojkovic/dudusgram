@@ -109,7 +109,7 @@ public class AccountSettingsActivity extends AppCompatActivity {
     
     public void setViewPager(int fragmentNumber){
         mRelativeLayout.setVisibility(View.GONE);
-        Log.d(TAG, "setmViewPager: Navvigating to fragment: " + fragmentNumber);
+        Log.d(TAG, "setViewPager: Navigating to fragment: " + fragmentNumber);
         mViewPager.setAdapter(pagerAdapter);
         mViewPager.setCurrentItem(fragmentNumber);
     }

@@ -257,7 +257,7 @@ public class FirebaseMethods {
      * @param phoneNumber
      */
 
-    public void updateUserAccountSettings(String displayName, String website, String description, long phoneNumber){
+    public void updateUserAccountSettings(String displayName, String website, String description, String phoneNumber, String notifications){
 
         Log.d(TAG, "updateUserAccountSettings: updating user account settings.");
 
@@ -288,13 +288,20 @@ public class FirebaseMethods {
 
         }
 
-        if (phoneNumber != 0) {
+        if (phoneNumber != null) {
 
             myRef.child(mContext.getString(R.string.dbname_users))
                     .child(userID)
                     .child(mContext.getString(R.string.field_phone_number))
                     .setValue(phoneNumber);
 
+        }
+
+        if (notifications != null) {
+            myRef.child(mContext.getString(R.string.dbname_users))
+                    .child(userID)
+                    .child(mContext.getString(R.string.field_notifications))
+                    .setValue(notifications);
         }
     }
 
@@ -383,7 +390,7 @@ public class FirebaseMethods {
 
     public void addNewUser(String email, String username, String description, String website, String profile_photo){
 
-        User user = new User(userID, 1, email, StringManipulation.condenseUsername(username));
+        User user = new User(userID, "", email, StringManipulation.condenseUsername(username), "ON");
 
         myRef.child(mContext.getString(R.string.dbname_users))
                 .child(userID)
@@ -501,6 +508,12 @@ public class FirebaseMethods {
                             ds.child(userID)
                                     .getValue(User.class)
                                     .getUser_id());
+
+                    user.setNotifications(
+                            ds.child(userID)
+                                .getValue(User.class)
+                                .getNotifications()
+                            );
 
                     Log.d(TAG, "getUserSettings: retrieved users information" + user.toString());
 

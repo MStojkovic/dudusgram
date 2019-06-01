@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -124,6 +125,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
     private CustomText mDisplayName, mUsername, mWebsite, mDescription, mEmail, mPhoneNumber;
     private TextView mChangeProfilePhoto;
     private CircleImageView mProfilePhoto;
+    private Switch mNotifications;
 
     private UserSettings mUserSettings;
 
@@ -139,6 +141,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         mEmail = view.findViewById(R.id.email);
         mPhoneNumber = view.findViewById(R.id.phoneNumber);
         mChangeProfilePhoto = view.findViewById(R.id.changeProfilePhoto);
+        mNotifications = view.findViewById(R.id.notificationsSwitch);
         mFirebaseMethods = new FirebaseMethods(getActivity());
 
         //setProfileImage();
@@ -176,7 +179,14 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         final String website = mWebsite.getText().toString();
         final String description = mDescription.getText().toString();
         final String email = mEmail.getText().toString();
-        final long phoneNumber = Long.parseLong(mPhoneNumber.getText().toString());
+        final String phoneNumber =mPhoneNumber.getText().toString();
+        String notifications;
+        if (mNotifications.isChecked()) {
+            notifications = "ON";
+        } else {
+            notifications ="OFF";
+        }
+
 
         //case1: the user made a change to their username
         if (!mUserSettings.getUser().getUsername().equals(username)) {
@@ -195,29 +205,33 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         if (!mUserSettings.getSettings().getDisplay_name().equals(displayName)){
 
             //update the display name
-            mFirebaseMethods.updateUserAccountSettings(displayName, null, null, 0);
+            mFirebaseMethods.updateUserAccountSettings(displayName, null, null, null, null);
 
         }
 
         if (!mUserSettings.getSettings().getWebsite().equals(website)){
 
             //update the website
-            mFirebaseMethods.updateUserAccountSettings(null, website, null, 0);
+            mFirebaseMethods.updateUserAccountSettings(null, website, null, null, null);
 
         }
 
         if (!mUserSettings.getSettings().getDescription().equals(description)){
 
             //update the description
-            mFirebaseMethods.updateUserAccountSettings(null, null, description, 0);
+            mFirebaseMethods.updateUserAccountSettings(null, null, description, null, null);
 
         }
 
-        if (mUserSettings.getUser().getPhone_number() != phoneNumber){
+        if (!mUserSettings.getUser().getPhone_number().equals(phoneNumber)){
 
             //update the phone number
-            mFirebaseMethods.updateUserAccountSettings(null, null, null, phoneNumber);
+            mFirebaseMethods.updateUserAccountSettings(null, null, null, phoneNumber, null);
 
+        }
+
+        if (!mUserSettings.getUser().getNotifications().equals(notifications)) {
+            mFirebaseMethods.updateUserAccountSettings(null, null, null, null, notifications);
         }
     }
 
@@ -278,7 +292,12 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         mWebsite.setText(settings.getWebsite());
         mDescription.setText(settings.getDescription());
         mEmail.setText(user.getEmail());
-        mPhoneNumber.setText(String.valueOf(user.getPhone_number()));
+        mPhoneNumber.setText(user.getPhone_number());
+        if (user.getNotifications().equals("ON")) {
+            mNotifications.setChecked(true);
+        } else {
+            mNotifications.setChecked(false);
+        }
 
         mChangeProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override

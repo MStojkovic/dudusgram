@@ -119,5 +119,12 @@
     <string name="verification_email_send_fail">Could not send verification email.</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="push_notifications">Push notifications</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="on">ON</string>
+    <string name="off">OFF</string>
+    <string name="field_notifications">notifications</string>
+    <string name="photo_id_from_notification">Photo_id</string>
 
 </resources>

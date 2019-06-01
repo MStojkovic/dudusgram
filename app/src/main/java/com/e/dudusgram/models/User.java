@@ -6,25 +6,28 @@ import android.os.Parcelable;
 public class User implements Parcelable {
 
     private String user_id;
-    private long phone_number;
+    private String phone_number;
     private String email;
-    private  String username;
+    private String username;
+    private String notifications;
 
     public User() {
     }
 
-    public User(String user_id, long phone_number, String email, String username) {
+    public User(String user_id, String phone_number, String email, String username, String notifications) {
         this.user_id = user_id;
         this.phone_number = phone_number;
         this.email = email;
         this.username = username;
+        this.notifications = notifications;
     }
 
     protected User(Parcel in) {
         user_id = in.readString();
-        phone_number = in.readLong();
+        phone_number = in.readString();
         email = in.readString();
         username = in.readString();
+        notifications = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -47,11 +50,11 @@ public class User implements Parcelable {
         this.user_id = user_id;
     }
 
-    public long getPhone_number() {
+    public String getPhone_number() {
         return phone_number;
     }
 
-    public void setPhone_number(long phone_number) {
+    public void setPhone_number(String phone_number) {
         this.phone_number = phone_number;
     }
 
@@ -71,6 +74,14 @@ public class User implements Parcelable {
         this.username = username;
     }
 
+    public String getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(String notifications) {
+        this.notifications = notifications;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -78,6 +89,7 @@ public class User implements Parcelable {
                 ", phone_number='" + phone_number + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
+                ", notifications='" + notifications + '\'' +
                 '}';
     }
 
@@ -89,8 +101,9 @@ public class User implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(user_id);
-        parcel.writeLong(phone_number);
+        parcel.writeString(phone_number);
         parcel.writeString(email);
         parcel.writeString(username);
+        parcel.writeString(notifications);
     }
 }
