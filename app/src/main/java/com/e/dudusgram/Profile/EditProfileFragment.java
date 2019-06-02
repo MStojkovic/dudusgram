@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +74,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                                             if(task.getResult().getSignInMethods().size() == 1){
 
                                                 Log.d(TAG, "onComplete: That email is already in use!");
-                                                Toast.makeText(getActivity(), "That email is already in use", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getActivity(), getString(R.string.email_already_in_use), Toast.LENGTH_SHORT).show();
 
                                             } else {
 
@@ -84,7 +85,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 if (task.isSuccessful()) {
                                                                     Log.d(TAG, "User email address updated.");
-                                                                    Toast.makeText(getActivity(), "Email has been updated!", Toast.LENGTH_SHORT).show();
+                                                                    Toast.makeText(getActivity(), getString(R.string.email_updated), Toast.LENGTH_SHORT).show();
                                                                     mFirebaseMethods.updateEmail(mEmail.getText().toString());
                                                                 }
                                                             }
@@ -191,21 +192,35 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         //case1: the user made a change to their username
         if (!mUserSettings.getUser().getUsername().equals(username)) {
 
-            checkIfUsernameExists(username);
+            if (username.length() < 5 ){
+                Toast.makeText(getActivity(), getString(R.string.short_username), Toast.LENGTH_SHORT).show();
+            } else {
+                checkIfUsernameExists(username);
+            }
         }
         //case2: user changed their email
         if (!mUserSettings.getUser().getEmail().equals(email)) {
 
-            ConfirmPasswordDialog dialog = new ConfirmPasswordDialog();
-            dialog.show(getFragmentManager(), getString(R.string.confirm_password_dialog));
-            dialog.setTargetFragment(EditProfileFragment.this, 1);
+            if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+
+                ConfirmPasswordDialog dialog = new ConfirmPasswordDialog();
+                dialog.show(getFragmentManager(), getString(R.string.confirm_password_dialog));
+                dialog.setTargetFragment(EditProfileFragment.this, 1);
+
+            } else {
+                Toast.makeText(getActivity(), getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
+            }
 
         }
 
         if (!mUserSettings.getSettings().getDisplay_name().equals(displayName)){
 
-            //update the display name
-            mFirebaseMethods.updateUserAccountSettings(displayName, null, null, null, null);
+            if (displayName.length() < 5 ){
+                Toast.makeText(getActivity(), getString(R.string.short_displayName), Toast.LENGTH_SHORT).show();
+            } else {
+                //update the display name
+                mFirebaseMethods.updateUserAccountSettings(displayName, null, null, null, null);
+            }
 
         }
 
@@ -256,12 +271,12 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                 if (!dataSnapshot.exists()){
                     //add the username
                     mFirebaseMethods.updateUsername(username);
-                    Toast.makeText(getActivity(), "Saved username.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getString(R.string.username_saved), Toast.LENGTH_SHORT).show();
                 }
                 for (DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
                     if (singleSnapshot.exists()){
                         Log.d(TAG, "checkIfUsernameExists: FOUND A MATCH!");
-                        Toast.makeText(getActivity(), "That username already exists!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), getString(R.string.username_exists), Toast.LENGTH_SHORT).show();
                     }
                 }
             }

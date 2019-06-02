@@ -36,6 +36,7 @@
     <string name="field_image_path">image_path</string>
     <string name="field_comments">comments</string>
     <string name="field_token">token</string>
+    <string name="field_notifications">notifications</string>
 
     <!-- Msgs -->
     <string name="no_account">No account yet? Create one now!</string>
@@ -49,6 +50,15 @@
     <string name="others">others</string>
     <string name="and">and</string>
     <string name="add_a_comment">Add a comment…</string>
+    <string name="invalid_email">That is not a valid email address</string>
+    <string name="short_username">Username too short! Please enter at least 5 characters.</string>
+    <string name="short_displayName">Display name is too short! Please enter at least 5 characters.</string>
+    <string name="username_exists">That username already exists!</string>
+    <string name="email_already_in_use">That email is already in use</string>
+    <string name="email_updated">Email has been updated!</string>
+    <string name="username_saved">Saved username.</string>
+    <string name="fill_out_all_fields">All fields must be filled out!</string>
+    <string name="successful_sign_up">Sign up successful. Sending verification email.</string>
 
     <!-- Activity -->
     <string name="profile_activity">Profile Activity</string>
@@ -61,6 +71,7 @@
     <string name="return_to_fragment">return_to_fragment</string>
     <string name="selected_bitmap">selected_bitmap</string>
     <string name="intent_user">intent_user</string>
+    <string name="photo_id_from_notification">Photo_id</string>
 
     <!-- Bundle args names -->
     <string name="activity_number">activity_number</string>
@@ -101,7 +112,7 @@
     <string name="change_photo">Change photo</string>
     <string name="username">Username</string>
     <string name="description">Description</string>
-    <string name="search">Search...</string>
+    <string name="search">Search…</string>
     <string name="camera_fragment">Camera Fragment</string>
     <string name="messages_fragment">Messages Fragment</string>
     <string name="options">Options</string>
@@ -124,7 +135,5 @@
     <string name="no">No</string>
     <string name="on">ON</string>
     <string name="off">OFF</string>
-    <string name="field_notifications">notifications</string>
-    <string name="photo_id_from_notification">Photo_id</string>
 
 </resources>

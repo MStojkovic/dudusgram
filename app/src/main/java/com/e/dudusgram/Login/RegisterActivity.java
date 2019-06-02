@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -79,8 +80,18 @@ public class RegisterActivity extends AppCompatActivity {
         Log.d(TAG, "checkInputs: checking inputs for null values");
 
         if (email.equals("") || username.equals("") || password.equals("")){
-            Toast.makeText(mContext, "All fields must be filled out!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, getString(R.string.fill_out_all_fields), Toast.LENGTH_SHORT).show();
             return false;
+        } else {
+            if (username.length() < 5 ){
+                Toast.makeText(mContext, getString(R.string.short_username), Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(mContext, getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
         return true;
     }
@@ -191,7 +202,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //add new user to database
                 firebaseMethods.addNewUser(email, mUsername, "", "", "");
 
-                Toast.makeText(mContext, "Signup successful. Sending verification email.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, getString(R.string.successfull_signup), Toast.LENGTH_SHORT).show();
 
                 mAuth.signOut();
             }
