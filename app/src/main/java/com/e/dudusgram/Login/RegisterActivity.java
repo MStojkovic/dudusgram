@@ -202,7 +202,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //add new user to database
                 firebaseMethods.addNewUser(email, mUsername, "", "", "");
 
-                Toast.makeText(mContext, getString(R.string.successfull_signup), Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, getString(R.string.successful_sign_up), Toast.LENGTH_SHORT).show();
 
                 mAuth.signOut();
             }
