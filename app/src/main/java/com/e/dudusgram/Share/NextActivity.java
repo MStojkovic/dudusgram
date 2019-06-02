@@ -103,6 +103,8 @@ public class NextActivity extends AppCompatActivity {
 
         if(intent.hasExtra(getString(R.string.selected_image))){
 
+            Log.d(TAG, "Test: " + intent.getStringExtra(getString(R.string.selected_image)));
+
             imgURL = intent.getStringExtra(getString(R.string.selected_image));
             Log.d(TAG, "setImage: got new image url " + imgURL);
             String mAppend = "file:/";

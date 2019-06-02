@@ -1,8 +1,10 @@
 package com.e.dudusgram.Share;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,17 +19,28 @@ import com.e.dudusgram.Profile.AccountSettingsActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.Permissions;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
 import static android.app.Activity.RESULT_OK;
 
 public class PhotoFragment extends Fragment {
     private static final String TAG = "PhotoFragment";
 
     private static final int PHOTO_FRAGMENT_NUM = 1;
-    private static final int CAMERA_REQUEST_CODE = 5;
+    private static final String EXTRA_FILENAME = "com.e.dudusgram.EXTRA_FILENAME";
+    private static final String FILENAME = "Photo";
+    private static final int CONTENT_REQUEST = 1337;
+    private static final String FILE_STRING = "file://";
+    private File output=null;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_photo, container, false);
         Log.d(TAG, "onCreateView: started.");
 
@@ -42,9 +55,26 @@ public class PhotoFragment extends Fragment {
 
                     if (((ShareActivity)getActivity()).checkPermissions(Permissions.CAMERA_PERMISSION)){
 
-                        Log.d(TAG, "onClick: starting camera.");
-                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+                        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                        StrictMode.setVmPolicy(builder.build());
+
+                        Intent i=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                        if (savedInstanceState==null) {
+                            File dir= new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/Dudusgram");
+
+                            if (!dir.exists()) {
+                                dir.mkdirs();
+                            }
+                            output=new File(dir, FILENAME + getTimestamp() + ".jpeg");
+                        }
+                        else {
+                            output=(File)savedInstanceState.getSerializable(EXTRA_FILENAME);
+                        }
+
+                        i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(output));
+
+                        startActivityForResult(i, CONTENT_REQUEST);
 
                     } else {
 
@@ -62,32 +92,48 @@ public class PhotoFragment extends Fragment {
         return view;
     }
 
+    private String getTimestamp(){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.UK);
+        sdf.setTimeZone(TimeZone.getTimeZone(getString(R.string.timezone)));
+
+        return sdf.format(new Date());
+    }
+
     private boolean isRootTask(){
 
         return ((ShareActivity) getActivity()).getTask() == 0;
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putSerializable(EXTRA_FILENAME, output);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         
-        if (requestCode == CAMERA_REQUEST_CODE){
+        if (requestCode == CONTENT_REQUEST){
 
             Log.d(TAG, "onActivityResult: done taking a Photo.");
             Log.d(TAG, "onActivityResult: attempting to navigate to final screen.");
 
             if (resultCode == RESULT_OK){
-                Bitmap bitmap;
-                bitmap = (Bitmap) data.getExtras().get("data");
 
                 if (isRootTask()) {
 
                     try{
+                        String imageUri = Uri.fromFile(output).toString();
 
-                        Log.d(TAG, "onActivityResult: received new bitmap from camera " + bitmap);
+                        if (imageUri.contains(FILE_STRING)) {
+                            imageUri = imageUri.replace(FILE_STRING, "");
+                        }
 
                         Intent intent = new Intent(getActivity(), NextActivity.class);
-                        intent.putExtra(getString(R.string.selected_bitmap), bitmap);
+                        intent.putExtra(getString(R.string.selected_image), imageUri);
                         startActivity(intent);
 
                     } catch (NullPointerException e){
@@ -98,10 +144,13 @@ public class PhotoFragment extends Fragment {
 
                     try{
 
-                        Log.d(TAG, "onActivityResult: received new bitmap from camera " + bitmap);
+                        String imageUri = Uri.fromFile(output).toString();
+                        if (imageUri.contains(FILE_STRING)) {
+                            imageUri = imageUri.replace(FILE_STRING, "");
+                        }
 
                         Intent intent = new Intent(getActivity(), AccountSettingsActivity.class);
-                        intent.putExtra(getString(R.string.selected_bitmap), bitmap);
+                        intent.putExtra(getString(R.string.selected_image), imageUri);
                         intent.putExtra(getString(R.string.return_to_fragment), getString(R.string.edit_profile_fragment));
                         startActivity(intent);
                         getActivity().finish();
