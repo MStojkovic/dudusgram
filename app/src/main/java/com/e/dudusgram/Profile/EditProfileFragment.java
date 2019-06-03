@@ -164,6 +164,9 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
             public void onClick(View v) {
                 Log.d(TAG, "onClick: attempting to save changes.");
                 saveProfileSettings();
+
+                Log.d(TAG, "onClick: Navigating back to ProfileActivity");
+                getActivity().finish();
             }
         });
 
