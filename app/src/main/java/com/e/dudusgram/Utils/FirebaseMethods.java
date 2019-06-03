@@ -257,7 +257,7 @@ public class FirebaseMethods {
      * @param phoneNumber
      */
 
-    public void updateUserAccountSettings(String displayName, String website, String description, String phoneNumber, String notifications){
+    public void updateUserAccountSettings(String displayName, String website, String description, String phoneNumber, String notifications, String profileType){
 
         Log.d(TAG, "updateUserAccountSettings: updating user account settings.");
 
@@ -302,6 +302,13 @@ public class FirebaseMethods {
                     .child(userID)
                     .child(mContext.getString(R.string.field_notifications))
                     .setValue(notifications);
+        }
+
+        if (profileType != null) {
+            myRef.child(mContext.getString(R.string.dbname_users))
+                    .child(userID)
+                    .child(mContext.getString(R.string.field_profile_type))
+                    .setValue(profileType);
         }
     }
 
@@ -390,7 +397,7 @@ public class FirebaseMethods {
 
     public void addNewUser(String email, String username, String description, String website, String profile_photo){
 
-        User user = new User(userID, "", email, StringManipulation.condenseUsername(username), "ON");
+        User user = new User(userID, "", email, StringManipulation.condenseUsername(username), "ON", "PUBLIC");
 
         myRef.child(mContext.getString(R.string.dbname_users))
                 .child(userID)
@@ -514,6 +521,12 @@ public class FirebaseMethods {
                                 .getValue(User.class)
                                 .getNotifications()
                             );
+
+                    user.setProfile_type(
+                            ds.child(userID)
+                            .getValue(User.class)
+                            .getProfile_type()
+                    );
 
                     Log.d(TAG, "getUserSettings: retrieved users information" + user.toString());
 

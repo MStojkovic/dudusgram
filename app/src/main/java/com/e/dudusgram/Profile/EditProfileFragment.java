@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import info.hoang8f.android.segmented.SegmentedGroup;
 
 public class EditProfileFragment extends Fragment implements ConfirmPasswordDialog.OnConfirmPasswordListener{
 
@@ -127,9 +129,11 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
     private TextView mChangeProfilePhoto;
     private CircleImageView mProfilePhoto;
     private Switch mNotifications;
+    private SegmentedGroup mProfileType;
+    private RadioButton mPublicProfile, mPrivateProfile;
 
     private UserSettings mUserSettings;
-    private Boolean sucess = false;
+    private Boolean success = false;
 
     @Nullable
     @Override
@@ -144,6 +148,9 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         mPhoneNumber = view.findViewById(R.id.phoneNumber);
         mChangeProfilePhoto = view.findViewById(R.id.changeProfilePhoto);
         mNotifications = view.findViewById(R.id.notificationsSwitch);
+        mProfileType = view.findViewById(R.id.segmentedGroupProfileType);
+        mPublicProfile = view.findViewById(R.id.buttonPublic);
+        mPrivateProfile = view.findViewById(R.id.buttonPrivate);
         mFirebaseMethods = new FirebaseMethods(getActivity());
 
         //setProfileImage();
@@ -187,6 +194,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         final String email = mEmail.getText().toString();
         final String phoneNumber =mPhoneNumber.getText().toString();
         String notifications;
+        String profileType;
         Boolean hadErrors = false;
 
         if (mNotifications.isChecked()) {
@@ -195,6 +203,11 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
             notifications ="OFF";
         }
 
+        if (mProfileType.getCheckedRadioButtonId() == R.id.buttonPublic) {
+            profileType = "PUBLIC";
+        } else {
+            profileType = "PRIVATE";
+        }
 
         //case1: the user made a change to their username
         if (!mUserSettings.getUser().getUsername().equals(username)) {
@@ -231,7 +244,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                 hadErrors = true;
             } else {
                 //update the display name
-                mFirebaseMethods.updateUserAccountSettings(displayName, null, null, null, null);
+                mFirebaseMethods.updateUserAccountSettings(displayName, null, null, null, null, null);
             }
 
         }
@@ -239,26 +252,34 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         if (!mUserSettings.getSettings().getWebsite().equals(website)){
 
             //update the website
-            mFirebaseMethods.updateUserAccountSettings(null, website, null, null, null);
+            mFirebaseMethods.updateUserAccountSettings(null, website, null, null, null, null);
 
         }
 
         if (!mUserSettings.getSettings().getDescription().equals(description)){
 
             //update the description
-            mFirebaseMethods.updateUserAccountSettings(null, null, description, null, null);
+            mFirebaseMethods.updateUserAccountSettings(null, null, description, null, null, null);
 
         }
 
         if (!mUserSettings.getUser().getPhone_number().equals(phoneNumber)){
 
             //update the phone number
-            mFirebaseMethods.updateUserAccountSettings(null, null, null, phoneNumber, null);
+            mFirebaseMethods.updateUserAccountSettings(null, null, null, phoneNumber, null, null);
 
         }
 
         if (!mUserSettings.getUser().getNotifications().equals(notifications)) {
-            mFirebaseMethods.updateUserAccountSettings(null, null, null, null, notifications);
+
+            //update notifications preferences
+            mFirebaseMethods.updateUserAccountSettings(null, null, null, null, notifications, null);
+        }
+
+        if (!mUserSettings.getUser().getProfile_type().equals(profileType)) {
+
+            //update account type preferences
+            mFirebaseMethods.updateUserAccountSettings(null, null, null, null, null, profileType);
         }
 
         return hadErrors;
@@ -286,13 +307,13 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                     //add the username
                     mFirebaseMethods.updateUsername(username);
                     Toast.makeText(getActivity(), getString(R.string.username_saved), Toast.LENGTH_SHORT).show();
-                    sucess = false;
+                    success = false;
                 }
                 for (DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
                     if (singleSnapshot.exists()){
                         Log.d(TAG, "checkIfUsernameExists: FOUND A MATCH!");
                         Toast.makeText(getActivity(), getString(R.string.username_exists), Toast.LENGTH_SHORT).show();
-                        sucess = true;
+                        success = true;
                     }
                 }
             }
@@ -303,7 +324,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
             }
         });
 
-        return sucess;
+        return success;
 
     }
 
@@ -330,6 +351,14 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
             mNotifications.setChecked(true);
         } else {
             mNotifications.setChecked(false);
+        }
+
+        if (user.getProfile_type().equals("PUBLIC")) {
+            mPublicProfile.setChecked(true);
+            mPrivateProfile.setChecked(false);
+        } else {
+            mPublicProfile.setChecked(false);
+            mPrivateProfile.setChecked(true);
         }
 
         mChangeProfilePhoto.setOnClickListener(new View.OnClickListener() {

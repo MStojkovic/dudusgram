@@ -1,5 +1,6 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:segmentedgroup="http://schemas.android.com/tools">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -250,6 +251,58 @@
                     android:minHeight="0dp"/>
 
             </RelativeLayout>
+
+            <!-- Profile type section -->
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/relLayout7"
+                android:layout_marginTop="15dp"
+                android:id="@+id/relLayout8">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:text="@string/profile_type"
+                    android:id="@+id/profileTypeText"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"/>
+
+                <info.hoang8f.android.segmented.SegmentedGroup
+                    android:id="@+id/segmentedGroupProfileType"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal"
+                    segmentedgroup:sc_border_width="2dp"
+                    segmentedgroup:sc_corner_radius="10dp"
+                    android:layout_toRightOf="@+id/profileTypeText"
+                    android:layout_toEndOf="@+id/profileTypeText"
+                    android:gravity="end"
+                    android:layout_centerVertical="true"
+                    app:sc_tint_color="@color/colorAccent">
+
+                    <RadioButton
+                        android:id="@+id/buttonPublic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/public_profile_button"
+                        android:checked="true"
+                        style="@style/RadioButton" />
+
+                    <RadioButton
+                        android:id="@+id/buttonPrivate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/private_profile_button"
+                        android:checked="false"
+                        style="@style/RadioButton" />
+
+                </info.hoang8f.android.segmented.SegmentedGroup>
+
+            </RelativeLayout>
+
 
         </RelativeLayout>
 

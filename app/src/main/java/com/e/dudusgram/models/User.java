@@ -10,16 +10,18 @@ public class User implements Parcelable {
     private String email;
     private String username;
     private String notifications;
+    private String profile_type;
 
     public User() {
     }
 
-    public User(String user_id, String phone_number, String email, String username, String notifications) {
+    public User(String user_id, String phone_number, String email, String username, String notifications, String profile_type) {
         this.user_id = user_id;
         this.phone_number = phone_number;
         this.email = email;
         this.username = username;
         this.notifications = notifications;
+        this.profile_type = profile_type;
     }
 
     protected User(Parcel in) {
@@ -28,6 +30,7 @@ public class User implements Parcelable {
         email = in.readString();
         username = in.readString();
         notifications = in.readString();
+        profile_type = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -82,6 +85,18 @@ public class User implements Parcelable {
         this.notifications = notifications;
     }
 
+    public String getProfile_type() {
+        return profile_type;
+    }
+
+    public void setProfile_type(String profile_type) {
+        this.profile_type = profile_type;
+    }
+
+    public static Creator<User> getCREATOR() {
+        return CREATOR;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -90,6 +105,7 @@ public class User implements Parcelable {
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
                 ", notifications='" + notifications + '\'' +
+                ", profile_type='" + profile_type + '\'' +
                 '}';
     }
 
@@ -105,5 +121,6 @@ public class User implements Parcelable {
         parcel.writeString(email);
         parcel.writeString(username);
         parcel.writeString(notifications);
+        parcel.writeString(profile_type);
     }
 }

@@ -37,6 +37,7 @@
     <string name="field_comments">comments</string>
     <string name="field_token">token</string>
     <string name="field_notifications">notifications</string>
+    <string name="field_profile_type">profile_type</string>
 
     <!-- Msgs -->
     <string name="no_account">No account yet? Create one now!</string>
@@ -59,6 +60,7 @@
     <string name="username_saved">Saved username.</string>
     <string name="fill_out_all_fields">All fields must be filled out!</string>
     <string name="successful_sign_up">Sign up successful. Sending verification email.</string>
+    <string name="private_profile">This profile is private. Follow this account to see their photos.</string>
 
     <!-- Activity -->
     <string name="profile_activity">Profile Activity</string>
@@ -140,5 +142,8 @@
     <string name="channel_description">Default_channel</string>
     <string name="notification_channel">Notification_channel</string>
     <string name="channel_description_follower">New follower</string>
+    <string name="public_profile_button">Public</string>
+    <string name="private_profile_button">Private</string>
+    <string name="profile_type">Profile type:</string>
 
 </resources>

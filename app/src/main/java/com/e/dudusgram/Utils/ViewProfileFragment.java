@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +67,7 @@ public class ViewProfileFragment extends Fragment {
     private BottomNavigationViewEx bottomNavigationView;
     private Context mContext;
     private TextView editProfile;
+    private RelativeLayout mProfilePrivacy;
 
     // Firebase
     private FirebaseAuth mAuth;
@@ -99,7 +101,10 @@ public class ViewProfileFragment extends Fragment {
         mUnfollow = view.findViewById(R.id.unfollow);
         editProfile = view.findViewById(R.id.textEditProfile);
         mBackArrow = view.findViewById(R.id.backArrow);
+        mProfilePrivacy = view.findViewById(R.id.profile_privacy);
         mContext = getActivity();
+
+        mProfilePrivacy.setVisibility(View.GONE);
 
         Log.d(TAG, "onCreateView: started.");
 
@@ -285,6 +290,7 @@ public class ViewProfileFragment extends Fragment {
                     Log.d(TAG, "onDataChange: found user: " + singleSnapshot.getValue());
 
                     setFollowing();
+                    gridView.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -376,6 +382,8 @@ public class ViewProfileFragment extends Fragment {
         mFollow.setVisibility(View.GONE);
         mUnfollow.setVisibility(View.VISIBLE);
         editProfile.setVisibility(View.GONE);
+        gridView.setVisibility(View.VISIBLE);
+        mProfilePrivacy.setVisibility(View.GONE);
 
     }
 
@@ -385,6 +393,13 @@ public class ViewProfileFragment extends Fragment {
         mFollow.setVisibility(View.VISIBLE);
         mUnfollow.setVisibility(View.GONE);
         editProfile.setVisibility(View.GONE);
+        if (mUser.getProfile_type().equals("PRIVATE")) {
+            gridView.setVisibility(View.GONE);
+            mProfilePrivacy.setVisibility(View.VISIBLE);
+        } else {
+            gridView.setVisibility(View.VISIBLE);
+            mProfilePrivacy.setVisibility(View.GONE);
+        }
 
     }
 

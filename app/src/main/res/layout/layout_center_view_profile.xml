@@ -111,8 +111,35 @@
                     android:stretchMode="columnWidth"
                     android:verticalSpacing="1dp">
 
-
                 </GridView>
+
+                <RelativeLayout
+                    android:id="@+id/profile_privacy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="100dp"
+                        android:id="@+id/locked"
+                        android:layout_centerVertical="true"
+                        app:srcCompat="@drawable/ic_locked"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/locked"
+                        android:layout_centerVertical="true"
+                        android:gravity="center"
+                        android:text="@string/private_profile"
+                        android:textSize="14sp"
+                        android:layout_toEndOf="@+id/locked" />
+
+                </RelativeLayout>
+
+
 
 
             </RelativeLayout>
