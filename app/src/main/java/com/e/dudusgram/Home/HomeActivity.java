@@ -148,7 +148,7 @@ public class HomeActivity extends AppCompatActivity
         tabLayout.setupWithViewPager(mViewPager);
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_instagram);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_dudusgram);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_arrow);
     }
 
