@@ -1,7 +1,10 @@
 package com.e.dudusgram.Home;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -19,6 +22,7 @@ import android.widget.RelativeLayout;
 
 import com.e.dudusgram.Login.LoginActivity;
 import com.e.dudusgram.Login.RegisterActivity;
+import com.e.dudusgram.Profile.ProfileActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.Utils.BottomNavigationViewHelper;
 import com.e.dudusgram.Utils.MainfeedListAdapter;
@@ -26,12 +30,16 @@ import com.e.dudusgram.Utils.SectionsPagerAdapter;
 import com.e.dudusgram.Utils.UniversalImageLoader;
 import com.e.dudusgram.Utils.ViewCommentsFragment;
 import com.e.dudusgram.models.Photo;
+import com.e.dudusgram.models.User;
 import com.e.dudusgram.models.UserAccountSettings;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -39,6 +47,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class HomeActivity extends AppCompatActivity
         implements MainfeedListAdapter.OnLoadMoreItemsListener {
+
+    private static final String CHANNEL_ID = "channel_id";
+    private static final String FOLLOWER_CHANNEL_ID = "Notification_channel";
 
     @Override
     public void onLoadMoreItems() {
@@ -78,12 +89,83 @@ public class HomeActivity extends AppCompatActivity
         mFrameLayout = findViewById(R.id.container);
         mRelativeLayout = findViewById(R.id.relLayoutParent);
 
+        createNotificationChannel();
+
         setupFirebaseAuth();
+
+        init();
 
         initImageLoader();
 
         setupBottomNavigationView();
         setupViewPager();
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.notification_channel);
+            String description = getString(R.string.channel_description_follower);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(FOLLOWER_CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void init(){
+
+        final Intent intent = getIntent();
+
+        if(intent.hasExtra(getString(R.string.calling_activity))){
+            if(intent.hasExtra(getString(R.string.photo_id_from_notification))){
+
+                Intent newIntent = new Intent(mContext, ProfileActivity.class);
+                newIntent.putExtra(getString(R.string.calling_activity), intent.getStringExtra(getString(R.string.calling_activity)));
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                newIntent.putExtra(getString(R.string.photo_id_from_notification), intent.getStringExtra(getString(R.string.photo_id_from_notification)));
+                startActivity(newIntent);
+                finish();
+
+            } else if (intent.hasExtra(getString(R.string.profile_id_from_notification))){
+
+                FirebaseDatabase.getInstance().getReference().child(getString(R.string.dbname_users)).child(intent.getStringExtra(getString(R.string.profile_id_from_notification))).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        Intent newIntent = new Intent(mContext, ProfileActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                        newIntent.putExtra(getString(R.string.calling_activity), intent.getStringExtra(getString(R.string.calling_activity)));
+                        Log.d(TAG, "Test: User iz baze: " + user);
+                        newIntent.putExtra(getString(R.string.intent_user), user);
+                        Log.d(TAG, "Test: User: " + user);
+                        startActivity(newIntent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+
+            }
+        }
     }
 
     public void onCommentThreadSelected(Photo photo, String callingActivity){

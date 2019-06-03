@@ -129,6 +129,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
     private Switch mNotifications;
 
     private UserSettings mUserSettings;
+    private Boolean sucess = false;
 
     @Nullable
     @Override
@@ -163,10 +164,11 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: attempting to save changes.");
-                saveProfileSettings();
+                if (!saveProfileSettings()) {
+                    Log.d(TAG, "onClick: Navigating back to ProfileActivity");
+                    getActivity().finish();
+                }
 
-                Log.d(TAG, "onClick: Navigating back to ProfileActivity");
-                getActivity().finish();
             }
         });
 
@@ -177,7 +179,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
      * Retrieves the data contained in the widgets and submits it to the database
      * 1st checks if the username is unique
      */
-    private void saveProfileSettings() {
+    private boolean saveProfileSettings() {
         final String displayName = mDisplayName.getText().toString();
         final String username = mUsername.getText().toString();
         final String website = mWebsite.getText().toString();
@@ -185,6 +187,8 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         final String email = mEmail.getText().toString();
         final String phoneNumber =mPhoneNumber.getText().toString();
         String notifications;
+        Boolean hadErrors = false;
+
         if (mNotifications.isChecked()) {
             notifications = "ON";
         } else {
@@ -197,8 +201,11 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
 
             if (username.length() < 5 ){
                 Toast.makeText(getActivity(), getString(R.string.short_username), Toast.LENGTH_SHORT).show();
+                hadErrors = true;
             } else {
-                checkIfUsernameExists(username);
+                 if (checkIfUsernameExists(username)){
+                     hadErrors = true;
+                 }
             }
         }
         //case2: user changed their email
@@ -212,6 +219,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
 
             } else {
                 Toast.makeText(getActivity(), getString(R.string.invalid_email), Toast.LENGTH_SHORT).show();
+                hadErrors = true;
             }
 
         }
@@ -220,6 +228,7 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
 
             if (displayName.length() < 5 ){
                 Toast.makeText(getActivity(), getString(R.string.short_displayName), Toast.LENGTH_SHORT).show();
+                hadErrors = true;
             } else {
                 //update the display name
                 mFirebaseMethods.updateUserAccountSettings(displayName, null, null, null, null);
@@ -251,13 +260,15 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
         if (!mUserSettings.getUser().getNotifications().equals(notifications)) {
             mFirebaseMethods.updateUserAccountSettings(null, null, null, null, notifications);
         }
+
+        return hadErrors;
     }
 
     /**
      * Check if @param already exists in the database
      * @param username
      */
-    private void checkIfUsernameExists(final String username) {
+    private boolean checkIfUsernameExists(final String username) {
 
         Log.d(TAG, "checkIfUsernameExists: checking if username: " + username + " already exists.");
 
@@ -275,11 +286,13 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
                     //add the username
                     mFirebaseMethods.updateUsername(username);
                     Toast.makeText(getActivity(), getString(R.string.username_saved), Toast.LENGTH_SHORT).show();
+                    sucess = false;
                 }
                 for (DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
                     if (singleSnapshot.exists()){
                         Log.d(TAG, "checkIfUsernameExists: FOUND A MATCH!");
                         Toast.makeText(getActivity(), getString(R.string.username_exists), Toast.LENGTH_SHORT).show();
+                        sucess = true;
                     }
                 }
             }
@@ -289,6 +302,8 @@ public class EditProfileFragment extends Fragment implements ConfirmPasswordDial
 
             }
         });
+
+        return sucess;
 
     }
 
