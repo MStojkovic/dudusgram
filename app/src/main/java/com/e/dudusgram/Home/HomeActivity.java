@@ -229,8 +229,11 @@ public class HomeActivity extends AppCompatActivity
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        View view1 = getLayoutInflater().inflate(R.layout.custom_view_icon, null);
+        view1.findViewById(R.id.icon);
+
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_dudusgram);
+        tabLayout.getTabAt(1).setCustomView(view1);
         tabLayout.getTabAt(2).setIcon(R.drawable.ic_arrow);
     }
 
