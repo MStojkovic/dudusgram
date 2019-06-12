@@ -63,7 +63,7 @@ public class ViewProfileFragment extends Fragment {
     private ProgressBar mProgressBar;
     private CircleImageView mProfilePhoto;
     private GridView gridView;
-    private ImageView mBackArrow;
+    private ImageView mBackArrow, mMessage;
     private BottomNavigationViewEx bottomNavigationView;
     private Context mContext;
     private TextView editProfile;
@@ -79,6 +79,7 @@ public class ViewProfileFragment extends Fragment {
     private int mFollowersCount = 0;
     private int mFollowingCount = 0;
     private int mPostsCount = 0;
+    private String currentUserUsername;
 
 
     @Nullable
@@ -102,6 +103,7 @@ public class ViewProfileFragment extends Fragment {
         editProfile = view.findViewById(R.id.textEditProfile);
         mBackArrow = view.findViewById(R.id.backArrow);
         mProfilePrivacy = view.findViewById(R.id.profile_privacy);
+        mMessage = view.findViewById(R.id.message);
         mContext = getActivity();
 
         mProfilePrivacy.setVisibility(View.GONE);
@@ -166,6 +168,16 @@ public class ViewProfileFragment extends Fragment {
                         .removeValue();
 
                 setUnfollowing();
+            }
+        });
+
+        mMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Test: sending test message");
+
+                FirebaseMethods mFirebaseMethods = new FirebaseMethods(mContext);
+                mFirebaseMethods.sendMessageWithNoExistingChat(mUser.getUser_id(), currentUserUsername, "Test");
             }
         });
 
@@ -403,14 +415,6 @@ public class ViewProfileFragment extends Fragment {
 
     }
 
-    private void setCurrentUsersProfile(){
-        Log.d(TAG, "setFollowing: updating UI for showing this user their own profile");
-
-        mFollow.setVisibility(View.GONE);
-        mUnfollow.setVisibility(View.GONE);
-        editProfile.setVisibility(View.VISIBLE);
-
-    }
 
     private void setupImageGrid(final ArrayList<Photo> photos){
         //setup the image grid
@@ -524,6 +528,23 @@ public class ViewProfileFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
+
+        Query query = FirebaseDatabase.getInstance().getReference()
+                .child(getString(R.string.dbname_users))
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child(getString(R.string.field_username));
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                currentUserUsername = dataSnapshot.getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

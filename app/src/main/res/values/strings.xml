@@ -9,6 +9,8 @@
     <string name="profile_fragment">Profile Fragment</string>
     <string name="view_comments_fragment">View Comments</string>
     <string name="view_profile_fragment">View Profile Fragment</string>
+    <string name="chats_fragment">Chats Fragment</string>
+    <string name="view_chat_fragment">View Chat Fragment</string>
 
     <!-- Firebase msgs -->
     <string name="auth_failed">Authentication failed.</string>
@@ -38,6 +40,13 @@
     <string name="field_token">token</string>
     <string name="field_notifications">notifications</string>
     <string name="field_profile_type">profile_type</string>
+    <string name="field_room_id">room_id</string>
+    <string name="dbname_messages">messages</string>
+    <string name="dbname_members">members</string>
+    <string name="dbname_chat">chat</string>
+    <string name="field_chats">chats</string>
+    <string name="field_last_message">last_message</string>
+    <string name="field_timestamp">timestamp</string>
 
     <!-- Msgs -->
     <string name="no_account">No account yet? Create one now!</string>
@@ -66,6 +75,7 @@
     <string name="profile_activity">Profile Activity</string>
     <string name="search_activity">Search Activity</string>
     <string name="home_activity">Home Activity</string>
+    <string name="chats_activity">Chats Activity</string>
 
     <!-- Intent Extras -->
     <string name="calling_activity">calling_activity</string>
@@ -145,5 +155,8 @@
     <string name="public_profile_button">Public</string>
     <string name="private_profile_button">Private</string>
     <string name="profile_type">Profile type:</string>
+    <string name="conversation">Conversation</string>
+    <string name="enter_a_message">Enter a message</string>
+    <string name="empty_message">Can not send empty message!</string>
 
 </resources>

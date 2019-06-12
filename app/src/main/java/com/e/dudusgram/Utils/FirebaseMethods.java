@@ -11,6 +11,9 @@ import android.widget.Toast;
 import com.e.dudusgram.Home.HomeActivity;
 import com.e.dudusgram.Profile.AccountSettingsActivity;
 import com.e.dudusgram.R;
+import com.e.dudusgram.models.Chat;
+import com.e.dudusgram.models.Members;
+import com.e.dudusgram.models.Message;
 import com.e.dudusgram.models.Photo;
 import com.e.dudusgram.models.User;
 import com.e.dudusgram.models.UserAccountSettings;
@@ -541,7 +544,7 @@ public class FirebaseMethods {
 
     }
 
-    public void deletePhoto (String photo_id, String date_created){
+    void deletePhoto(String photo_id, String date_created){
 
         FilePaths filePaths = new FilePaths();
         String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -610,7 +613,7 @@ public class FirebaseMethods {
         });
     }
 
-    public void deleteComment (String photoOwnerID, String photoID, String commentID){
+    void deleteComment(String photoOwnerID, String photoID, String commentID){
 
         //delete from photos node
 
@@ -661,5 +664,78 @@ public class FirebaseMethods {
         });
 
         Toast.makeText(mContext, "Successfully deleted the comment", Toast.LENGTH_SHORT).show();
+    }
+
+    void sendMessageWithNoExistingChat(String receiver_id, String currentUserDisplayName, String msg){
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        String newRoomID = databaseReference.child(mContext.getString(R.string.dbname_chat)).push().getKey();
+        String currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String timeStamp = getTimestamp();
+
+        Chat newChat = new Chat();
+        newChat.setLast_message(currentUserDisplayName + ": " + msg);
+        newChat.setTimestamp(timeStamp);
+        newChat.setRoom_id(newRoomID);
+
+        databaseReference
+                .child((mContext.getString(R.string.dbname_chat)))
+                .child(newRoomID)
+                .setValue(newChat);
+
+        databaseReference
+                .child(mContext.getString(R.string.dbname_users))
+                .child(currentUserID)
+                .child(mContext.getString(R.string.field_chats))
+                .child(newRoomID)
+                .setValue(true);
+
+        databaseReference
+                .child(mContext.getString(R.string.dbname_users))
+                .child(receiver_id)
+                .child(mContext.getString(R.string.field_chats))
+                .child(newRoomID)
+                .setValue(true);
+
+        String newMessageID = databaseReference
+                .child(mContext.getString(R.string.dbname_messages))
+                .child(newRoomID).push().getKey();
+        Message newMessage = new Message(currentUserID, msg, timeStamp);
+
+        databaseReference
+                .child(mContext.getString(R.string.dbname_messages))
+                .child(newRoomID)
+                .child(newMessageID)
+                .setValue(newMessage);
+
+        Members newMembers = new Members(currentUserID, receiver_id);
+
+        databaseReference
+                .child(mContext.getString(R.string.dbname_members))
+                .child(newRoomID)
+                .setValue(newMembers);
+    }
+
+    public void addNewChatMessage(String conversation_id, String username, String message, String timestamp) {
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        databaseReference.child(mContext.getString(R.string.dbname_chat))
+                .child(conversation_id)
+                .child(mContext.getString(R.string.field_last_message))
+                .setValue(username + ": " + message);
+
+        databaseReference.child(mContext.getString(R.string.dbname_chat))
+                .child(conversation_id)
+                .child(mContext.getString(R.string.field_timestamp))
+                .setValue(timestamp);
+
+        Message newMessage = new Message(FirebaseAuth.getInstance().getCurrentUser().getUid(), message, timestamp);
+
+        databaseReference
+                .child(mContext.getString(R.string.dbname_messages))
+                .child(conversation_id).push()
+                .setValue(newMessage);
+
     }
 }

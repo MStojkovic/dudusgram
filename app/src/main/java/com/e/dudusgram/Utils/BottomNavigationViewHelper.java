@@ -9,7 +9,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.e.dudusgram.Home.HomeActivity;
-import com.e.dudusgram.Likes.LikesActivity;
+import com.e.dudusgram.Chats.ChatsActivity;
 import com.e.dudusgram.Profile.ProfileActivity;
 import com.e.dudusgram.R;
 import com.e.dudusgram.Search.SearchActivity;
@@ -59,9 +59,9 @@ public class BottomNavigationViewHelper {
                         }
                         break;
 
-                    case R.id.ic_alert:
-                        if (!(callingActivity.toString().split("@")[0].equals(LikesActivity.class.toString().split(" ")[1]))) {
-                            Intent intent4 = new Intent(context, LikesActivity.class); //ACTIVITY_NUM = 3
+                    case R.id.ic_chat:
+                        if (!(callingActivity.toString().split("@")[0].equals(ChatsActivity.class.toString().split(" ")[1]))) {
+                            Intent intent4 = new Intent(context, ChatsActivity.class); //ACTIVITY_NUM = 3
                             context.startActivity(intent4);
                             callingActivity.overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                         }

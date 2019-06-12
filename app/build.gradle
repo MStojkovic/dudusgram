@@ -57,7 +57,11 @@ dependencies {
     implementation 'com.android.support:support-annotations:28.0.0'
     implementation 'org.jetbrains:annotations-java5:15.0'
 
+    //Segmented control
     implementation 'info.hoang8f:android-segmented:1.0.6'
+
+    //Recycler view
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

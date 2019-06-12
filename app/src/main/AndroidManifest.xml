@@ -31,7 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Likes.LikesActivity" />
+        <activity android:name=".Chats.ChatsActivity" />
         <activity android:name=".Profile.ProfileActivity" />
         <activity
             android:name=".Search.SearchActivity"

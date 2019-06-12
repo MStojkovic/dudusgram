@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/chat_profile_image"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="20dp"
+        app:civ_border_color="@color/black"
+        app:civ_border_width="0.5dp"
+        android:layout_marginStart="20dp"
+        android:layout_centerVertical="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/relLayout1"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/chat_profile_image"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/grey_border_bottom"
+        android:layout_toEndOf="@id/chat_profile_image"
+        android:layout_marginStart="10dp"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="Test"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:id="@+id/username"
+            android:gravity="start" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:orientation="horizontal"
+            android:weightSum="100"
+            android:layout_below="@+id/username">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="75"
+                android:text="Poruka"
+                android:textSize="14sp"
+                android:maxLines="1"
+                android:id="@+id/message"
+                android:gravity="start"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="20"
+                android:text="Timestamp"
+                android:textSize="12sp"
+                android:id="@+id/timestamp"
+                android:gravity="end"
+                android:maxLines="1"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

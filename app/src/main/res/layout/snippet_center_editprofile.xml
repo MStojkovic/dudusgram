@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="25sp"
                 android:text="@string/private_information"
-                android:layout_below="@id/relLayout4"
+                android:layout_below="@id/relLayout8"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
                 android:textColor="@color/black"
@@ -225,7 +225,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:id="@+id/relLayout7"
-                android:layout_below="@+id/relLayout6"
+                android:layout_below="@+id/relLayout4"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/white_gray_border_bottom">
 
