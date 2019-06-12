@@ -67,4 +67,5 @@ public class ChatsActivity extends AppCompatActivity {
         transaction.commit();
 
     }
+
 }

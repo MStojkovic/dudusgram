@@ -1,6 +1,6 @@
 package com.e.dudusgram.models;
 
-public class MessagesForDisplay {
+public class MessagesForDisplay implements Comparable<MessagesForDisplay>{
 
     private String username;
     private String profile_picture;
@@ -57,5 +57,12 @@ public class MessagesForDisplay {
                 ", message='" + message + '\'' +
                 ", timestamp='" + timestamp + '\'' +
                 '}';
+    }
+
+
+    @Override
+    public int compareTo(MessagesForDisplay o) {
+        int last = this.timestamp.compareTo(o.timestamp);
+        return last == 0 ? this.timestamp.compareTo(o.timestamp) : last;
     }
 }

@@ -27,6 +27,7 @@ import com.e.dudusgram.models.MessagesForDisplay;
 import com.e.dudusgram.models.UserAccountSettings;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +38,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -172,6 +175,14 @@ public class ViewChatFragment extends Fragment {
             }
         });
 
+        mBackArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getActivity().onBackPressed();
+            }
+        });
+
     }
 
     private String getConversationIDFromBundle(){
@@ -187,52 +198,68 @@ public class ViewChatFragment extends Fragment {
 
     private void prepareConversation (final String conversationID) {
 
-        Query query = myRef.child(getString(R.string.dbname_messages))
-                .child(conversationID);
+        myRef.child(getString(R.string.dbname_messages))
+                .child(conversationID)
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                    Message message = snapshot.getValue(Message.class);
-
-                    final MessagesForDisplay messageForDisplay = new MessagesForDisplay();
-                    messageForDisplay.setMessage(message.getMessage());
-                    messageForDisplay.setTimestamp(message.getTimestamp());
-
-                    Query query1 = myRef.child(getString(R.string.dbname_user_account_settings))
-                            .child(message.getUserID());
-
-                    query1.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                            UserAccountSettings user = dataSnapshot.getValue(UserAccountSettings.class);
-
-                            messageForDisplay.setUsername(user.getUsername());
-                            messageForDisplay.setProfile_picture(user.getProfile_photo());
-
-                            messages.add(messageForDisplay);
-                            adapter.notifyDataSetChanged();
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
+                        Log.d(TAG, "Testing: " + dataSnapshot.getValue(Message.class).toString());
 
 
-                }
-            }
+                        Message message = dataSnapshot.getValue(Message.class);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                        final MessagesForDisplay messageForDisplay = new MessagesForDisplay();
+                        messageForDisplay.setMessage(message.getMessage());
+                        messageForDisplay.setTimestamp(message.getTimestamp());
 
-            }
-        });
+                        Query query1 = myRef.child(getString(R.string.dbname_user_account_settings))
+                                .child(message.getUserID());
+
+                        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                UserAccountSettings user = dataSnapshot.getValue(UserAccountSettings.class);
+
+                                messageForDisplay.setUsername(user.getUsername());
+                                messageForDisplay.setProfile_picture(user.getProfile_photo());
+
+                                messages.add(messageForDisplay);
+                                Collections.sort(messages);
+                                Log.d(TAG, "Messages: " + messages);
+                                adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
 
     }
 
