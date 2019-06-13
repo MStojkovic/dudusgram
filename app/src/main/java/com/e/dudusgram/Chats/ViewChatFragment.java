@@ -164,9 +164,6 @@ public class ViewChatFragment extends Fragment {
                 if (mTextMessage.getText().toString().length() > 0) {
                     String timestamp = getTimestamp();
                     mFirebaseMethods.addNewChatMessage(mConversationID,currentUserUsername, mTextMessage.getText().toString(), timestamp);
-                    MessagesForDisplay newMessage = new MessagesForDisplay(currentUserUsername, currentProfilePhoto, mTextMessage.getText().toString(), timestamp);
-                    messages.add(newMessage);
-                    adapter.notifyDataSetChanged();
                     mTextMessage.setText("");
                 } else {
                     Toast.makeText(mContext, getString(R.string.empty_message), Toast.LENGTH_SHORT).show();
