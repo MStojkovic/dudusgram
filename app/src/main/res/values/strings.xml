@@ -11,6 +11,7 @@
     <string name="view_profile_fragment">View Profile Fragment</string>
     <string name="chats_fragment">Chats Fragment</string>
     <string name="view_chat_fragment">View Chat Fragment</string>
+    <string name="view_new_chat_fragment">View New Chat Fragment</string>
 
     <!-- Firebase msgs -->
     <string name="auth_failed">Authentication failed.</string>
@@ -158,5 +159,7 @@
     <string name="conversation">Conversation</string>
     <string name="enter_a_message">Enter a message</string>
     <string name="empty_message">Can not send empty message!</string>
+    <string name="user_id_for_chat">User_id</string>
+    <string name="field_first_user">firstUser</string>
 
 </resources>

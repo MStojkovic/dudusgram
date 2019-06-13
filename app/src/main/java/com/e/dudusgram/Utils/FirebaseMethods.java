@@ -666,7 +666,7 @@ public class FirebaseMethods {
         Toast.makeText(mContext, "Successfully deleted the comment", Toast.LENGTH_SHORT).show();
     }
 
-    void sendMessageWithNoExistingChat(String receiver_id, String currentUserDisplayName, String msg){
+    public String sendMessageWithNoExistingChat(String receiver_id, String currentUserDisplayName, String msg){
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         String newRoomID = databaseReference.child(mContext.getString(R.string.dbname_chat)).push().getKey();
@@ -714,6 +714,8 @@ public class FirebaseMethods {
                 .child(mContext.getString(R.string.dbname_members))
                 .child(newRoomID)
                 .setValue(newMembers);
+
+        return newRoomID;
     }
 
     public void addNewChatMessage(String conversation_id, String username, String message, String timestamp) {

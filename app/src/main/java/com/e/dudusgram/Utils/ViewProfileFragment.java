@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.e.dudusgram.Chats.ChatsActivity;
 import com.e.dudusgram.Login.LoginActivity;
 import com.e.dudusgram.Profile.AccountSettingsActivity;
 import com.e.dudusgram.R;
@@ -176,8 +177,14 @@ public class ViewProfileFragment extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "Test: sending test message");
 
+                Intent intent = new Intent(mContext, ChatsActivity.class);
+                intent.putExtra(getString(R.string.calling_activity), getString(R.string.profile_activity));
+                intent.putExtra(getString(R.string.user_id_for_chat), mUser.getUser_id());
+                startActivity(intent);
+
+                /*
                 FirebaseMethods mFirebaseMethods = new FirebaseMethods(mContext);
-                mFirebaseMethods.sendMessageWithNoExistingChat(mUser.getUser_id(), currentUserUsername, "Test");
+                mFirebaseMethods.sendMessageWithNoExistingChat(mUser.getUser_id(), currentUserUsername, "Test");*/
             }
         });
 

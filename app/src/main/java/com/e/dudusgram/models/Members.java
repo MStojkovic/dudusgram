@@ -36,4 +36,10 @@ public class Members {
                 ", secondUser='" + secondUser + '\'' +
                 '}';
     }
+
+    public boolean compareTo(Members members) {
+
+        return (this.getFirstUser().equals(members.getFirstUser()) && this.getSecondUser().equals(members.getSecondUser()))
+                || (this.getFirstUser().equals(members.getSecondUser()) && this.getSecondUser().equals(members.getFirstUser()));
+    }
 }

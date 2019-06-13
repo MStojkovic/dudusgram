@@ -138,7 +138,7 @@ public class HomeActivity extends AppCompatActivity
 
                 Intent newIntent = new Intent(mContext, ProfileActivity.class);
                 newIntent.putExtra(getString(R.string.calling_activity), intent.getStringExtra(getString(R.string.calling_activity)));
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                newIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 newIntent.putExtra(getString(R.string.photo_id_from_notification), intent.getStringExtra(getString(R.string.photo_id_from_notification)));
                 startActivity(newIntent);
                 finish();
@@ -218,9 +218,9 @@ public class HomeActivity extends AppCompatActivity
 
     private void setupViewPager (){
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new CameraFragment()); //index 0
+        //adapter.addFragment(new CameraFragment()); //index 0
         adapter.addFragment(new HomeFragment()); //index 1
-        adapter.addFragment((new MessagesFragment())); //index 2
+        //adapter.addFragment((new MessagesFragment())); //index 2
 
         mViewPager.setAdapter(adapter);
 
@@ -232,9 +232,9 @@ public class HomeActivity extends AppCompatActivity
         View view1 = getLayoutInflater().inflate(R.layout.custom_view_icon, null);
         view1.findViewById(R.id.icon);
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
-        tabLayout.getTabAt(1).setCustomView(view1);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_arrow);
+        //tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
+        tabLayout.getTabAt(0).setCustomView(view1);
+        //tabLayout.getTabAt(2).setIcon(R.drawable.ic_arrow);
     }
 
     /**

@@ -70,7 +70,6 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
     private static class ViewHolder {
         TextView comment, username, timestamp, likes, delete;
         CircleImageView profileImage;
-        ImageView like;
         User user = new User();
     }
 
@@ -88,7 +87,6 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             holder.username = convertView.findViewById(R.id.comment_username);
             holder.timestamp = convertView.findViewById(R.id.comment_time_posted);
             holder.delete = convertView.findViewById(R.id.comment_delete);
-            holder.like = convertView.findViewById(R.id.comment_like);
             holder.likes = convertView.findViewById(R.id.comment_likes);
             holder.profileImage = convertView.findViewById(R.id.comment_profile_image);
             holder.delete.setVisibility(View.VISIBLE);
@@ -96,7 +94,6 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
             convertView.setTag(holder);
         }else{
             holder = (ViewHolder) convertView.getTag();
-            holder.like.setVisibility(View.VISIBLE);
             holder.likes.setVisibility(View.VISIBLE);
             holder.delete.setVisibility(View.VISIBLE);
         }
@@ -215,7 +212,6 @@ public class CommentListAdapter extends ArrayAdapter<Comment> {
 
         try {
             if (getItem(position).getDescription()) {
-                holder.like.setVisibility(View.GONE);
                 holder.likes.setVisibility(View.GONE);
                 holder.delete.setVisibility(View.GONE);
             }
