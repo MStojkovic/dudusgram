@@ -463,8 +463,6 @@ public class ViewPostFragment extends Fragment{
                             final FirebaseMethods firebaseMethods = new FirebaseMethods(getContext());
 
                             switch (item.getItemId()) {
-                                case R.id.text_edit:
-                                    return true;
                                 case R.id.text_delete:
                                     new AlertDialog.Builder(getActivity())
                                             .setTitle("Delete")
